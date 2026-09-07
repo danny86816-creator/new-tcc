@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Tcc.Presentation.Contracts</AssemblyName>
+    <RootNamespace>Tcc.Presentation.Contracts</RootNamespace>
+  </PropertyGroup>
+</Project>

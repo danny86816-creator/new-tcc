@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Tcc.Features.Themes</AssemblyName>
+    <RootNamespace>Tcc.Features.Themes</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
+    <ProjectReference Include="../Tcc.Themes/Tcc.Themes.csproj" />
+  </ItemGroup>
+</Project>

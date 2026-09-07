@@ -1,0 +1,24 @@
+# .NET build outputs
+**/bin/
+**/obj/
+**/TestResults/
+**/coverage/
+*.coverage
+*.coveragexml
+
+# IDE and user-local state
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Packaging outputs
+**/publish/
+*.nupkg
+*.snupkg
+
+# OS metadata
+.DS_Store
+Thumbs.db

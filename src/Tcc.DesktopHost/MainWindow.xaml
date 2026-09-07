@@ -1,0 +1,19 @@
+<Window x:Class="Tcc.DesktopHost.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Trading Command Center"
+        Width="960"
+        Height="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock FontSize="24"
+                       FontWeight="SemiBold"
+                       Text="Trading Command Center" />
+            <TextBlock Margin="0,12,0,0"
+                       HorizontalAlignment="Center"
+                       Text="{Binding Status}" />
+        </StackPanel>
+    </Grid>
+</Window>

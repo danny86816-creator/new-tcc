@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Tcc.Windows</AssemblyName>
+    <RootNamespace>Tcc.Windows</RootNamespace>
+  </PropertyGroup>
+</Project>

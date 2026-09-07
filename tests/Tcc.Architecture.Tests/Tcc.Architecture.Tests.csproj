@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Tcc.Architecture.Tests</AssemblyName>
+    <RootNamespace>Tcc.Architecture.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Tcc.Features.Themes/Tcc.Features.Themes.csproj" />
+    <ProjectReference Include="../../src/Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
+    <ProjectReference Include="../../src/Tcc.Themes/Tcc.Themes.csproj" />
+    <ProjectReference Include="../../src/Tcc.Windows/Tcc.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

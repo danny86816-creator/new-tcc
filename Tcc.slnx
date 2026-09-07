@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
+    <Project Path="src/Tcc.Themes/Tcc.Themes.csproj" />
+    <Project Path="src/Tcc.Features.Themes/Tcc.Features.Themes.csproj" />
+    <Project Path="src/Tcc.Windows/Tcc.Windows.csproj" />
+    <Project Path="src/Tcc.DesktopHost/Tcc.DesktopHost.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tcc.Architecture.Tests/Tcc.Architecture.Tests.csproj" />
+  </Folder>
+</Solution>

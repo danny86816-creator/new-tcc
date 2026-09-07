@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Tcc.Themes</AssemblyName>
+    <RootNamespace>Tcc.Themes</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
+  </ItemGroup>
+</Project>
