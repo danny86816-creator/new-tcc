@@ -1,13 +1,19 @@
 # Codex Project Status
 
 **Current approved phase:** Phase 3 — Theme Manifest Validator
-**Current execution status:** Phase 3 planning complete; Phase 3 implementation not started; AI Trading Intelligence Baseline integration complete and awaiting 05A validation
+**Current execution status:** Phase 3 implementation complete; initial independent validation FAIL; surgical remediation complete; independent re-validation PASS; Baseline Staging Audit PASS; ready for baseline sealing
 **Last updated:** 2026-09-07
 
-**Commit allowed:** NO
-**Ready for Phase 3 implementation:** NO — pending 05A validation and separate implementation authorization
+**Commit readiness:** READY FOR BASELINE SEALING
+**User Explicit Commit Authorization:** GRANTED
+**Commit performed:** NO
+**phase3-approved tag:** NOT CREATED
+**Phase 3 Baseline Staging Audit:** PASS
+**Ready for baseline sealing:** YES
+**Target commit message:** `chore: establish approved TCC Phase 3 theme manifest validator baseline`
+**Target annotated tag:** `phase3-approved`
 **Git branch:** `phase3-theme-manifest-validator`
-**Branch start HEAD:** `9ea2b6e945d3f438099dcdeb922f20c2a78a48fa`
+**Implementation starting HEAD:** `3c1478513e5b3fd3930bff043ccb4eed4f6b9ce7`
 
 ## Baseline
 
@@ -22,25 +28,38 @@
 - Phase 2 scope decision: `docs/adr/ADR-0002-phase2-schemas-public-contracts-scope.md`.
 - Frozen System Architecture SHA-256: `7BAF7ABEBEBFFE77F20DF964E89E7845AA54E8DE810CF6FB8C6B500881275B6F`.
 
-## Phase 3 planning state
+## Phase 3 implementation state
 
 - Official phase name: **Phase 3 — Theme Manifest Validator**.
 - Phase 3 Planning: **COMPLETE**.
-- Phase 3 Implementation: **NOT STARTED**.
+- Phase 3 Implementation: **COMPLETE**.
+- Phase 3 Initial Independent Validation: **FAIL**.
+- Phase 3 Surgical Remediation: **COMPLETE**.
+- Resolved defects: `P3-VAL-001` **RESOLVED**; `P3-VAL-002` **RESOLVED**; `P3-VAL-003` **RESOLVED**.
+- Phase 3 Independent Re-validation: **PASS** — CRITICAL 0, HIGH 0, MEDIUM 0, LOW 0.
+- Phase 3 Baseline Staging Audit: **PASS**.
 - Phase 3 Scope: deterministic, fail-closed implementation of the sealed `IThemeManifestValidator` contract in `Tcc.Themes`; no I/O, persistence, lifecycle, UI, or downstream Theme runtime.
 - Scope plan: `docs/phase3/PHASE3_SCOPE_PLAN.md`.
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
-- Ready for Phase 3 implementation: **NO — pending 05A validation and separate implementation authorization**.
-- Commit allowed: **NO**.
-- Current planning/governance change files: `docs/phase3/PHASE3_SCOPE_PLAN.md`, `docs/governance/AI_TRADING_INTELLIGENCE_BASELINE_V1.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`.
-- Validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; tests 94/94 passed with 0 skipped; baseline/tag/branch/Frozen-hash/project-graph/contract-sufficiency/scope/Git hygiene gates passed.
-- Known risk: the public contract validates an already materialized manifest; raw JSON parsing and archive/package processing remain explicit non-goals.
-- Next action: return to GPT Supervisor for 05A validation; do not start Phase 3 implementation.
+- User Explicit Commit Authorization: **GRANTED**.
+- Commit readiness: **READY FOR BASELINE SEALING**.
+- Ready for baseline sealing: **YES**.
+- Target commit message: `chore: establish approved TCC Phase 3 theme manifest validator baseline`.
+- Target annotated tag: `phase3-approved`.
+- Commit performed: **NO**.
+- `phase3-approved` tag: **NOT CREATED**.
+- Phase 4 allowed: **NO — until baseline commit, tag, and post-commit verification complete**.
+- Current implementation change files: `src/Tcc.Themes/Manifests/ThemeManifestValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseThreeThemeManifestValidatorTests.cs`, `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, and `docs/CODEX_PROJECT_STATUS.md`.
+- Validation: clean, normal restore, and locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 173/173 passed with 0 skipped; Phase 1 filter 2/2, Phase 2 filter 89/89, Phase 3 filter 78/78, signature/diagnostic/determinism/immutability filter 14/14, Phase 2 and compiled-surface negative-fixture filter 6/6, and dependency-boundary filter 5/5 passed; baseline/tag/branch/Frozen-hash/project-graph/contract/schema/scope/leakage/Git hygiene gates passed.
+- Independent re-validation evidence: Release x64 **PASS — 0 warnings / 0 errors**; all tests **173/173 PASS**; Frozen System **PASS**; Frozen Theme **PASS**; unexpected artifacts **0**; Theme / Trading separation **PASS**; Phase 2 contracts **UNCHANGED**; Phase 2 schemas **UNCHANGED**.
+- Theme / Trading Intelligence separation: **PRESERVED**.
+- Known risk: the public contract validates an already materialized manifest; raw JSON parsing, referenced personalization min/max contents, asset inventory entries, and archive/package processing remain explicit non-goals for this Phase.
+- Next action: perform exact five-file staging, staged audit, baseline commit, annotated tag creation, and post-commit verification; do not start Phase 4.
 
 ## AI Trading Intelligence planning state
 
-- AI Trading Intelligence Baseline Integration: **COMPLETE — AWAITING 05A VALIDATION**.
+- AI Trading Intelligence Baseline Integration: **INTEGRATED — GOVERNANCE ONLY**.
 - AI Trading Production Implementation: **NOT STARTED**.
 - Implementation authorized: **NO**.
 - Authority artifact: `docs/governance/AI_TRADING_INTELLIGENCE_BASELINE_V1.md`.
@@ -57,7 +76,7 @@
 - Production files changed by 05A: **NONE**.
 - 05A validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 94/94 passed with 0 skipped; dependency boundary tests 5/5 passed; Phase 1/2 refs, Frozen hashes, production/schema/runtime/project-dependency diff, Phase 3/AI leakage, staged, unexpected-artifact, skill-observation Git-surface, and `git diff --check` gates passed.
 - Open blockers: **NONE**.
-- Exact next action: **Return to GPT Supervisor for 05A validation. Do not start Phase 3 implementation.**
+- Exact next action: **Keep the Trading Intelligence production track untouched while Phase 3 awaits the Baseline Staging Audit re-run.**
 
 ## Phase 1 repository foundation
 
@@ -198,13 +217,13 @@ docs/
 ## Current risks and blockers
 
 - Open Phase 2 defects or validation blockers: none.
-- Open Phase 3 planning blockers: none.
+- Open Phase 3 validation defects: none; the Baseline Staging Audit passed.
 - Unrestricted solution-level MSBuild previously caused abnormal recursive process growth on this host; all remediation gates used `-m:1`. This is recorded as host/invocation behavior, not treated as a Phase 2 product defect.
-- Phase 3 implementation has not started.
+- Phase 3 implementation, remediation, independent re-validation, and Baseline Staging Audit are complete; the exact five-file surface is ready for authorized baseline sealing.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- No commit is authorized in the planning conversation.
+- Exact five-file staging, the Phase 3 baseline commit, and the local annotated `phase3-approved` tag are explicitly authorized; push, merge, and Phase 4 implementation remain prohibited.
 
 ## Exact next action
 
-Return to GPT Supervisor for 05A validation. Do not start Phase 3 implementation.
+Perform exact five-file staging, staged audit, the authorized Phase 3 baseline commit, annotated tag creation, and post-commit verification. Do not push or start Phase 4.

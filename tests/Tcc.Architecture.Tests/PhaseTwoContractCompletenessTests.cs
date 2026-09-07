@@ -1,5 +1,6 @@
 using System.Reflection;
 using Tcc.Presentation.Contracts.Theme;
+using Tcc.Themes.Manifests;
 
 namespace Tcc.Architecture.Tests;
 
@@ -88,7 +89,7 @@ public sealed class PhaseTwoContractCompletenessTests
     }
 
     [Fact]
-    public void RequiredInterfacesHaveNoProductionImplementationInPhaseTwoAssemblies()
+    public void RequiredInterfacesHaveOnlyPhaseApprovedProductionImplementations()
     {
         Assembly[] productionAssemblies =
         [
@@ -98,20 +99,38 @@ public sealed class PhaseTwoContractCompletenessTests
             typeof(Tcc.Windows.AssemblyMarker).Assembly,
         ];
 
-        Type[] requiredInterfaces = typeof(IThemePackage).Assembly
-            .GetExportedTypes()
-            .Where(type => type.IsInterface && RequiredInterfaces.Contains(type.Name, StringComparer.Ordinal))
-            .ToArray();
+        Assert.Empty(FindUnauthorizedImplementationViolations(productionAssemblies));
+    }
 
-        foreach (Type contractInterface in requiredInterfaces)
-        {
-            Type[] implementations = productionAssemblies
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => type.IsClass && !type.IsAbstract && contractInterface.IsAssignableFrom(type))
-                .ToArray();
+    [Fact]
+    public void UnauthorizedPhaseTwoInterfaceImplementationFailsTheImplementationGuard()
+    {
+        Assembly fixture = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            markerAdditionalSource:
+                """
+                public sealed class ThemeIntegrityVerifier :
+                    global::Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifier
+                {
+                    public global::System.Threading.Tasks.ValueTask<global::Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationResult> VerifyAsync(
+                        global::Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationRequest request,
+                        global::System.Threading.CancellationToken cancellationToken = default) =>
+                        global::System.Threading.Tasks.ValueTask.FromResult(
+                            new global::Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationResult(
+                                false,
+                                false,
+                                string.Empty,
+                                string.Empty,
+                                []));
+                }
+                """,
+            otherSource: null);
 
-            Assert.Empty(implementations);
-        }
+        string[] violations = FindUnauthorizedImplementationViolations([fixture]);
+
+        Assert.Contains(
+            violations,
+            violation => violation.Contains("IThemeIntegrityVerifier", StringComparison.Ordinal)
+                && violation.Contains("ThemeIntegrityVerifier", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -134,5 +153,37 @@ public sealed class PhaseTwoContractCompletenessTests
         Assert.Equal(41, Directory.EnumerateFiles(Path.Combine(RepositoryPaths.ThemeContracts, "module-contracts"), "*.json").Count());
         Assert.Equal(17, Directory.EnumerateFiles(Path.Combine(RepositoryPaths.ThemeContracts, "zone-contracts"), "*.json").Count());
         Assert.Equal(19, Directory.EnumerateFiles(Path.Combine(RepositoryPaths.ThemeContracts, "state-contracts"), "*.json").Count());
+    }
+
+    private static string[] FindUnauthorizedImplementationViolations(IEnumerable<Assembly> productionAssemblies)
+    {
+        Type[] productionTypes = productionAssemblies
+            .SelectMany(assembly => assembly.GetTypes())
+            .ToArray();
+        Type[] requiredInterfaces = typeof(IThemePackage).Assembly
+            .GetExportedTypes()
+            .Where(type => type.IsInterface && RequiredInterfaces.Contains(type.Name, StringComparer.Ordinal))
+            .ToArray();
+        List<string> violations = [];
+
+        foreach (Type contractInterface in requiredInterfaces)
+        {
+            Type[] implementations = productionTypes
+                .Where(type => type.IsClass && !type.IsAbstract && contractInterface.IsAssignableFrom(type))
+                .ToArray();
+
+            foreach (Type implementation in implementations)
+            {
+                bool isApprovedManifestValidator = contractInterface == typeof(IThemeManifestValidator)
+                    && implementation == typeof(ThemeManifestValidator);
+                if (!isApprovedManifestValidator)
+                {
+                    violations.Add(
+                        $"{implementation.FullName} is an unauthorized production implementation of {contractInterface.FullName}.");
+                }
+            }
+        }
+
+        return violations.Order(StringComparer.Ordinal).ToArray();
     }
 }
