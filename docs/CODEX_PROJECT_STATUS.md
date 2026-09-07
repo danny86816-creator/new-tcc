@@ -1,16 +1,19 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 2 — Schemas & Public Contracts
-**Current execution status:** Phase 2 implementation complete; independent re-validation passed; ready for baseline commit preparation
+**Current approved phase:** Phase 3 — Theme Manifest Validator
+**Current execution status:** Phase 3 planning complete; Phase 3 implementation not started; AI Trading Intelligence Baseline integration complete and awaiting 05A validation
 **Last updated:** 2026-09-07
 
-**Commit allowed:** YES
-**Phase 3 allowed:** NO
-**Git branch:** `phase2-foundation`
-**Baseline HEAD:** `1ea18618266abf0c99e7560ed9f23b7fb4247989`
+**Commit allowed:** NO
+**Ready for Phase 3 implementation:** NO — pending 05A validation and separate implementation authorization
+**Git branch:** `phase3-theme-manifest-validator`
+**Branch start HEAD:** `9ea2b6e945d3f438099dcdeb922f20c2a78a48fa`
 
 ## Baseline
 
+- Phase 1 baseline/tag: `1ea18618266abf0c99e7560ed9f23b7fb4247989` / `phase1-approved`.
+- Phase 2 status: **APPROVED / SEALED**.
+- Phase 2 baseline/tag: `9ea2b6e945d3f438099dcdeb922f20c2a78a48fa` / `phase2-approved`.
 - Theme Architecture governance baseline: `v1.2 — APPROVED`.
 - Approved SHA-256: `960CCCB69AFDBE006CA12BECB86A1E3E6C96C6C59500CE943F176162D2B33856`.
 - Baseline interpretation: `docs/governance/TCC_THEME_ARCHITECTURE_BASELINE_APPROVAL.md`.
@@ -18,6 +21,43 @@
 - Theme feature ownership decision: `docs/adr/ADR-0002-theme-feature-owner.md`.
 - Phase 2 scope decision: `docs/adr/ADR-0002-phase2-schemas-public-contracts-scope.md`.
 - Frozen System Architecture SHA-256: `7BAF7ABEBEBFFE77F20DF964E89E7845AA54E8DE810CF6FB8C6B500881275B6F`.
+
+## Phase 3 planning state
+
+- Official phase name: **Phase 3 — Theme Manifest Validator**.
+- Phase 3 Planning: **COMPLETE**.
+- Phase 3 Implementation: **NOT STARTED**.
+- Phase 3 Scope: deterministic, fail-closed implementation of the sealed `IThemeManifestValidator` contract in `Tcc.Themes`; no I/O, persistence, lifecycle, UI, or downstream Theme runtime.
+- Scope plan: `docs/phase3/PHASE3_SCOPE_PLAN.md`.
+- Open blockers: **NONE**.
+- Waiting for user decisions: **NONE**.
+- Ready for Phase 3 implementation: **NO — pending 05A validation and separate implementation authorization**.
+- Commit allowed: **NO**.
+- Current planning/governance change files: `docs/phase3/PHASE3_SCOPE_PLAN.md`, `docs/governance/AI_TRADING_INTELLIGENCE_BASELINE_V1.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`.
+- Validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; tests 94/94 passed with 0 skipped; baseline/tag/branch/Frozen-hash/project-graph/contract-sufficiency/scope/Git hygiene gates passed.
+- Known risk: the public contract validates an already materialized manifest; raw JSON parsing and archive/package processing remain explicit non-goals.
+- Next action: return to GPT Supervisor for 05A validation; do not start Phase 3 implementation.
+
+## AI Trading Intelligence planning state
+
+- AI Trading Intelligence Baseline Integration: **COMPLETE — AWAITING 05A VALIDATION**.
+- AI Trading Production Implementation: **NOT STARTED**.
+- Implementation authorized: **NO**.
+- Authority artifact: `docs/governance/AI_TRADING_INTELLIGENCE_BASELINE_V1.md`.
+- Architecture authority: deterministic engine owns risk arithmetic, sizing, hard constraints, permissions, lifecycle/state transitions, deterministic scoring, versioning, freshness validation, and execution gates; AI is advisory; humans retain governance and final authority.
+- Future roadmap: **AI Trading Architecture Amendment Track AI-A through AI-F — ROADMAP ONLY**.
+- Theme Runtime Track / Trading Intelligence Track: **SEPARATE**.
+- Phase 3 production scope: **UNCHANGED — Theme Manifest Validator only**.
+- Future Trading contracts and schemas: **ADDITIVE / DEFERRED**.
+- Exchange execution: **NOT AUTHORIZED**; connectors remain read-only.
+- LLM production: **NOT AUTHORIZED**; GPT remains optional.
+- Architecture Amendment Required: any broker/exchange write or execution path, including transmission after Prepared Order confirmation.
+- Future Trading Risk Policy authority: target single trade 1.0%; absolute single cap 1.2%; aggregate 3.0%; maximum positions 3; daily-loss block -3%; two-loss warning; three-loss entry block; consecutive-loss master toggle required.
+- Historical values retained: Total Risk 2%; Maximum Positions 2; superseded only for future Trading Risk Policy authority.
+- Production files changed by 05A: **NONE**.
+- 05A validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 94/94 passed with 0 skipped; dependency boundary tests 5/5 passed; Phase 1/2 refs, Frozen hashes, production/schema/runtime/project-dependency diff, Phase 3/AI leakage, staged, unexpected-artifact, skill-observation Git-surface, and `git diff --check` gates passed.
+- Open blockers: **NONE**.
+- Exact next action: **Return to GPT Supervisor for 05A validation. Do not start Phase 3 implementation.**
 
 ## Phase 1 repository foundation
 
@@ -76,8 +116,9 @@ docs/
 - Per-surface Theme constraints derive from `TCC Theme Architecture v1.2 — APPROVED` §§6 and 30.2.
 - No new UX ID is introduced. Duplicate IDs are rejected by generator and negative test.
 
-## Current Phase 2 validation state
+## Approved Phase 2 validation state
 
+- Status: **APPROVED / SEALED** at `9ea2b6e945d3f438099dcdeb922f20c2a78a48fa` and tag `phase2-approved`.
 - Implementation: **COMPLETE**.
 - Initial independent validation verdict: **FAIL** (`P2-VAL-001` HIGH, `P2-VAL-002` HIGH, `P2-VAL-003` HIGH, `P2-VAL-004` MEDIUM / commit blocker).
 - Surgical remediation: **COMPLETE** for all four identified defects.
@@ -86,8 +127,8 @@ docs/
 - Previous defects: `P2-VAL-001` **RESOLVED**; `P2-VAL-002` **RESOLVED**; `P2-VAL-003` **RESOLVED**; `P2-VAL-004` **RESOLVED**.
 - Phase 2 completeness: **100%** — 21/21 schemas and 17/17 public interfaces.
 - Open defects: **NONE**.
-- Commit allowed: **YES**.
-- Phase 3 allowed: **NO** until the Phase 2 baseline commit, `phase2-approved` tag, and Phase 3 branch are created.
+- Phase 2 baseline commit/tag prerequisites: **COMPLETE**.
+- Phase 3 planning and branch setup: **COMPLETE**.
 - Actual SDK: system-installed `.NET SDK 10.0.400` at `C:\Program Files\dotnet\dotnet.exe`.
 - `global.json`: present; minimum `10.0.100`, `rollForward: latestFeature`, resolves to `10.0.400`.
 
@@ -120,7 +161,7 @@ docs/
 | Secret/local-path/temporary-SDK scan | Passed — no matches |
 | Project/lock-file changes | Passed — none |
 
-## Current Phase 2 change areas
+## Approved Phase 2 change areas
 
 - `contracts/theme/`
 - `docs/adr/ADR-0002-phase2-schemas-public-contracts-scope.md`
@@ -157,10 +198,13 @@ docs/
 ## Current risks and blockers
 
 - Open Phase 2 defects or validation blockers: none.
+- Open Phase 3 planning blockers: none.
 - Unrestricted solution-level MSBuild previously caused abnormal recursive process growth on this host; all remediation gates used `-m:1`. This is recorded as host/invocation behavior, not treated as a Phase 2 product defect.
-- The Phase 2 baseline commit and `phase2-approved` tag have not yet been created.
-- Phase 3 remains prohibited until the baseline commit, approval tag, and Phase 3 branch prerequisites are complete.
+- Phase 3 implementation has not started.
+- AI Trading production implementation has not started and is not authorized.
+- The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
+- No commit is authorized in the planning conversation.
 
 ## Exact next action
 
-Prepare the Phase 2 baseline commit. Do not create the commit, `phase2-approved` tag, or Phase 3 branch without explicit authorization.
+Return to GPT Supervisor for 05A validation. Do not start Phase 3 implementation.
