@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeCompatibility.schema.json",
+  "title": "ThemeCompatibility",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "theme_id",
+    "version",
+    "core",
+    "theme_api",
+    "ux_contract",
+    "windows",
+    "accessibility_matrix"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "theme_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "core": {
+      "type": "object",
+      "required": [
+        "required",
+        "tested"
+      ],
+      "properties": {
+        "required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "theme_api": {
+      "type": "object",
+      "required": [
+        "required",
+        "tested"
+      ],
+      "properties": {
+        "required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "ux_contract": {
+      "type": "object",
+      "required": [
+        "required",
+        "tested"
+      ],
+      "properties": {
+        "required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "windows": {
+      "type": "object",
+      "required": [
+        "installer_supported",
+        "portable_supported",
+        "multi_monitor_supported",
+        "dpi_ranges_tested"
+      ],
+      "properties": {
+        "installer_supported": {
+          "const": true
+        },
+        "portable_supported": {
+          "const": true
+        },
+        "multi_monitor_supported": {
+          "const": true
+        },
+        "dpi_ranges_tested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]+%$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "accessibility_matrix": {
+      "type": "object",
+      "required": [
+        "deep",
+        "light",
+        "reduced_motion",
+        "reduced_transparency",
+        "high_contrast",
+        "color_vision",
+        "keyboard",
+        "screen_reader"
+      ],
+      "properties": {
+        "deep": {
+          "const": "pass_required"
+        },
+        "light": {
+          "const": "pass_required"
+        },
+        "reduced_motion": {
+          "const": "pass_required"
+        },
+        "reduced_transparency": {
+          "const": "pass_required"
+        },
+        "high_contrast": {
+          "const": "pass_required"
+        },
+        "color_vision": {
+          "const": "pass_required"
+        },
+        "keyboard": {
+          "const": "pass_required"
+        },
+        "screen_reader": {
+          "const": "pass_required"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

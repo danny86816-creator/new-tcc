@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.tcc.local/theme/GlobalStatePresentation.schema.json",
+  "schema_version": "1.0",
+  "state_id": "STATE-RECOVERY-AVAILABLE",
+  "required_semantics": {
+    "meaning": "A recoverable state exists and restore impact can be inspected",
+    "must_show_reason": false,
+    "must_show_exit_or_resolution_path": true,
+    "may_offer_corrective_action": true
+  },
+  "required_redundancy": {
+    "text": true,
+    "icon_or_structure": true,
+    "programmatic_state": true,
+    "screen_reader_announcement": true,
+    "color_only_forbidden": true,
+    "motion_only_forbidden": true,
+    "sound_only_forbidden": true,
+    "transparency_only_forbidden": true
+  },
+  "theme_freedom": {
+    "color": "allowed_if_contrast_valid",
+    "animation": "supplementary_only",
+    "sound": "supplementary_only",
+    "metaphor": "allowed_if_plain_label_preserved"
+  },
+  "provenance": [
+    "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+  ]
+}

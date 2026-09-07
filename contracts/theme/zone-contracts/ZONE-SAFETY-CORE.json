@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schemas.tcc.local/theme/FunctionalZoneContract.schema.json",
+  "schema_version": "1.0",
+  "zone_id": "ZONE-SAFETY-CORE",
+  "zone_name": "Safety Core",
+  "semantics": "Trading Permission, total risk, current positions, and major alerts; always visible on Home and globally accessible",
+  "priority": "critical",
+  "rearrangeability": "limited",
+  "required_visibility": "always_on_home_and_globally_accessible",
+  "may_be_collapsed": false,
+  "semantic_children": [
+    "trading_permission",
+    "total_risk",
+    "current_positions",
+    "major_alerts"
+  ],
+  "theme_may_change": [
+    "visual_style",
+    "component_skin",
+    "iconography",
+    "motion_supplement",
+    "sound_supplement"
+  ],
+  "theme_must_not_change": [
+    "presence_when_required",
+    "meaning",
+    "priority",
+    "labels",
+    "programmatic_state",
+    "accessibility"
+  ],
+  "provenance": [
+    "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/FunctionalZoneContract.schema.json",
+  "title": "FunctionalZoneContract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "zone_id",
+    "zone_name",
+    "semantics",
+    "priority",
+    "rearrangeability",
+    "required_visibility",
+    "may_be_collapsed",
+    "semantic_children",
+    "theme_may_change",
+    "theme_must_not_change",
+    "provenance"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "zone_id": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "ZONE-SAFETY-CORE",
+        "ZONE-CONTEXT-HEADER",
+        "ZONE-STATUS-STRIP",
+        "ZONE-PRIMARY-ACTION",
+        "ZONE-EVIDENCE",
+        "ZONE-RISK",
+        "ZONE-DECISION",
+        "ZONE-TIMELINE",
+        "ZONE-CHECKLIST",
+        "ZONE-APPROVAL",
+        "ZONE-COLLABORATION",
+        "ZONE-ATTACHMENTS",
+        "ZONE-AUDIT-HISTORY",
+        "ZONE-SECONDARY-UTILITY",
+        "ZONE-RECOVERY",
+        "ZONE-PRIVACY",
+        "ZONE-CONFIRMATION"
+      ]
+    },
+    "zone_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semantics": {
+      "type": "string",
+      "minLength": 1
+    },
+    "priority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rearrangeability": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_visibility": {
+      "type": "string",
+      "minLength": 1
+    },
+    "may_be_collapsed": {
+      "type": "boolean"
+    },
+    "semantic_children": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "theme_may_change": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "theme_must_not_change": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

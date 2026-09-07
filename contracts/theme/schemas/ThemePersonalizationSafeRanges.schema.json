@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemePersonalizationSafeRanges.schema.json",
+  "title": "ThemePersonalizationSafeRanges",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "theme_id",
+    "controls"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "theme_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "control_id",
+          "display_name",
+          "type",
+          "default",
+          "accessibility_overrides",
+          "cannot_affect"
+        ],
+        "properties": {
+          "control_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "number",
+              "boolean",
+              "enum",
+              "color",
+              "string"
+            ]
+          },
+          "default": {},
+          "min": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "max": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "step": {
+            "type": "number",
+            "minimum": 0.0
+          },
+          "accessibility_overrides": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {}
+          },
+          "cannot_affect": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "enum": [
+                "risk_semantics",
+                "permission_semantics",
+                "audit_semantics",
+                "recovery_semantics",
+                "critical_alert_visibility",
+                "home_safety_core_visibility",
+                "confirmation_semantics",
+                "keyboard_focus_visibility",
+                "screen_reader_labels",
+                "accessibility_availability",
+                "connector_scope",
+                "gpt_optionality",
+                "authoritative_data"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

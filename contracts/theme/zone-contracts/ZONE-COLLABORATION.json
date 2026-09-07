@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.tcc.local/theme/FunctionalZoneContract.schema.json",
+  "schema_version": "1.0",
+  "zone_id": "ZONE-COLLABORATION",
+  "zone_name": "Collaboration Zone",
+  "semantics": "Comments, presence, annotations, privacy, and visibility labels",
+  "priority": "contextual",
+  "rearrangeability": "contract_defined",
+  "required_visibility": "when_applicable",
+  "may_be_collapsed": true,
+  "semantic_children": [],
+  "theme_may_change": [
+    "visual_style",
+    "component_skin",
+    "iconography",
+    "motion_supplement",
+    "sound_supplement"
+  ],
+  "theme_must_not_change": [
+    "presence_when_required",
+    "meaning",
+    "priority",
+    "labels",
+    "programmatic_state",
+    "accessibility"
+  ],
+  "provenance": [
+    "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+  ]
+}

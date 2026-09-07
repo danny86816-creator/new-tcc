@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "presentation_only": true,
+  "supplementary_only": true,
+  "one_click_disable_required": true,
+  "independent_categories": [
+    "master_theme_audio",
+    "bgm",
+    "ambient",
+    "ui_sound",
+    "alert_supplement"
+  ],
+  "normalized_volume_range": {
+    "minimum": 0.0,
+    "maximum": 1.0
+  },
+  "night_mode_required": true,
+  "ducking_required": true,
+  "critical_alert_visual_text_redundancy_required": true,
+  "loss_celebration_forbidden": true,
+  "source_reference": "TCC Theme Architecture v1.2 — APPROVED §20"
+}

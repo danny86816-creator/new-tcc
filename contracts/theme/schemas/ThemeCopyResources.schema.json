@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeCopyResources.schema.json",
+  "title": "ThemeCopyResources",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "locale",
+    "non_critical_resources",
+    "approved_critical_fallbacks"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "locale": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$"
+    },
+    "non_critical_resources": {
+      "type": "object",
+      "required": [],
+      "properties": {},
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "approved_critical_fallbacks": {
+      "type": "object",
+      "required": [],
+      "properties": {},
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

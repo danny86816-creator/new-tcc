@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeSoundPack.schema.json",
+  "title": "ThemeSoundPack",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "sound_pack_id",
+    "version",
+    "controls",
+    "events",
+    "bgm",
+    "ambient"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "sound_pack_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "controls": {
+      "type": "object",
+      "required": [
+        "one_click_disable",
+        "independent_bgm",
+        "independent_ambient",
+        "independent_ui",
+        "independent_alert_supplement",
+        "night_mode",
+        "ducking"
+      ],
+      "properties": {
+        "one_click_disable": {
+          "const": true
+        },
+        "independent_bgm": {
+          "const": true
+        },
+        "independent_ambient": {
+          "const": true
+        },
+        "independent_ui": {
+          "const": true
+        },
+        "independent_alert_supplement": {
+          "const": true
+        },
+        "night_mode": {
+          "const": true
+        },
+        "ducking": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "event_id",
+          "asset_id",
+          "priority",
+          "supplementary_only",
+          "duck_bgm",
+          "respects_sound_disabled",
+          "requires_visual_and_text_alert",
+          "celebratory"
+        ],
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "asset_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "supplementary_only": {
+            "const": true
+          },
+          "duck_bgm": {
+            "type": "boolean"
+          },
+          "respects_sound_disabled": {
+            "const": true
+          },
+          "requires_visual_and_text_alert": {
+            "type": "boolean"
+          },
+          "celebratory": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": false
+    },
+    "bgm": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "track_id",
+          "path",
+          "loop",
+          "contextual",
+          "respects_one_click_disable",
+          "respects_night_mode"
+        ],
+        "properties": {
+          "track_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "loop": {
+            "type": "boolean"
+          },
+          "contextual": {
+            "type": "boolean"
+          },
+          "respects_one_click_disable": {
+            "const": true
+          },
+          "respects_night_mode": {
+            "const": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": false
+    },
+    "ambient": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ambient_id",
+          "path",
+          "loop",
+          "contextual",
+          "surface_scope",
+          "respects_one_click_disable",
+          "respects_night_mode",
+          "duckable",
+          "default_volume"
+        ],
+        "properties": {
+          "ambient_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "loop": {
+            "type": "boolean"
+          },
+          "contextual": {
+            "type": "boolean"
+          },
+          "surface_scope": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "enum": [
+                "UX-HOME-001",
+                "UX-HOME-002",
+                "UX-ONB-001",
+                "UX-ONB-002",
+                "UX-ONB-003",
+                "UX-RISK-001",
+                "UX-RISK-002",
+                "UX-RISK-003",
+                "UX-RISK-004",
+                "UX-RISK-005",
+                "UX-PLAN-001",
+                "UX-PLAN-002",
+                "UX-PLAN-003",
+                "UX-PLAN-004",
+                "UX-PLAN-005",
+                "UX-POS-001",
+                "UX-POS-002",
+                "UX-POS-003",
+                "UX-CLOSE-001",
+                "UX-CLOSE-002",
+                "UX-CLOSE-003",
+                "UX-ORDER-001",
+                "UX-CLOSE-004",
+                "UX-REVIEW-001",
+                "UX-REVIEW-002",
+                "UX-REVIEW-003",
+                "UX-REVIEW-004",
+                "UX-REVIEW-005",
+                "UX-REVIEW-006",
+                "UX-MILE-001",
+                "UX-CAL-001",
+                "UX-CAL-002",
+                "UX-CAL-003",
+                "UX-ANALYTICS-001",
+                "UX-ANALYTICS-002",
+                "UX-TEAM-001",
+                "UX-TEAM-002",
+                "UX-TEAM-003",
+                "UX-TEAM-004",
+                "UX-ROOM-001",
+                "UX-ROOM-002",
+                "UX-COLLAB-001",
+                "UX-AI-001",
+                "UX-AI-002",
+                "UX-AI-003",
+                "UX-AI-004",
+                "UX-DATA-001",
+                "UX-ARCH-001",
+                "UX-DATA-002",
+                "UX-REC-001",
+                "UX-MIG-001",
+                "UX-MIG-002",
+                "UX-THEME-001",
+                "UX-THEME-002",
+                "UX-THEME-003",
+                "UX-SET-001",
+                "UX-SET-002",
+                "UX-SET-003",
+                "UX-SET-004",
+                "UX-SET-005",
+                "UX-SET-006",
+                "UX-AUTH-001",
+                "UX-AUTH-002",
+                "UX-AUTH-003",
+                "UX-EXT-001",
+                "UX-EXT-002",
+                "UX-CONN-001",
+                "UX-NOTIF-001",
+                "UX-CMD-001",
+                "UX-FLOAT-001",
+                "UX-SAFE-001"
+              ]
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "respects_one_click_disable": {
+            "const": true
+          },
+          "respects_night_mode": {
+            "const": true
+          },
+          "duckable": {
+            "const": true
+          },
+          "default_volume": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "uniqueItems": false
+    }
+  },
+  "additionalProperties": false
+}

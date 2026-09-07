@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeTokens.schema.json",
+  "title": "ThemeTokens",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "tokens",
+    "semantic_bindings"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "tokens": {
+      "type": "object",
+      "required": [],
+      "properties": {},
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "type",
+          "value"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "color",
+              "duration",
+              "number",
+              "string",
+              "font",
+              "dimension",
+              "opacity",
+              "boolean"
+            ]
+          },
+          "value": {}
+        },
+        "additionalProperties": false
+      }
+    },
+    "semantic_bindings": {
+      "type": "object",
+      "required": [],
+      "properties": {},
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "token",
+          "requires_text_label",
+          "requires_icon_or_structure"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requires_text_label": {
+            "type": "boolean"
+          },
+          "requires_icon_or_structure": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

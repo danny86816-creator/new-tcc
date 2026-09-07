@@ -1,6 +1,6 @@
 # Trading Command Center
 
-This repository contains the approved Phase 1 foundation for the Trading Command Center rebuild.
+This repository contains the approved Phase 1 foundation and the in-progress Phase 2 Schemas & Public Contracts implementation for the Trading Command Center rebuild.
 
 ## Phase 1 scope
 
@@ -9,7 +9,14 @@ This repository contains the approved Phase 1 foundation for the Trading Command
 - Package boundaries for presentation contracts, the Theme runtime, Theme feature UI, Windows adapters, and the desktop composition root.
 - Minimal xUnit architecture test runner.
 
-No Theme schemas, Theme API contracts, validators, persistence models, package lifecycle, preview, switching, accessibility runtime, or other Phase 2–8 implementation is included.
+## Phase 2 scope
+
+- Declarative Theme JSON Schemas under `contracts/theme/schemas`.
+- Stable UX contract JSON and deterministic page/module/zone/state projections under `contracts/theme`.
+- Public Theme contracts and interfaces under `Tcc.Presentation.Contracts.Theme`.
+- Architecture, schema, contract, serialization, and negative tests in the existing architecture test project.
+
+Phase 2 contains no production Theme validator, loader, runtime, persistence, package lifecycle, preview, switching, accessibility evaluator, audio/motion engine, UI, or Phase 3+ behavior.
 
 ## Prerequisites
 

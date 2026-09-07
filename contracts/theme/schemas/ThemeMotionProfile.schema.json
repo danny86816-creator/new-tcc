@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeMotionProfile.schema.json",
+  "title": "ThemeMotionProfile",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "profiles",
+    "reduced_motion"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "profile_id",
+          "intensity",
+          "transitions_interruptible",
+          "transitions_skippable",
+          "parallax_enabled",
+          "parallax_reduced_fallback",
+          "critical_alert_motion_supplementary_only",
+          "loss_celebration_forbidden"
+        ],
+        "properties": {
+          "profile_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "intensity": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "none",
+              "subtle",
+              "moderate",
+              "rich"
+            ]
+          },
+          "transitions_interruptible": {
+            "const": true
+          },
+          "transitions_skippable": {
+            "const": true
+          },
+          "parallax_enabled": {
+            "type": "boolean"
+          },
+          "parallax_reduced_fallback": {
+            "const": "static"
+          },
+          "critical_alert_motion_supplementary_only": {
+            "const": true
+          },
+          "loss_celebration_forbidden": {
+            "const": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": false
+    },
+    "reduced_motion": {
+      "type": "object",
+      "required": [
+        "disable_nonessential_motion",
+        "replace_transitions_with",
+        "preserve_state_textually",
+        "disable_parallax",
+        "disable_looping_decorative_motion"
+      ],
+      "properties": {
+        "disable_nonessential_motion": {
+          "const": true
+        },
+        "replace_transitions_with": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "instant",
+            "short_fade",
+            "instant_or_short_fade"
+          ]
+        },
+        "preserve_state_textually": {
+          "const": true
+        },
+        "disable_parallax": {
+          "const": true
+        },
+        "disable_looping_decorative_motion": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

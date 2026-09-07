@@ -1,0 +1,584 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeManifest.schema.json",
+  "title": "ThemeManifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "theme_api_version",
+    "package",
+    "compatibility",
+    "variants",
+    "capabilities",
+    "feature_flags",
+    "degraded_mode",
+    "accessibility",
+    "assets",
+    "motion",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "theme_api_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "package": {
+      "type": "object",
+      "required": [
+        "theme_id",
+        "package_id",
+        "name",
+        "publisher",
+        "publisher_id",
+        "version",
+        "channel",
+        "description",
+        "license",
+        "tags"
+      ],
+      "properties": {
+        "theme_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+        },
+        "package_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "stable",
+            "beta",
+            "developer"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "homepage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "support_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "required_core_version",
+        "required_theme_api_version",
+        "required_ux_contract_version",
+        "supported_platforms",
+        "portable_supported",
+        "minimum_dpi_scale",
+        "maximum_tested_dpi_scale"
+      ],
+      "properties": {
+        "required_core_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_theme_api_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_ux_contract_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supported_platforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "windows"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "portable_supported": {
+          "const": true
+        },
+        "minimum_dpi_scale": {
+          "type": "number",
+          "minimum": 1.0
+        },
+        "maximum_tested_dpi_scale": {
+          "type": "number",
+          "minimum": 1.0
+        }
+      },
+      "additionalProperties": false
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "variant_id",
+          "display_name",
+          "type",
+          "default",
+          "token_file",
+          "accessibility_overrides"
+        ],
+        "properties": {
+          "variant_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "deep",
+              "light",
+              "high_contrast",
+              "custom"
+            ]
+          },
+          "default": {
+            "type": "boolean"
+          },
+          "token_file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "accessibility_overrides": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "fallback_variant_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "enum": [
+          "presentation.tokens",
+          "presentation.layout",
+          "presentation.components",
+          "presentation.icons",
+          "presentation.copy.noncritical",
+          "presentation.motion",
+          "presentation.parallax",
+          "presentation.cursor.showcase_limited",
+          "presentation.audio.ui",
+          "presentation.audio.bgm",
+          "presentation.audio.ambient",
+          "presentation.loading_empty_error",
+          "presentation.time_of_day_scene",
+          "presentation.trading_state_overlay",
+          "presentation.workspace_appearance",
+          "presentation.floating_workspace_appearance",
+          "presentation.personalization"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "feature_flags": {
+      "type": "object",
+      "required": [
+        "presentation_only"
+      ],
+      "properties": {
+        "presentation_only": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "flag_id",
+              "default_enabled",
+              "description",
+              "cannot_affect"
+            ],
+            "properties": {
+              "flag_id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^presentation\\."
+              },
+              "default_enabled": {
+                "type": "boolean"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cannot_affect": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "degraded_mode": {
+      "type": "object",
+      "required": [
+        "supported",
+        "levels",
+        "preserves",
+        "default_fallback_level"
+      ],
+      "properties": {
+        "supported": {
+          "const": true
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "none",
+              "reduced_decoration",
+              "minimal_decoration",
+              "safe_presentation_only"
+            ]
+          },
+          "minItems": 4,
+          "uniqueItems": true
+        },
+        "preserves": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "default_fallback_level": {
+          "const": "safe_presentation_only"
+        }
+      },
+      "additionalProperties": false
+    },
+    "accessibility": {
+      "type": "object",
+      "required": [
+        "q93_compliant_claim",
+        "text_scaling_supported",
+        "zoom_supported",
+        "contrast_supported",
+        "color_vision_modes_supported",
+        "reduced_motion_supported",
+        "reduced_transparency_supported",
+        "sound_controls_supported",
+        "keyboard_focus_visible",
+        "full_keyboard_operation",
+        "screen_reader_labels_preserved",
+        "critical_alert_redundancy_supported"
+      ],
+      "properties": {
+        "q93_compliant_claim": {
+          "type": "boolean"
+        },
+        "text_scaling_supported": {
+          "const": true
+        },
+        "zoom_supported": {
+          "const": true
+        },
+        "contrast_supported": {
+          "const": true
+        },
+        "color_vision_modes_supported": {
+          "const": true
+        },
+        "reduced_motion_supported": {
+          "const": true
+        },
+        "reduced_transparency_supported": {
+          "const": true
+        },
+        "sound_controls_supported": {
+          "const": true
+        },
+        "keyboard_focus_visible": {
+          "const": true
+        },
+        "full_keyboard_operation": {
+          "const": true
+        },
+        "screen_reader_labels_preserved": {
+          "const": true
+        },
+        "critical_alert_redundancy_supported": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "object",
+      "required": [
+        "inventory",
+        "tiers",
+        "total_declared_size_bytes",
+        "hash_algorithm"
+      ],
+      "properties": {
+        "inventory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "tier0",
+              "tier1",
+              "tier2",
+              "tier3",
+              "audio"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "total_declared_size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hash_algorithm": {
+          "const": "sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "required": [
+        "sound_pack",
+        "bgm",
+        "ambient",
+        "optional",
+        "one_click_disable_supported",
+        "night_mode_supported",
+        "ducking_supported"
+      ],
+      "properties": {
+        "sound_pack": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bgm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ambient": {
+          "type": "string",
+          "minLength": 1
+        },
+        "optional": {
+          "const": true
+        },
+        "one_click_disable_supported": {
+          "const": true
+        },
+        "night_mode_supported": {
+          "const": true
+        },
+        "ducking_supported": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "motion": {
+      "type": "object",
+      "required": [
+        "profiles",
+        "reduced_motion",
+        "interruptible_transitions",
+        "skippable_transitions",
+        "parallax_static_fallback"
+      ],
+      "properties": {
+        "profiles": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reduced_motion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interruptible_transitions": {
+          "const": true
+        },
+        "skippable_transitions": {
+          "const": true
+        },
+        "parallax_static_fallback": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "personalization": {
+      "type": "object",
+      "required": [
+        "presets",
+        "safe_ranges",
+        "migrations",
+        "reset_supported"
+      ],
+      "properties": {
+        "presets": {
+          "type": "string",
+          "minLength": 1
+        },
+        "safe_ranges": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migrations": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reset_supported": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "integrity": {
+      "type": "object",
+      "required": [
+        "integrity_manifest",
+        "signature_required_for_channel",
+        "hash_algorithm"
+      ],
+      "properties": {
+        "integrity_manifest": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signature_required_for_channel": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hash_algorithm": {
+          "const": "sha256"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rollback": {
+      "type": "object",
+      "required": [
+        "rollback_manifest",
+        "state_migration_supported",
+        "previous_version_compatibility"
+      ],
+      "properties": {
+        "rollback_manifest": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_migration_supported": {
+          "type": "boolean"
+        },
+        "previous_version_compatibility": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

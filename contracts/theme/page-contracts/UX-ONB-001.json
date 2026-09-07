@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.tcc.local/theme/UxSurfaceContract.schema.json",
+  "schema_version": "1.0",
+  "ux_contract_version": "1.1.0",
+  "surface_id": "UX-ONB-001",
+  "surface_type": "page",
+  "surface_name": "Quick Start Onboarding",
+  "required_theme_contract": "Quick Start onboarding",
+  "supported_states": [
+    "STATE-NORMAL",
+    "STATE-LOADING",
+    "STATE-EMPTY",
+    "STATE-SUCCESS",
+    "STATE-WARNING",
+    "STATE-BLOCKED",
+    "STATE-ERROR",
+    "STATE-OFFLINE",
+    "STATE-STALE-DATA",
+    "STATE-SYNCING",
+    "STATE-PERMISSION-DENIED",
+    "STATE-RECOVERY-AVAILABLE",
+    "STATE-DEGRADED-PERFORMANCE",
+    "STATE-REDUCED-MOTION",
+    "STATE-REDUCED-TRANSPARENCY"
+  ],
+  "invariants": [
+    "core_ia_meaning",
+    "home_safety_core_visible",
+    "critical_alert_highest_priority",
+    "trading_permission_tradable_warning_blocked",
+    "risk_permission_semantics_fixed",
+    "old_new_risk_impact_confirm",
+    "manual_core_conflict_resolution",
+    "gpt_optional_and_non_official",
+    "connector_strictly_read_only",
+    "accessibility_q93_required",
+    "installer_portable_core_workflow_parity"
+  ],
+  "accessibility_requirements": {
+    "keyboard": true,
+    "screen_reader_labels": true,
+    "screen_reader_announcements": true,
+    "focus_visible": true,
+    "full_keyboard_operation": true,
+    "text_scaling": true,
+    "zoom": true,
+    "contrast": true,
+    "color_vision": true,
+    "reduced_motion": true,
+    "reduced_transparency": true,
+    "sound_controls": true,
+    "critical_alert_redundancy": true
+  },
+  "safety_constraints": [
+    "Safety Core meaning preserved",
+    "Accessibility entry available"
+  ],
+  "theme_freedom": "medium",
+  "required_theme_tests": [
+    "keyboard_wizard",
+    "screen_reader"
+  ],
+  "provenance": [
+    "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+    "TCC Theme Architecture v1.2 — APPROVED §30.2"
+  ]
+}

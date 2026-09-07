@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "page_transitions_interruptible": true,
+  "page_transitions_skippable": true,
+  "reduced_motion_mandatory": true,
+  "parallax_static_fallback": true,
+  "motion_is_supplementary": true,
+  "critical_alert_preempts_motion": true,
+  "loss_celebration_forbidden": true,
+  "source_reference": "TCC Theme Architecture v1.2 — APPROVED §§19, 21"
+}

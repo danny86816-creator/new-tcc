@@ -1,0 +1,5085 @@
+{
+  "$schema": "https://schemas.tcc.local/theme/ux-contract.v1.1.schema.json",
+  "schema_version": "1.0",
+  "ux_contract_version": "1.1.0",
+  "ux_architecture_display_label": "v1.1",
+  "theme_architecture_version": "1.0.0",
+  "minimum_theme_api_version": "1.0.0",
+  "provenance": {
+    "authority": "TCC Information & UX Architecture v1.1 — APPROVED",
+    "derived_contract_source": "TCC Theme Architecture v1.2 — APPROVED §§6, 30",
+    "generation_rule": "Preserve exact approved stable IDs and semantics; reject duplicate or unknown IDs."
+  },
+  "invariants": [
+    "core_ia_meaning",
+    "home_safety_core_visible",
+    "critical_alert_highest_priority",
+    "trading_permission_tradable_warning_blocked",
+    "risk_permission_semantics_fixed",
+    "old_new_risk_impact_confirm",
+    "manual_core_conflict_resolution",
+    "gpt_optional_and_non_official",
+    "connector_strictly_read_only",
+    "accessibility_q93_required",
+    "installer_portable_core_workflow_parity"
+  ],
+  "domains": [
+    {
+      "id": "D-HOME",
+      "name": "Command Center Home",
+      "semantics": "Integrated safety, status, daily priorities, positions, and alerts",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-PLAN",
+      "name": "Planning",
+      "semantics": "Trade plans, strategy templates, checklists, quality score, and hard gates",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-RISK",
+      "name": "Risk & Permission",
+      "semantics": "Trading permission, Risk Profiles, account/group rules, and risk simulation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-POSITION",
+      "name": "Positions",
+      "semantics": "Active position management, focus mode, updates, and risk-sensitive edits",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-CLOSE",
+      "name": "Closing",
+      "semantics": "Configurable closing flow, quick close, and delayed review",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-REVIEW",
+      "name": "Review & Learning",
+      "semantics": "Decision Timeline, trade history, reports, mental state, and AI coach",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-CALENDAR",
+      "name": "P&L Calendar & Analytics",
+      "semantics": "Monthly calendar, quarterly/yearly heatmaps, and analytics builder",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-TEAM",
+      "name": "Team Command Center",
+      "semantics": "Shared plans, team workspaces, approvals, activity, and rooms",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-COLLAB",
+      "name": "Collaboration Rooms",
+      "semantics": "Dedicated collaboration spaces with shared artifacts and permissions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-AI",
+      "name": "GPT / AI Workflows",
+      "semantics": "Manual GPT export/import, privacy preview, optional scoring, and AI coach",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-DATA",
+      "name": "Data, Recovery & Migration",
+      "semantics": "Recovery Center, backups, migration, and import/export",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-SETTINGS",
+      "name": "Settings & Control",
+      "semantics": "Settings, security, devices, accessibility, and shortcut profiles",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-THEME",
+      "name": "Theme Management",
+      "semantics": "Theme library, switching, personalization, and rollback",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-EXT",
+      "name": "Extensions & Connectors",
+      "semantics": "Plugins/extensions and future read-only connector management",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    },
+    {
+      "id": "D-UTILITY",
+      "name": "Global Utilities",
+      "semantics": "Search, Command Palette, notifications, and floating workspace",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §3.1"
+    }
+  ],
+  "workspaces": [
+    {
+      "id": "WS-PERSONAL",
+      "name": "Personal Command Center",
+      "semantics": "Personal trading operations",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-TEAM",
+      "name": "Team Command Center",
+      "semantics": "Team-level trading collaboration",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-DAILY",
+      "name": "Daily Workspace",
+      "semantics": "Default day overview",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-PREMARKET",
+      "name": "Pre-Market Workspace",
+      "semantics": "Start-of-day preparation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-TRADING",
+      "name": "Trading / Position Workspace",
+      "semantics": "Active trade monitoring and management",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-REVIEW",
+      "name": "Review Workspace",
+      "semantics": "Post-trade review and improvement",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-COLLAB",
+      "name": "Team Workspace",
+      "semantics": "Shared plans, approvals, and rooms",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-FLOAT",
+      "name": "Floating Reminder Workspace",
+      "semantics": "Always-on-top compact workspace",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    },
+    {
+      "id": "WS-CUSTOM-*",
+      "name": "Custom Saved Workspace",
+      "semantics": "User or team configured layout pattern",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §7.1"
+    }
+  ],
+  "modules": [
+    {
+      "id": "MOD-HOME-COMMAND",
+      "name": "Integrated Command Center Home",
+      "semantics": "Unified safety, status, and work overview",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-RISK-PERMISSION",
+      "name": "Trading Permission",
+      "semantics": "Tradable, Warning, and Blocked state with evidence and resolution paths",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-PLAN-WORKBENCH",
+      "name": "Trade Plan Workbench",
+      "semantics": "Build and formalize trade plans",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-PLAN-CHECKLIST-GATES",
+      "name": "Checklist / Quality Score / Hard Gates",
+      "semantics": "Validate plan quality and enforce hard gates",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-PLAN-STRATEGY-TEMPLATES",
+      "name": "Strategy Templates",
+      "semantics": "Versioned plan structures, conditions, scoring, and gates",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-RISK-PROFILES",
+      "name": "Risk Profiles",
+      "semantics": "Configure, simulate, apply, share, and version risk rules",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-RISK-ACCOUNTS-GROUPS",
+      "name": "Accounts / Account Groups",
+      "semantics": "Account and group context with separated rules and statistics",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-POSITION-MANAGEMENT",
+      "name": "Position Management",
+      "semantics": "Manage current positions and risk-sensitive edits",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-CLOSING",
+      "name": "Closing",
+      "semantics": "Quick and full closing workflows with audit",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-REVIEW-TIMELINE",
+      "name": "Decision Timeline / Review",
+      "semantics": "Compare plan and execution through ordered evidence and diffs",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-REVIEW-TRADE-HISTORY",
+      "name": "Trade History",
+      "semantics": "Searchable past trades and saved views",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-EVIDENCE-ATTACHMENTS-MARKUP",
+      "name": "Attachments / Markup",
+      "semantics": "Versioned evidence, snapshots, and annotations",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-CALENDAR-PL",
+      "name": "P&L Calendar",
+      "semantics": "Comparable month, quarter, and year performance views",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-ANALYTICS-BUILDER",
+      "name": "Analytics Builder",
+      "semantics": "Custom analytics with stable numeric meaning",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-REVIEW-REPORT-LIBRARY",
+      "name": "Report Library",
+      "semantics": "Searchable evidence-linked reports",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-REVIEW-MENTAL-STATE",
+      "name": "Mental State",
+      "semantics": "Optional privacy-sensitive pre/during/post state context",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-AI-IMPROVEMENT-COACH",
+      "name": "Improvement Loop / AI Coach",
+      "semantics": "Evidence-linked optional improvement workflow",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-AI-GPT-MANUAL",
+      "name": "GPT Manual Export / Import",
+      "semantics": "Manual optional GPT workflow with privacy preview",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-COLLAB-PERSONAL-TEAM",
+      "name": "Personal / Team Collaboration",
+      "semantics": "Shared plans, comments, presence, and permissions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-COLLAB-ROOMS",
+      "name": "Collaboration Rooms",
+      "semantics": "Dedicated permissioned team spaces",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-UTILITY-ACTIVITY-FEED",
+      "name": "Activity Feed",
+      "semantics": "Permission-filtered relevant activity with critical alerts separated",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-UTILITY-COMMAND-PALETTE",
+      "name": "Search / Command Palette",
+      "semantics": "Permission-aware search and direct actions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-UTILITY-NOTIFICATIONS",
+      "name": "Notifications",
+      "semantics": "Categorized actionable alerts with critical risk highest priority",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-UTILITY-FLOATING-WORKSPACE",
+      "name": "Floating Reminder Workspace",
+      "semantics": "Compact always-on-top monitoring with safety meaning",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-THEME-MANAGEMENT",
+      "name": "Theme Management",
+      "semantics": "Theme packages, compatibility, preview, switching, and rollback without data mutation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-THEME-PERSONALIZATION",
+      "name": "Theme Personalization Studio",
+      "semantics": "Safe-range presentation personalization",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-SETTINGS-CENTER",
+      "name": "Settings",
+      "semantics": "Searchable professional settings with change history",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-DATA-RECOVERY",
+      "name": "Recovery Center",
+      "semantics": "Recover state with diff, confirmation, and audit",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-DATA-MIGRATION",
+      "name": "Migration",
+      "semantics": "Previewed, backed-up, no-overwrite migration",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-EXT-PLUGIN-MANAGEMENT",
+      "name": "Plugin / Extension Management",
+      "semantics": "Sandboxed extension control with explicit permissions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-EXT-READONLY-CONNECTORS",
+      "name": "Future Read-Only Connector Management",
+      "semantics": "Read-only sync, reconciliation, and monitoring only",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-SETTINGS-SECURITY-DEVICES",
+      "name": "Security / Devices",
+      "semantics": "2FA, device management, App Lock, and step-up",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-SETTINGS-ACCESSIBILITY",
+      "name": "Accessibility",
+      "semantics": "Full Q93 accessibility profile",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-ONBOARDING",
+      "name": "Quick Start / Full Setup Onboarding",
+      "semantics": "Resumable safe product setup",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-AUTH-SECURITY",
+      "name": "Login / App Lock / 2FA / Step-Up",
+      "semantics": "Multi-user authentication and protected app access",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-DATA-ARCHIVE-SOFT-DELETE",
+      "name": "Archive & Soft-Delete",
+      "semantics": "Data-type-specific archive, soft-delete, restore, permission, and audit rules",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-LIFECYCLE-ORDER-TRACKING",
+      "name": "Manual Order / Execution Tracking",
+      "semantics": "Manual lifecycle recording only; no connector execution",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-LIFECYCLE-REPORTS",
+      "name": "Closing Reports / Post-Trade Review Reports",
+      "semantics": "Versioned evidence-linked lifecycle reports",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-REVIEW-MILESTONES",
+      "name": "Growth & Discipline Milestones",
+      "semantics": "Restrained, disableable progress without celebrating losses",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-DATA-EXPORT-PORTABLE-ARCHIVE",
+      "name": "Export & Portable Archive",
+      "semantics": "Open formats with private/shared separation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    },
+    {
+      "id": "MOD-SETTINGS-UPDATES",
+      "name": "Updates & Release Channels",
+      "semantics": "Stable/Beta/Developer update safety with backup and rollback",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2"
+    }
+  ],
+  "zones": [
+    {
+      "id": "ZONE-SAFETY-CORE",
+      "name": "Safety Core",
+      "semantics": "Trading Permission, total risk, current positions, and major alerts; always visible on Home and globally accessible",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-CONTEXT-HEADER",
+      "name": "Context Header",
+      "semantics": "Current object, account/group, mode, and sync state",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-STATUS-STRIP",
+      "name": "Status Strip",
+      "semantics": "Source, freshness, sync, and permissions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-PRIMARY-ACTION",
+      "name": "Primary Action Area",
+      "semantics": "Canonical actions with risk-sensitive confirmation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-EVIDENCE",
+      "name": "Evidence Panel",
+      "semantics": "Attachments, charts, notes, citations, and linkage",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-RISK",
+      "name": "Risk Panel",
+      "semantics": "Current risk, violations, limits, impact, and corrective path",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-DECISION",
+      "name": "Decision Panel",
+      "semantics": "Thesis, choices, and rationale",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-TIMELINE",
+      "name": "Timeline",
+      "semantics": "Ordered event and diff history",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-CHECKLIST",
+      "name": "Checklist Zone",
+      "semantics": "Required checks, gates, and score",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-APPROVAL",
+      "name": "Approval Zone",
+      "semantics": "Approval requests, approvers, status, and path",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-COLLABORATION",
+      "name": "Collaboration Zone",
+      "semantics": "Comments, presence, annotations, privacy, and visibility labels",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-ATTACHMENTS",
+      "name": "Attachments Zone",
+      "semantics": "Files, markup, snapshots, version, and source",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-AUDIT-HISTORY",
+      "name": "Audit / History Zone",
+      "semantics": "Diff, history, and restore without hiding audit",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-SECONDARY-UTILITY",
+      "name": "Secondary Utility Zone",
+      "semantics": "Keyboard-accessible filters, sort, and saved views",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-RECOVERY",
+      "name": "Recovery Zone",
+      "semantics": "Autosave, retry, rollback, and clear recovery action",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-PRIVACY",
+      "name": "Privacy Zone",
+      "semantics": "Included data and private/shared visibility for AI/export/share",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    },
+    {
+      "id": "ZONE-CONFIRMATION",
+      "name": "Confirmation Zone",
+      "semantics": "Old, New, Risk Impact, required approval or validation, and explicit Confirm",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §10.4"
+    }
+  ],
+  "states": [
+    {
+      "id": "STATE-NORMAL",
+      "name": "Normal",
+      "semantics": "Data and actions are available",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-LOADING",
+      "name": "Loading",
+      "semantics": "Fetch or computation is in progress",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-EMPTY",
+      "name": "Empty",
+      "semantics": "No data exists or matches and a next action is available",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-SUCCESS",
+      "name": "Success",
+      "semantics": "An action completed with a clear result and next step",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-WARNING",
+      "name": "Warning",
+      "semantics": "A risk or validation issue requires cause and impact visibility",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-BLOCKED",
+      "name": "Blocked",
+      "semantics": "Action is not allowed and exact blocker plus resolution path are required",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-ERROR",
+      "name": "Error",
+      "semantics": "Operation failed with cause and retry or recovery path",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-OFFLINE",
+      "name": "Offline",
+      "semantics": "Network is unavailable while local-safe workflows remain available",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-STALE-DATA",
+      "name": "Stale Data",
+      "semantics": "Freshness is uncertain and source plus last update must be shown",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-SYNCING",
+      "name": "Syncing",
+      "semantics": "Sync is in progress with source and progress visible",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-CONFLICT",
+      "name": "Conflict",
+      "semantics": "Values disagree and diff/source plus manual resolution are required",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-PERMISSION-DENIED",
+      "name": "Permission Denied",
+      "semantics": "User is not authorized and a safe access path may be shown",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-APPROVAL-PENDING",
+      "name": "Approval Pending",
+      "semantics": "A required approval is outstanding",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-APPROVAL-REJECTED",
+      "name": "Approval Rejected",
+      "semantics": "A request was denied and cannot be applied",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-RECOVERY-AVAILABLE",
+      "name": "Recovery Available",
+      "semantics": "A recoverable state exists and restore impact can be inspected",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-SAFE-MODE",
+      "name": "Safe Mode",
+      "semantics": "Minimal accessible repair state with normal themes/plugins disabled",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-DEGRADED-PERFORMANCE",
+      "name": "Degraded Performance",
+      "semantics": "Presentation was downgraded without reducing safety or accessibility",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-REDUCED-MOTION",
+      "name": "Reduced Motion",
+      "semantics": "Motion is minimized and all functions remain available",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    },
+    {
+      "id": "STATE-REDUCED-TRANSPARENCY",
+      "name": "Reduced Transparency",
+      "semantics": "Transparency is minimized while hierarchy and readability remain",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §36.1"
+    }
+  ],
+  "flows": [
+    {
+      "id": "FLOW-A-PREMARKET",
+      "name": "Start-of-Day / Pre-Market Flow",
+      "semantics": "Prepare the day and evaluate readiness",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-B-CREATE-PLAN",
+      "name": "Create Trade Plan",
+      "semantics": "Create a trade plan",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-C-VALIDATE-PLAN",
+      "name": "Complete Technical/Mindset/Risk Validation",
+      "semantics": "Validate plan evidence, checklist, and risk",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-D-PERMISSION-EVAL",
+      "name": "Trading Permission Evaluation",
+      "semantics": "Evaluate Tradable, Warning, or Blocked",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-E-HARD-BLOCK-RECOVERY",
+      "name": "Hard-Block and Recovery",
+      "semantics": "Resolve a hard blocker safely",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-F-FORMALIZE-OPEN",
+      "name": "Formalize / Open a Trade",
+      "semantics": "Create a formal snapshot and manually record opening",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-G-MANAGE-POSITION",
+      "name": "Manage Active Position",
+      "semantics": "Monitor and manage an active position",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-H-RISK-SENSITIVE-UPDATE",
+      "name": "Update Risk-Sensitive Trade Values",
+      "semantics": "Confirm Old, New, Risk Impact, and apply",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-I-CLOSE-TRADE",
+      "name": "Close Trade",
+      "semantics": "Manually record a close with audit",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-J-QUICK-CLOSE",
+      "name": "Quick Close Capture",
+      "semantics": "Capture immediate close data for later review",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-K-DELAYED-DEEP-REVIEW",
+      "name": "Delayed Deep Review",
+      "semantics": "Complete post-trade deep review",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-L-DECISION-TIMELINE",
+      "name": "Decision Timeline Review",
+      "semantics": "Compare plan, decisions, and execution",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-M-CALENDAR-INVESTIGATION",
+      "name": "P&L Calendar Investigation",
+      "semantics": "Investigate performance from calendar views",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-N-STRATEGY-TEMPLATE",
+      "name": "Strategy Template Creation/Editing",
+      "semantics": "Create and version strategy templates",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-O-RISK-PROFILE",
+      "name": "Risk Profile Creation/Editing/Simulation/Application",
+      "semantics": "Edit, simulate, confirm, and apply risk profile changes",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-P-FOLLOW-SHARED-TRADE",
+      "name": "Follow a Shared Trade",
+      "semantics": "Follow shared truth with a personal alternative view",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-Q-TEAM-COLLAB-PLAN",
+      "name": "Team Collaborative Plan",
+      "semantics": "Collaborate on a permissioned shared plan",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-R-TEAM-APPROVAL",
+      "name": "Team Approval",
+      "semantics": "Review evidence and decide a gated approval",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-S-TRADE-FIELD-CONFLICT",
+      "name": "Resolve Realtime Trade-Field Conflict",
+      "semantics": "Manually resolve core trade-field conflict",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-T-GPT-EXPORT",
+      "name": "GPT Manual Export",
+      "semantics": "Prepare and export privacy-reviewed context manually",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-U-GPT-IMPORT",
+      "name": "GPT Result Import",
+      "semantics": "Validate and import optional GPT results without silent mutation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-V-CRASH-RECOVERY",
+      "name": "Recovery After Crash",
+      "semantics": "Inspect and safely recover autosaved state",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-W-MIGRATION",
+      "name": "Legacy-Data Migration",
+      "semantics": "Preview, back up, validate, migrate, retry, or roll back",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-X-THEME-SWITCH",
+      "name": "Theme Switching",
+      "semantics": "Preview, confirm, and switch presentation safely",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-Y-THEME-ROLLBACK",
+      "name": "Theme Failure Rollback",
+      "semantics": "Fallback and roll back a failed theme",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-Z-PLUGIN-PERMISSION",
+      "name": "Plugin Enable / Permission Workflow",
+      "semantics": "Review sandbox permissions before enabling",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AA-ONBOARDING",
+      "name": "Quick Start / Full Setup Onboarding",
+      "semantics": "Complete or resume safe setup",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AB-AUTH-SECURITY",
+      "name": "Login / App Lock / 2FA / Step-Up Verification",
+      "semantics": "Authenticate and verify sensitive actions",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AC-ARCHIVE-SOFT-DELETE",
+      "name": "Archive / Soft-Delete / Restore Data",
+      "semantics": "Apply data-type lifecycle rules with confirmation and audit",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AD-LIFECYCLE-REPORTS",
+      "name": "Manual Order Tracking / Closing Report / Post-Trade Review Report",
+      "semantics": "Record manual lifecycle and reports",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AE-READONLY-CONNECTOR",
+      "name": "Read-Only Connector Enable / Reconcile / Monitor",
+      "semantics": "Enable only read-only sync, reconciliation, and monitoring",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    },
+    {
+      "id": "FLOW-AF-COMMAND-PALETTE-DIRECT-ACTION",
+      "name": "Command Palette Direct Action",
+      "semantics": "Run permission-aware direct actions with required confirmation",
+      "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §37.1"
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "UX-HOME-001",
+      "name": "Command Center Home",
+      "required_theme_contract": "Home command surface",
+      "safety_constraints": [
+        "ZONE-SAFETY-CORE visible",
+        "Trading Permission, total risk, current positions, and major alerts preserved"
+      ],
+      "theme_freedom": "high_outside_safety_core",
+      "required_theme_tests": [
+        "safety_core",
+        "deep_light",
+        "reduced_modes"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-HOME-002",
+      "name": "Daily Brief",
+      "required_theme_contract": "Daily brief surface",
+      "safety_constraints": [
+        "Alerts and risk visible",
+        "No hidden blockers"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "daily_brief_state",
+        "accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ONB-001",
+      "name": "Quick Start Onboarding",
+      "required_theme_contract": "Quick Start onboarding",
+      "safety_constraints": [
+        "Safety Core meaning preserved",
+        "Accessibility entry available"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "keyboard_wizard",
+        "screen_reader"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ONB-002",
+      "name": "Full Setup Onboarding",
+      "required_theme_contract": "Full Setup onboarding",
+      "safety_constraints": [
+        "High-impact setup confirmation clarity"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "setup_confirmation",
+        "reduced_modes"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ONB-003",
+      "name": "Onboarding Resume",
+      "required_theme_contract": "Onboarding resume",
+      "safety_constraints": [
+        "Progress visible and accessible",
+        "No data loss on resume"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "resume_state"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-RISK-001",
+      "name": "Trading Permission Overview",
+      "required_theme_contract": "Trading Permission overview",
+      "safety_constraints": [
+        "Tradable, Warning, and Blocked semantics fixed"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "permission_state_non_color_only"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-RISK-002",
+      "name": "Risk Profile Library",
+      "required_theme_contract": "Risk Profile library",
+      "safety_constraints": [
+        "Version and active-profile clarity"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "version_labels",
+        "contrast"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-RISK-003",
+      "name": "Risk Profile Editor",
+      "required_theme_contract": "Risk Profile editor",
+      "safety_constraints": [
+        "Rule-edit impact not obscured"
+      ],
+      "theme_freedom": "low_medium",
+      "required_theme_tests": [
+        "forms",
+        "keyboard",
+        "confirmation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-RISK-004",
+      "name": "Risk Simulation",
+      "required_theme_contract": "Risk simulation",
+      "safety_constraints": [
+        "Old, New, and Risk Impact visible",
+        "Pre-apply simulation required"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "simulation_tables_accessible"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-RISK-005",
+      "name": "Accounts & Groups",
+      "required_theme_contract": "Accounts and groups",
+      "safety_constraints": [
+        "Account separation visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "account_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-PLAN-001",
+      "name": "Trade Plan Dashboard",
+      "required_theme_contract": "Plan dashboard",
+      "safety_constraints": [
+        "Draft and formal distinction preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "list_grid_states"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-PLAN-002",
+      "name": "Trade Plan Workbench",
+      "required_theme_contract": "Plan workbench",
+      "safety_constraints": [
+        "Risk, template, and account context visible",
+        "Formal snapshot rule preserved"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "forms",
+        "evidence",
+        "accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-PLAN-003",
+      "name": "Checklist & Gates",
+      "required_theme_contract": "Checklist and gates",
+      "safety_constraints": [
+        "Gate semantics fixed",
+        "Non-color-only state"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "gate_status"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-PLAN-004",
+      "name": "Strategy Template Library",
+      "required_theme_contract": "Template library",
+      "safety_constraints": [
+        "Source and version visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "template_list"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-PLAN-005",
+      "name": "Strategy Template Editor",
+      "required_theme_contract": "Template editor",
+      "safety_constraints": [
+        "Required fields, gates, and conditions clear"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "rule_editor_keyboard"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-POS-001",
+      "name": "Positions Overview",
+      "required_theme_contract": "Positions overview",
+      "safety_constraints": [
+        "Current positions and risk visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "dense_table_accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-POS-002",
+      "name": "Position Detail",
+      "required_theme_contract": "Position detail",
+      "safety_constraints": [
+        "Risk-sensitive edits require confirmation"
+      ],
+      "theme_freedom": "low_medium",
+      "required_theme_tests": [
+        "diff",
+        "confirmation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-POS-003",
+      "name": "Position Focus Mode",
+      "required_theme_contract": "Focus mode",
+      "safety_constraints": [
+        "Critical alerts interrupt focus mode"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "focus_mode_alerts"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CLOSE-001",
+      "name": "Close Dashboard",
+      "required_theme_contract": "Close dashboard",
+      "safety_constraints": [
+        "Close status and risk context visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "close_actions"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CLOSE-002",
+      "name": "Quick Close",
+      "required_theme_contract": "Quick close",
+      "safety_constraints": [
+        "No celebration on loss"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "loss_feedback_negative"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CLOSE-003",
+      "name": "Full Close",
+      "required_theme_contract": "Full close",
+      "safety_constraints": [
+        "Material close confirmation preserved"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "guided_flow"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ORDER-001",
+      "name": "Manual Order Tracking",
+      "required_theme_contract": "Manual order tracking",
+      "safety_constraints": [
+        "Manual V1 only",
+        "No connector execution"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "read_only_boundary_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CLOSE-004",
+      "name": "Closing Report",
+      "required_theme_contract": "Closing report",
+      "safety_constraints": [
+        "Report visibility and close values preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "report_structure"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-001",
+      "name": "Review Dashboard",
+      "required_theme_contract": "Review dashboard",
+      "safety_constraints": [
+        "Optional AI",
+        "Review status visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "optional_ai_absence"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-002",
+      "name": "Decision Timeline",
+      "required_theme_contract": "Decision timeline",
+      "safety_constraints": [
+        "Diff and audit order preserved"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "timeline_semantics"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-003",
+      "name": "Trade History",
+      "required_theme_contract": "Trade history",
+      "safety_constraints": [
+        "Saved views do not alter data"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "table_list"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-004",
+      "name": "Report Library",
+      "required_theme_contract": "Report library",
+      "safety_constraints": [
+        "Evidence trace preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "report_cards"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-005",
+      "name": "Mental State",
+      "required_theme_contract": "Mental state",
+      "safety_constraints": [
+        "Privacy labels visible",
+        "Context remains optional"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "sensitive_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REVIEW-006",
+      "name": "Post-Trade Review",
+      "required_theme_contract": "Post-trade review",
+      "safety_constraints": [
+        "Rule, self, team, and GPT scores side-by-side",
+        "GPT optional and non-official"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "gpt_optional_non_official"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-MILE-001",
+      "name": "Growth & Discipline Milestones",
+      "required_theme_contract": "Milestones",
+      "safety_constraints": [
+        "Disableable",
+        "No loss celebration"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "disable",
+        "no_loss_celebration"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CAL-001",
+      "name": "Monthly P&L Calendar",
+      "required_theme_contract": "Monthly calendar",
+      "safety_constraints": [
+        "Numeric meaning and source preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "heatmap_non_color_values"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CAL-002",
+      "name": "Quarterly Heatmap",
+      "required_theme_contract": "Quarterly heatmap",
+      "safety_constraints": [
+        "Comparability preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "scale",
+        "contrast"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CAL-003",
+      "name": "Yearly Heatmap",
+      "required_theme_contract": "Yearly heatmap",
+      "safety_constraints": [
+        "Strong comparability preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "screen_reader_values"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ANALYTICS-001",
+      "name": "Analytics Builder",
+      "required_theme_contract": "Analytics builder",
+      "safety_constraints": [
+        "Numeric semantics fixed"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "chart_alternatives"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ANALYTICS-002",
+      "name": "Historical Search",
+      "required_theme_contract": "Historical search",
+      "safety_constraints": [
+        "Permission-filtered results"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "search_accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-TEAM-001",
+      "name": "Team Command Center",
+      "required_theme_contract": "Team command center",
+      "safety_constraints": [
+        "Shared, private, and team boundaries visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "boundary_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-TEAM-002",
+      "name": "Shared Trades",
+      "required_theme_contract": "Shared trades",
+      "safety_constraints": [
+        "Shared truth visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "shared_status_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-TEAM-003",
+      "name": "Team Approvals",
+      "required_theme_contract": "Team approvals",
+      "safety_constraints": [
+        "Old, New, Risk Impact, and evidence visible"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "approval_confirmation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-TEAM-004",
+      "name": "Activity Feed",
+      "required_theme_contract": "Activity feed",
+      "safety_constraints": [
+        "Critical risk separated from ordinary feed"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "feed_filtering"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ROOM-001",
+      "name": "Collaboration Room List",
+      "required_theme_contract": "Room list",
+      "safety_constraints": [
+        "Access boundaries visible"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "room_permissions"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ROOM-002",
+      "name": "Collaboration Room Workspace",
+      "required_theme_contract": "Room workspace",
+      "safety_constraints": [
+        "Conflict and approval handling preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "collaboration_conflict"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-COLLAB-001",
+      "name": "Comments & Annotations",
+      "required_theme_contract": "Comments and annotations",
+      "safety_constraints": [
+        "Q34 taxonomy fixed"
+      ],
+      "theme_freedom": "high_style_only",
+      "required_theme_tests": [
+        "status_taxonomy"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AI-001",
+      "name": "GPT Export Center",
+      "required_theme_contract": "GPT export center",
+      "safety_constraints": [
+        "Manual and optional export",
+        "Privacy preview required"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "privacy_export_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AI-002",
+      "name": "GPT Privacy Preview",
+      "required_theme_contract": "Privacy preview",
+      "safety_constraints": [
+        "Included data and privacy boundary visible"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "critical_privacy_screen_reader"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AI-003",
+      "name": "GPT Import",
+      "required_theme_contract": "GPT import",
+      "safety_constraints": [
+        "Optional analysis",
+        "No silent changes"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "import_validation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AI-004",
+      "name": "AI Coach",
+      "required_theme_contract": "AI coach",
+      "safety_constraints": [
+        "Evidence-linked and optional",
+        "No silent mutation"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "no_silent_mutation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-DEGRADED-PERFORMANCE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-DATA-001",
+      "name": "Data Center",
+      "required_theme_contract": "Data center",
+      "safety_constraints": [
+        "Local-first and source state visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "data_actions"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-ARCH-001",
+      "name": "Archive & Soft-Delete Center",
+      "required_theme_contract": "Archive and soft-delete",
+      "safety_constraints": [
+        "Destructive warning plain",
+        "Data-type rules fixed"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "old_new_impact_confirm"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-DATA-002",
+      "name": "Export & Portable Archive",
+      "required_theme_contract": "Export and portable archive",
+      "safety_constraints": [
+        "Private and shared separation visible"
+      ],
+      "theme_freedom": "low_medium",
+      "required_theme_tests": [
+        "export_preview"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-REC-001",
+      "name": "Recovery Center",
+      "required_theme_contract": "Recovery Center",
+      "safety_constraints": [
+        "Diff and restore clarity",
+        "Overwrite confirmation required"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "recovery_confirmation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-MIG-001",
+      "name": "Migration Start",
+      "required_theme_contract": "Migration start",
+      "safety_constraints": [
+        "No-overwrite and backup visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "migration_scan"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-MIG-002",
+      "name": "Migration Preview & Validation",
+      "required_theme_contract": "Migration preview",
+      "safety_constraints": [
+        "Validation, retry, and rollback visible",
+        "No overwrite"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "migration_validation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-THEME-001",
+      "name": "Theme Library",
+      "required_theme_contract": "Theme Library",
+      "safety_constraints": [
+        "Compatibility, integrity, and accessibility visible",
+        "No data mutation"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "install_switch_states"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-THEME-002",
+      "name": "Theme Preview",
+      "required_theme_contract": "Theme Preview",
+      "safety_constraints": [
+        "Preview cannot mutate authoritative data",
+        "Audio controls visible",
+        "Exit always available"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "preview_audio",
+        "no_data_mutation"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-THEME-003",
+      "name": "Personalization Studio",
+      "required_theme_contract": "Personalization Studio",
+      "safety_constraints": [
+        "Safe ranges and reset preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "clamp",
+        "accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-001",
+      "name": "Settings Center",
+      "required_theme_contract": "Settings Center",
+      "safety_constraints": [
+        "High-impact settings marked"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "settings_search"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-002",
+      "name": "Accessibility Settings",
+      "required_theme_contract": "Accessibility Settings",
+      "safety_constraints": [
+        "Full Q93 controls available"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "full_accessibility_profile"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-003",
+      "name": "Security & Devices",
+      "required_theme_contract": "Security and devices",
+      "safety_constraints": [
+        "Step-up and security wording plain"
+      ],
+      "theme_freedom": "low_medium",
+      "required_theme_tests": [
+        "secure_forms"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-004",
+      "name": "Notifications & Sound",
+      "required_theme_contract": "Notifications and sound",
+      "safety_constraints": [
+        "Critical priority fixed",
+        "Sound remains supplementary"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "audio_disabled",
+        "night_mode"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-005",
+      "name": "Keyboard Shortcuts",
+      "required_theme_contract": "Keyboard shortcuts",
+      "safety_constraints": [
+        "Shortcut conflict checks visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "keyboard_native"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SET-006",
+      "name": "Updates & Release Channels",
+      "required_theme_contract": "Updates and channels",
+      "safety_constraints": [
+        "Backup, compatibility, and rollback visible"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "breaking_notice"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AUTH-001",
+      "name": "Login / User Selection",
+      "required_theme_contract": "Login and user selection",
+      "safety_constraints": [
+        "Protected data hidden before authentication"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "secure_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AUTH-002",
+      "name": "App Lock / Unlock",
+      "required_theme_contract": "App Lock and unlock",
+      "safety_constraints": [
+        "Locked data hidden",
+        "Unlock accessible"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "unlock_accessibility"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-AUTH-003",
+      "name": "Verification / 2FA / Step-Up",
+      "required_theme_contract": "2FA and Step-Up",
+      "safety_constraints": [
+        "Action reason clear",
+        "Cancellation safe"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "cancel_safety"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-EXT-001",
+      "name": "Plugin Manager",
+      "required_theme_contract": "Plugin manager",
+      "safety_constraints": [
+        "Sandbox and Safe Mode semantics fixed"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "plugin_coexistence"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-EXT-002",
+      "name": "Plugin Permission Review",
+      "required_theme_contract": "Plugin permission review",
+      "safety_constraints": [
+        "Permission impact plain",
+        "Explicit confirmation"
+      ],
+      "theme_freedom": "low",
+      "required_theme_tests": [
+        "permission_labels"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CONN-001",
+      "name": "Read-Only Connector Manager",
+      "required_theme_contract": "Read-only connector manager",
+      "safety_constraints": [
+        "No write or execution capability"
+      ],
+      "theme_freedom": "low_medium",
+      "required_theme_tests": [
+        "connector_boundary_negative"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-NOTIF-001",
+      "name": "Notification Center",
+      "required_theme_contract": "Notification center",
+      "safety_constraints": [
+        "Critical risk highest priority",
+        "Redundant alert cues"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "alert_redundancy"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-CMD-001",
+      "name": "Command Palette",
+      "required_theme_contract": "Command palette",
+      "safety_constraints": [
+        "Permission and risk confirmation preserved"
+      ],
+      "theme_freedom": "high",
+      "required_theme_tests": [
+        "direct_action_safety"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-FLOAT-001",
+      "name": "Floating Workspace",
+      "required_theme_contract": "Floating Workspace",
+      "safety_constraints": [
+        "Compact safety visible",
+        "Multi-monitor and DPI safe"
+      ],
+      "theme_freedom": "medium",
+      "required_theme_tests": [
+        "dpi_multi_monitor"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    },
+    {
+      "id": "UX-SAFE-001",
+      "name": "Safe Mode Home",
+      "required_theme_contract": "Safe Mode Home",
+      "safety_constraints": [
+        "Minimal accessible presentation",
+        "No decoration dependency"
+      ],
+      "theme_freedom": "low_visual",
+      "required_theme_tests": [
+        "safe_mode_recovery"
+      ],
+      "source_references": [
+        "TCC Information & UX Architecture v1.1 — APPROVED §9.1",
+        "TCC Theme Architecture v1.2 — APPROVED §30.2"
+      ],
+      "supported_states": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ],
+      "accessibility_obligations": {
+        "keyboard": true,
+        "screen_reader_labels": true,
+        "screen_reader_announcements": true,
+        "focus_visible": true,
+        "full_keyboard_operation": true,
+        "text_scaling": true,
+        "zoom": true,
+        "contrast": true,
+        "color_vision": true,
+        "reduced_motion": true,
+        "reduced_transparency": true,
+        "sound_controls": true,
+        "critical_alert_redundancy": true
+      },
+      "visual_regression_coverage": [
+        "declared_variants",
+        "applicable_states",
+        "accessibility_modes",
+        "dpi_buckets",
+        "critical_alert_overlay"
+      ],
+      "performance_coverage": [
+        "safety_core_continuity",
+        "non_blocking_theme_work",
+        "deterministic_degradation"
+      ]
+    }
+  ]
+}

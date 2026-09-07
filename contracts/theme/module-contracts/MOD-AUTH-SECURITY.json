@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "ux_contract_version": "1.1.0",
+  "module_id": "MOD-AUTH-SECURITY",
+  "module_name": "Login / App Lock / 2FA / Step-Up",
+  "semantics": "Multi-user authentication and protected app access",
+  "source_reference": "TCC Information & UX Architecture v1.1 — APPROVED §8.2",
+  "theme_must_not_change": [
+    "meaning",
+    "business_semantics",
+    "risk_semantics",
+    "permission_semantics",
+    "accessibility"
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeDiagnosticsEvent.schema.json",
+  "title": "ThemeDiagnosticsEvent",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "theme_id",
+    "theme_version",
+    "severity",
+    "message",
+    "correlation_id",
+    "timestamp",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^theme\\."
+    },
+    "theme_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "theme_version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "variant_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "surface_id": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "UX-HOME-001",
+        "UX-HOME-002",
+        "UX-ONB-001",
+        "UX-ONB-002",
+        "UX-ONB-003",
+        "UX-RISK-001",
+        "UX-RISK-002",
+        "UX-RISK-003",
+        "UX-RISK-004",
+        "UX-RISK-005",
+        "UX-PLAN-001",
+        "UX-PLAN-002",
+        "UX-PLAN-003",
+        "UX-PLAN-004",
+        "UX-PLAN-005",
+        "UX-POS-001",
+        "UX-POS-002",
+        "UX-POS-003",
+        "UX-CLOSE-001",
+        "UX-CLOSE-002",
+        "UX-CLOSE-003",
+        "UX-ORDER-001",
+        "UX-CLOSE-004",
+        "UX-REVIEW-001",
+        "UX-REVIEW-002",
+        "UX-REVIEW-003",
+        "UX-REVIEW-004",
+        "UX-REVIEW-005",
+        "UX-REVIEW-006",
+        "UX-MILE-001",
+        "UX-CAL-001",
+        "UX-CAL-002",
+        "UX-CAL-003",
+        "UX-ANALYTICS-001",
+        "UX-ANALYTICS-002",
+        "UX-TEAM-001",
+        "UX-TEAM-002",
+        "UX-TEAM-003",
+        "UX-TEAM-004",
+        "UX-ROOM-001",
+        "UX-ROOM-002",
+        "UX-COLLAB-001",
+        "UX-AI-001",
+        "UX-AI-002",
+        "UX-AI-003",
+        "UX-AI-004",
+        "UX-DATA-001",
+        "UX-ARCH-001",
+        "UX-DATA-002",
+        "UX-REC-001",
+        "UX-MIG-001",
+        "UX-MIG-002",
+        "UX-THEME-001",
+        "UX-THEME-002",
+        "UX-THEME-003",
+        "UX-SET-001",
+        "UX-SET-002",
+        "UX-SET-003",
+        "UX-SET-004",
+        "UX-SET-005",
+        "UX-SET-006",
+        "UX-AUTH-001",
+        "UX-AUTH-002",
+        "UX-AUTH-003",
+        "UX-EXT-001",
+        "UX-EXT-002",
+        "UX-CONN-001",
+        "UX-NOTIF-001",
+        "UX-CMD-001",
+        "UX-FLOAT-001",
+        "UX-SAFE-001"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "information",
+        "warning",
+        "error",
+        "critical"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "privacy": {
+      "type": "object",
+      "required": [
+        "contains_trading_data",
+        "contains_private_data",
+        "contains_team_data"
+      ],
+      "properties": {
+        "contains_trading_data": {
+          "const": false
+        },
+        "contains_private_data": {
+          "const": false
+        },
+        "contains_team_data": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

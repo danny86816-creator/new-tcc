@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeStatePresentation.schema.json",
+  "title": "ThemeStatePresentation",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "state_id",
+    "required_semantics",
+    "required_redundancy",
+    "theme_freedom"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "state_id": {
+      "type": "string",
+      "minLength": 1,
+      "enum": [
+        "STATE-NORMAL",
+        "STATE-LOADING",
+        "STATE-EMPTY",
+        "STATE-SUCCESS",
+        "STATE-WARNING",
+        "STATE-BLOCKED",
+        "STATE-ERROR",
+        "STATE-OFFLINE",
+        "STATE-STALE-DATA",
+        "STATE-SYNCING",
+        "STATE-CONFLICT",
+        "STATE-PERMISSION-DENIED",
+        "STATE-APPROVAL-PENDING",
+        "STATE-APPROVAL-REJECTED",
+        "STATE-RECOVERY-AVAILABLE",
+        "STATE-SAFE-MODE",
+        "STATE-DEGRADED-PERFORMANCE",
+        "STATE-REDUCED-MOTION",
+        "STATE-REDUCED-TRANSPARENCY"
+      ]
+    },
+    "required_semantics": {
+      "type": "object",
+      "required": [
+        "meaning",
+        "must_show_reason",
+        "must_show_exit_or_resolution_path",
+        "may_offer_corrective_action"
+      ],
+      "properties": {
+        "meaning": {
+          "type": "string",
+          "minLength": 1
+        },
+        "must_show_reason": {
+          "type": "boolean"
+        },
+        "must_show_exit_or_resolution_path": {
+          "type": "boolean"
+        },
+        "may_offer_corrective_action": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "required_redundancy": {
+      "type": "object",
+      "required": [
+        "text",
+        "icon_or_structure",
+        "programmatic_state",
+        "screen_reader_announcement",
+        "color_only_forbidden",
+        "motion_only_forbidden",
+        "sound_only_forbidden",
+        "transparency_only_forbidden"
+      ],
+      "properties": {
+        "text": {
+          "const": true
+        },
+        "icon_or_structure": {
+          "const": true
+        },
+        "programmatic_state": {
+          "const": true
+        },
+        "screen_reader_announcement": {
+          "const": true
+        },
+        "color_only_forbidden": {
+          "const": true
+        },
+        "motion_only_forbidden": {
+          "const": true
+        },
+        "sound_only_forbidden": {
+          "const": true
+        },
+        "transparency_only_forbidden": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "theme_freedom": {
+      "type": "object",
+      "required": [
+        "color",
+        "animation",
+        "sound",
+        "metaphor"
+      ],
+      "properties": {
+        "color": {
+          "type": "string",
+          "minLength": 1
+        },
+        "animation": {
+          "const": "supplementary_only"
+        },
+        "sound": {
+          "const": "supplementary_only"
+        },
+        "metaphor": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

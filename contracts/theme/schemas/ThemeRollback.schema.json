@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeRollback.schema.json",
+  "title": "ThemeRollback",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "theme_id",
+    "version",
+    "rollback_supported",
+    "rollback_targets",
+    "non_migratable_state_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "theme_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "rollback_supported": {
+      "const": true
+    },
+    "rollback_targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from_version",
+          "to_version_range",
+          "state_migration",
+          "cache_invalidation"
+        ],
+        "properties": {
+          "from_version": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+          },
+          "to_version_range": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state_migration": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cache_invalidation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": false
+    },
+    "non_migratable_state_policy": {
+      "const": "reset_theme_owned_state_only"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeCriticalCopyRules.schema.json",
+  "title": "ThemeCriticalCopyRules",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "core_owned_keys",
+    "plain_language_required_categories",
+    "reject_ambiguous_critical_copy",
+    "reject_missing_critical_fallback"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "core_owned_keys": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "plain_language_required_categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "reject_ambiguous_critical_copy": {
+      "const": true
+    },
+    "reject_missing_critical_fallback": {
+      "const": true
+    }
+  },
+  "additionalProperties": false
+}
