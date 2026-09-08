@@ -1,11 +1,11 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 4 — Theme Integrity Verifier (Phase 4A internal integrity foundation)
-**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment SEALED; Phase 4A internal foundation IMPLEMENTED / VALIDATED; Independent Phase 4A Re-Validation PASS; ready for Phase 4A Baseline Seal; public `ThemeIntegrityVerifier` and Phase 4B–4F NOT STARTED
+**Current approved phase:** Phase 4 — Theme Integrity Verifier (IN PROGRESS; Phase 4A SEALED / APPROVED)
+**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment SEALED; Phase 4A internal foundation SEALED / APPROVED; Independent Phase 4A Re-Validation PASS; public `ThemeIntegrityVerifier` and Phase 4B–4F NOT STARTED
 **Last updated:** 2026-09-08
 
 **Contract amendment status:** SEALED — implementation/remediation complete; Independent Security Audit PASS; all known defects RESOLVED
-**Phase 4 production implementation:** STARTED — INTERNAL FOUNDATION ONLY
+**Phase 4 production implementation:** INTERNAL FOUNDATION SEALED
 **Compatibility gap:** RESOLVED
 **Approved strategy:** V2-only production runtime
 **V1 adapter:** NOT AUTHORIZED
@@ -14,8 +14,10 @@
 **Seal reference:** `phase4-contract-amendment-approved`
 **Push:** NOT PERFORMED
 **Git branch:** `phase4-theme-integrity-verifier`
-**Production branch base / current HEAD:** `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`
-**Current Phase 4A changes:** UNSTAGED — internal production foundation, narrowly scoped test access, focused tests, exact scope-boundary evolution, and this status snapshot
+**Production branch base:** `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`
+**Phase 4A baseline commit:** `08db235843113b987d0bdfface27cdfeb3d7c524`
+**Approved baseline tag:** `phase4a-approved`
+**Current Phase 4A changes:** SEALED — internal production foundation, narrowly scoped test access, focused tests, exact scope-boundary evolution, and status finalization
 **Implementation starting HEAD:** `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`
 
 ## Baseline
@@ -74,8 +76,10 @@
 - Old external fixture: **NOT FOUND**.
 - Focused Baseline Staging Re-Audit: **PASS**.
 - Baseline Staging Audit security carry-forward: **PASS**.
-- Production implementation: **STARTED — INTERNAL FOUNDATION ONLY**.
-- Phase 4A: **IMPLEMENTED / VALIDATED** — deterministic request/reader preflight, cancellation propagation, basic required-object/value checks, and undefined security-enum rejection.
+- Phase 4 overall: **IN PROGRESS**.
+- Production implementation: **INTERNAL FOUNDATION SEALED**.
+- Phase 4A: **SEALED / APPROVED** — deterministic request/reader preflight, cancellation propagation, basic required-object/value checks, and undefined security-enum rejection.
+- Phase 4A baseline: `08db235843113b987d0bdfface27cdfeb3d7c524`.
 - Independent Phase 4A Re-Validation: **PASS** — `P4A-IV-001` **RESOLVED**; `P4A-IV-002` **RESOLVED**; CRITICAL 0, HIGH 0, MEDIUM 0, LOW 0.
 - Surgical remediation: `P4A-IV-001` **RESOLVED** — a present envelope with null, empty, or whitespace-only Signature rejects with exact `P4I013`; required-object absence retains `P4I020`. The three reproduction vectors failed with `P4I020` before the fix and pass with exact `P4I013` afterward. Each vector, each mixed `[P4I013, P4I020]` case, and the missing-object case passes 50-run complete-diagnostic determinism; no package-content or cryptographic validation was added.
 - Status remediation: `P4A-IV-002` **RESOLVED** — the current Phase 2 count is corrected from the prior snapshot's 93/93 to actual executable **92/92 PASS**, derived from `PhaseTwo*` results in this round's full-suite TRX. Phase 2 tests and classification were not changed to force the count.
@@ -102,13 +106,13 @@
 - Current security defect state: **ALL KNOWN SECURITY DEFECTS RESOLVED** — `P4A-VAL-001`–`P4A-VAL-006`, `P4A-REVAL-001`–`P4A-REVAL-003`, and `P4A-REVAL2-001` are resolved.
 - Diagnostic coverage: **29/29 active codes actually emitted**; active/declared/used sets equal; unknown codes rejected; successful and failed complete results, including non-null hashes, evidence, signature status, and ordered diagnostics, are identical across 50 runs.
 - In progress: **NONE** — Phase 4A surgical remediation and repository validation are complete.
-- Pending: **Focused Phase 4A Baseline Staging Re-Audit / baseline seal authorization**. Phase 4B–4F remain **NOT STARTED**.
+- Pending: **GPT Supervisor Phase 4B planning decision**. Phase 4B–4F remain **NOT STARTED**.
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
-- Current round changed files: only `src/Tcc.Themes/Integrity/ThemeIntegrityRequestBoundary.cs`, `tests/Tcc.Architecture.Tests/PhaseFourThemeIntegrityVerifierTests.cs`, and `docs/CODEX_PROJECT_STATUS.md`; all **UNSTAGED**. The existing Phase 4A changes in `src/Tcc.Themes/Tcc.Themes.csproj` and `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs` are preserved byte-for-byte. `CODEX_DECISIONS.md`, ADR-0003, contracts, schemas, the Contract Conformance Oracle, and `ThemeManifestValidator` were not modified.
+- Current round changed files: the exact five-file Phase 4A surface is committed at `08db235843113b987d0bdfface27cdfeb3d7c524`; seal finalization changes `docs/CODEX_PROJECT_STATUS.md` only. `CODEX_DECISIONS.md`, ADR-0003, contracts, schemas, the Contract Conformance Oracle, and `ThemeManifestValidator` were not modified.
 - Current round validation: focused Phase 4A tests **19/19 PASS**; Phase 4A plus exact-surface focused tests **24/24 PASS**; normal restore **6/6 PASS**; locked restore **6/6 PASS**; Release x64 build **0 warnings / 0 errors**; full tests **304/304 PASS, 0 skipped**; Phase 1 **2/2 PASS**; Phase 2 **92/92 PASS**; Phase 3 **79/79 PASS**; Contract Amendment **107/107 PASS**; Phase 4A **19/19 PASS**; architecture dependency tests **5/5 PASS**. Full-suite phase counts are taken from executed TRX results. Build/test/restore commands use controlled single-node `-m:1`; full tests also use `RunConfiguration.MaxCpuCount=1`.
-- Current round preservation / hygiene: all four sealed tag objects and peeled commits unchanged; Frozen System and Theme SHA-256 exact; V1, V2, schemas, ADR-0003, Contract Conformance Oracle, and `ThemeManifestValidator` unchanged. Dependency surface remains **6 projects / 11 ProjectReferences / 4 PackageReferences**. The sole friend assembly is `Tcc.Architecture.Tests`. Production verifier implementations, V1 runtime implementations, Phase 5+ leakage, Trading leakage, added-line secret/local-path matches, unexpected temp/SKILL artifacts, and unexpected changed files: **0**. The exact compiled-type allowlist and unauthorized-internal-type negative fixture pass; `git diff --check` passes. Current Git state: **3 modified tracked, 2 expected untracked, 0 staged**; only ignored bin/obj build outputs remain.
-- Current round gate: Independent Phase 4A Re-Validation **PASS** — CRITICAL 0, HIGH 0, MEDIUM 0, LOW 0; ready for Phase 4A Baseline Seal **YES**. Commit: **NOT AUTHORIZED**; push: **NOT PERFORMED**. Phase 4B allowed: **NO**; separate Supervisor authorization is required.
+- Current round preservation / hygiene: all four previous sealed tag objects and peeled commits unchanged; Frozen System and Theme SHA-256 exact; V1, V2, schemas, ADR-0003, Contract Conformance Oracle, and `ThemeManifestValidator` unchanged. Dependency surface remains **6 projects / 11 ProjectReferences / 4 PackageReferences**. The sole friend assembly is `Tcc.Architecture.Tests`. Production verifier implementations, V1 runtime implementations, Phase 5+ leakage, Trading leakage, added-line secret/local-path matches, unexpected temp/SKILL artifacts, and unexpected changed files: **0**. The exact compiled-type allowlist and unauthorized-internal-type negative fixture pass; `git diff --check` passes. Final Git state: **clean, 0 staged, 0 untracked**.
+- Current round gate: Phase 4A **SEALED / APPROVED**; Independent Phase 4A Re-Validation **PASS** — `P4A-IV-001` **RESOLVED**, `P4A-IV-002` **RESOLVED**, CRITICAL 0, HIGH 0, MEDIUM 0, LOW 0. Approved baseline tag: `phase4a-approved`. Push: **NOT PERFORMED**. Phase 4B allowed: **NO**; separate Supervisor authorization is required.
 - Sealed amendment files (historical): `contracts/theme/schemas/ThemeIntegrity.v2.schema.json`, `contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json`, `docs/adr/ADR-0003-theme-integrity-contract-amendment.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`, `src/Tcc.Presentation.Contracts/Theme/ContractVersions.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeContractJson.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityContractsV2.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityInterfacesV2.cs`, `tests/Tcc.Architecture.Tests/JsonSchemaSubsetValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, `tests/Tcc.Architecture.Tests/PhaseFourContractAmendmentTests.cs`, and `tests/Tcc.Architecture.Tests/ThemeIntegrityContractConformanceOracle.cs`.
 - Third-remediation files (historical): `JsonSchemaSubsetValidator.cs`, `ThemeIntegrityContractConformanceOracle.cs`, `PhaseFourContractAmendmentTests.cs`, and this status file. The pre-seal amendment surface was 13 files; that remediation added no new file/project/reference/package/public API/diagnostic code.
 - Sealed amendment validation (historical): clean **PASS**; normal restore **6/6 PASS**; locked restore **6/6 PASS**; Release x64 build **0 warnings / 0 errors**; all tests **284/284 PASS, 0 skipped**; Phase 1 **2/2 PASS**; Phase 2 **93/93 PASS**; Phase 3 **78/78 PASS**; amendment test class **107/107 PASS**; original six-defect regressions **11/11 PASS**; REVAL-001 **5/5 PASS**; REVAL-002 **9/9 PASS**; REVAL-003 **4/4 PASS**; REVAL2-001 **17/17 PASS**; API/dependency/compiled-surface filter **13/13 PASS**. Schema, serialization, crypto, path, inventory, trust, channel, identity, diagnostics, and 50-run determinism passed in the amendment suite.
@@ -116,7 +120,7 @@
 - Sealed amendment preservation/hygiene (historical): V1 contract/schema and Phase 3 implementation/test diffs **0**; project/package/lock diffs **0**; six projects, 11 ProjectReferences, four PackageReferences unchanged; production verifier implementations **0**; Phase 5+/Trading leakage **0**; candidate secret/local-path/SKILL-artifact matches **0**; unexpected repository artifacts **0**; pre-seal staged **0**, modified tracked **6**, expected untracked **7** (historical audit counts, not current Git state). Only ignored bin/obj build outputs remain. Frozen hashes exact; `git diff --check` **PASS**. Temp / Git Hygiene Closure **PASS**; old external fixture **NOT FOUND**; new temporary fixture remnants **0**.
 - Validation result: **CONTRACT AMENDMENT SEALED**; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure **PASS**.
 - Known boundary: the Phase 4A component only decides whether outer inputs may proceed to the next integrity stage. Package enumeration, hashes, signatures, trust, channel policy, evidence, and the public package verdict remain unavailable until their authorized phases.
-- Exact next action: return to GPT Supervisor for **focused Phase 4A baseline staging re-audit**. Do not begin Phase 4B, create `ThemeIntegrityVerifier`, stage, commit, or push automatically.
+- Exact next action: **Return to GPT Supervisor**. Do not begin Phase 4B, create `ThemeIntegrityVerifier`, modify production source, or push.
 
 ## AI Trading Intelligence planning state
 
@@ -137,7 +141,7 @@
 - Production files changed by 05A: **NONE**.
 - 05A validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 94/94 passed with 0 skipped; dependency boundary tests 5/5 passed; Phase 1/2 refs, Frozen hashes, production/schema/runtime/project-dependency diff, Phase 3/AI leakage, staged, unexpected-artifact, skill-observation Git-surface, and `git diff --check` gates passed.
 - Open blockers: **NONE**.
-- Exact next action: **Keep the Trading Intelligence production track untouched while the Phase 4A baseline seal is pending.**
+- Exact next action: **Keep the Trading Intelligence production track untouched while awaiting the GPT Supervisor decision.**
 
 ## Phase 1 repository foundation
 
@@ -287,4 +291,4 @@ docs/
 
 ## Exact next action
 
-Return to GPT Supervisor for **focused Phase 4A baseline staging re-audit**. Do not begin Phase 4B–4F automatically; do not create `ThemeIntegrityVerifier`, stage, commit, or push.
+Return to GPT Supervisor. Do not begin Phase 4B–4F automatically; do not create `ThemeIntegrityVerifier`, modify production source, or push.
