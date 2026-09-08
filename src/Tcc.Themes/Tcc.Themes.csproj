@@ -7,4 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="../Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tcc.Architecture.Tests" />
+  </ItemGroup>
 </Project>

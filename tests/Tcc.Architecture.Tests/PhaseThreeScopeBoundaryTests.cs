@@ -10,6 +10,7 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static readonly string[] ApprovedTopLevelTypes =
     [
         "Tcc.Themes.AssemblyMarker",
+        "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
         "Tcc.Themes.Manifests.ThemeManifestValidator",
     ];
 
@@ -71,6 +72,20 @@ public sealed class PhaseThreeScopeBoundaryTests
         string[] violations = GetCompiledSurfaceViolations(fixture);
 
         Assert.Contains(violations, violation => violation.Contains("MarketObservation", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void UnapprovedInternalThemeTypeFailsTheExactCompiledSurfaceBoundary()
+    {
+        Assembly fixture = BuildFixtureAssembly(
+            markerAdditionalSource: null,
+            otherSource: "namespace Tcc.Themes.Integrity; internal static class UnapprovedIntegrityStage { }");
+
+        string[] violations = GetCompiledSurfaceViolations(fixture);
+
+        Assert.Contains(
+            violations,
+            violation => violation.Contains("Tcc.Themes.Integrity.UnapprovedIntegrityStage", StringComparison.Ordinal));
     }
 
     internal static string[] GetCompiledSurfaceViolations(Assembly assembly)
