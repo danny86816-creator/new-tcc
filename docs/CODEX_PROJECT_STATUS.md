@@ -1,14 +1,15 @@
 # Codex Project Status
 
 **Current approved phase:** Phase 4 — Theme Integrity Verifier (derived scope; contract amendment only)
-**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment IMPLEMENTED / REMEDIATED; Independent Security Audit PASS; Baseline Staging Audit attempted and blocked only by status snapshot drift; production implementation NOT STARTED / NOT AUTHORIZED
+**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment SEALED; Independent Security Audit PASS; Focused Baseline Staging Re-Audit PASS; production implementation NOT STARTED
 **Last updated:** 2026-09-08
 
-**Contract amendment status:** IMPLEMENTED / REMEDIATED — security audit PASS; not sealed
+**Contract amendment status:** SEALED — implementation/remediation complete; Independent Security Audit PASS; all known defects RESOLVED
 **Phase 4 production implementation:** NOT STARTED
-**Commit authorization:** NOT AUTHORIZED
-**Commit status:** NOT PERFORMED
-**Tag status:** NOT CREATED
+**Baseline content:** COMMITTED
+**Contract amendment implementation commit:** `f9356632a7cc9c00b5f16110f7bbb3de4eecea79`
+**Seal reference:** `phase4-contract-amendment-approved`
+**Push:** NOT PERFORMED
 **Git branch:** `phase4-contract-amendment`
 **Implementation starting HEAD:** `678f0730f6c626ed38a65920931660b3428ac231`
 
@@ -46,29 +47,31 @@
 - Commit: `678f0730f6c626ed38a65920931660b3428ac231`.
 - Tag: `phase3-approved`.
 - Sealing status: **SEALED**.
-- Phase 4 contract amendment: **IMPLEMENTED / REMEDIATED; INDEPENDENT SECURITY AUDIT PASS**.
+- Phase 4 contract amendment: **SEALED; INDEPENDENT SECURITY AUDIT PASS; ALL KNOWN DEFECTS RESOLVED**.
 - Validation: clean, normal restore, and locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 173/173 passed with 0 skipped; Phase 1 filter 2/2, Phase 2 filter 89/89, Phase 3 filter 78/78, signature/diagnostic/determinism/immutability filter 14/14, Phase 2 and compiled-surface negative-fixture filter 6/6, and dependency-boundary filter 5/5 passed; baseline/tag/branch/Frozen-hash/project-graph/contract/schema/scope/leakage/Git hygiene gates passed.
 - Independent re-validation evidence: Release x64 **PASS — 0 warnings / 0 errors**; all tests **173/173 PASS**; Frozen System **PASS**; Frozen Theme **PASS**; unexpected artifacts **0**; Theme / Trading separation **PASS**; Phase 2 contracts **UNCHANGED**; Phase 2 schemas **UNCHANGED**.
 - Theme / Trading Intelligence separation: **PRESERVED**.
 - Known risk: the public contract validates an already materialized manifest; raw JSON parsing, referenced personalization min/max contents, asset inventory entries, and archive/package processing remain explicit non-goals for this Phase.
-- Next action: rerun the focused Phase 4 Contract Amendment Baseline Staging Audit after status snapshot correction; do not start production implementation.
+- Next action: define the **Phase 4 Theme Integrity Verifier production scope / branch setup**; do not start production implementation automatically.
 
 ## Phase 4 Theme Integrity Verifier
 
 - Phase 4 target: **Theme Integrity Verifier**.
 - Scope source: **DERIVED** from the approved Contract Gap Resolution Proposal and sealed Theme architecture.
-- Contract Amendment: **IMPLEMENTED / REMEDIATED**; not committed, tagged, or sealed.
+- Contract Amendment: **SEALED**.
 - Independent Security Audit: **PASS**.
 - Independent Re-Audit #3: **SECURITY PASS**.
 - Temp / Git Hygiene Closure: **PASS**.
 - Old external fixture: **NOT FOUND**.
-- Baseline Staging Audit: **ATTEMPTED — BLOCKED ONLY BY STATUS SNAPSHOT DRIFT**.
+- Focused Baseline Staging Re-Audit: **PASS**.
 - Baseline Staging Audit security carry-forward: **PASS**.
 - Production implementation: **NOT STARTED**.
-- Production branch: **NOT AUTHORIZED / NOT CREATED**.
+- Production branch: **NOT CREATED**.
 - ThemeIntegrityVerifier production implementation: **NOT STARTED**.
-- Commit: **NOT AUTHORIZED / NOT PERFORMED**.
-- Tag: **NOT CREATED**.
+- Baseline content: **COMMITTED**.
+- Contract amendment implementation commit: `f9356632a7cc9c00b5f16110f7bbb3de4eecea79`.
+- Seal reference: `phase4-contract-amendment-approved`.
+- Push: **NOT PERFORMED**.
 - Current branch: `phase4-contract-amendment`.
 - Completed: additive V2 integrity request/result/manifest/file contracts; V1 signature, policy, trust, signer, evidence, diagnostic, and package-content contracts; opaque `ThemePackageRef`; typed `ThemeCanonicalPath`; strict V2 enum JSON handling; exact 64-byte P1363 signature boundary; exhaustive canonical-path/inventory semantic guards; trust-policy binding and duplicate signer rejection; authoritative `P4Ixxx` diagnostic vocabulary; test-only Contract Conformance Oracle; two versioned schemas; ADR-0003; exact contract/schema inventory guards; deterministic security vectors and negative tests.
 - Resolved defects: `P4A-VAL-001` **RESOLVED**; `P4A-VAL-002` **RESOLVED**; `P4A-VAL-003` **RESOLVED**; `P4A-VAL-004` **RESOLVED**; `P4A-VAL-005` **RESOLVED**; `P4A-VAL-006` **RESOLVED**.
@@ -79,7 +82,7 @@
 - Current security defect state: **ALL KNOWN SECURITY DEFECTS RESOLVED** — `P4A-VAL-001`–`P4A-VAL-006`, `P4A-REVAL-001`–`P4A-REVAL-003`, and `P4A-REVAL2-001` are resolved.
 - Diagnostic coverage: **29/29 active codes actually emitted**; active/declared/used sets equal; unknown codes rejected; successful and failed complete results, including non-null hashes, evidence, signature status, and ordered diagnostics, are identical across 50 runs.
 - In progress: **NONE**.
-- Pending: **Focused Baseline Staging Re-Audit after this status snapshot correction**.
+- Pending: **Phase 4 Theme Integrity Verifier production scope / branch setup**.
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
 - Changed files: `contracts/theme/schemas/ThemeIntegrity.v2.schema.json`, `contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json`, `docs/adr/ADR-0003-theme-integrity-contract-amendment.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`, `src/Tcc.Presentation.Contracts/Theme/ContractVersions.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeContractJson.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityContractsV2.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityInterfacesV2.cs`, `tests/Tcc.Architecture.Tests/JsonSchemaSubsetValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, `tests/Tcc.Architecture.Tests/PhaseFourContractAmendmentTests.cs`, and `tests/Tcc.Architecture.Tests/ThemeIntegrityContractConformanceOracle.cs`.
@@ -87,9 +90,9 @@
 - Validation: clean **PASS**; normal restore **6/6 PASS**; locked restore **6/6 PASS**; Release x64 build **0 warnings / 0 errors**; all tests **284/284 PASS, 0 skipped**; Phase 1 **2/2 PASS**; Phase 2 **93/93 PASS**; Phase 3 **78/78 PASS**; amendment test class **107/107 PASS**; original six-defect regressions **11/11 PASS**; REVAL-001 **5/5 PASS**; REVAL-002 **9/9 PASS**; REVAL-003 **4/4 PASS**; REVAL2-001 **17/17 PASS**; API/dependency/compiled-surface filter **13/13 PASS**. Schema, serialization, crypto, path, inventory, trust, channel, identity, diagnostics, and 50-run determinism passed in the amendment suite.
 - Numeric security proof: independently re-hashed and signed raw metadata containing `1e1000`, `-1e1000`, `79228162514264337593543950336`, negative overflow, underflow, or precision loss rejects with `P4I027` and no escaped exception. Exact legal decimals, DPI minimum `1`, and decimal maximum `79228162514264337593543950335` pass the full pipeline. Decimal minimum is representable but rejected by the actual positive-DPI constraint. All 13 raw numeric vectors have 50-run complete-result determinism checks; supporting tests cover decimal extrema, Int64 overflow, and actual schema minimum/maximum mutations.
 - Preservation/hygiene: V1 contract/schema and Phase 3 implementation/test diffs **0**; project/package/lock diffs **0**; six projects, 11 ProjectReferences, four PackageReferences unchanged; production verifier implementations **0**; Phase 5+/Trading leakage **0**; candidate secret/local-path/SKILL-artifact matches **0**; unexpected repository artifacts **0**; staged **0**, modified tracked **6**, expected untracked **7**. Only ignored bin/obj build outputs remain. Frozen hashes exact; `git diff --check` **PASS**. Temp / Git Hygiene Closure **PASS**; old external fixture **NOT FOUND**; new temporary fixture remnants **0**.
-- Validation result: **SECURITY PASS / READY FOR FOCUSED BASELINE STAGING RE-AUDIT**; Baseline Staging Audit has not yet passed.
-- Known risk: **NONE identified in the contract amendment security scope**. Production verifier behavior is unimplemented and not authorized.
-- Exact next action: return to GPT Supervisor and rerun the **focused Baseline Staging Audit** after this status snapshot correction; do not stage, commit, tag, create the production branch, or begin `ThemeIntegrityVerifier` implementation.
+- Validation result: **CONTRACT AMENDMENT SEALED**; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure **PASS**.
+- Known risk: **NONE identified in the contract amendment security scope**. Production verifier behavior remains unimplemented.
+- Exact next action: return to GPT Supervisor for **Phase 4 Theme Integrity Verifier production scope / branch setup**; do not begin production implementation, create another branch, or push automatically.
 
 ## AI Trading Intelligence planning state
 
@@ -110,7 +113,7 @@
 - Production files changed by 05A: **NONE**.
 - 05A validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 94/94 passed with 0 skipped; dependency boundary tests 5/5 passed; Phase 1/2 refs, Frozen hashes, production/schema/runtime/project-dependency diff, Phase 3/AI leakage, staged, unexpected-artifact, skill-observation Git-surface, and `git diff --check` gates passed.
 - Open blockers: **NONE**.
-- Exact next action: **Keep the Trading Intelligence production track untouched while the Theme Integrity Contract Amendment awaits focused Baseline Staging Re-Audit.**
+- Exact next action: **Keep the Trading Intelligence production track untouched while Phase 4 Theme Integrity Verifier production scope / branch setup is prepared.**
 
 ## Phase 1 repository foundation
 
@@ -253,11 +256,11 @@ docs/
 - Open Phase 2 defects or validation blockers: none.
 - Open Phase 3 validation defects: none; Phase 3 is sealed at `678f0730f6c626ed38a65920931660b3428ac231` / `phase3-approved`.
 - Unrestricted solution-level MSBuild previously caused abnormal recursive process growth on this host; all remediation gates used `-m:1`. This is recorded as host/invocation behavior, not treated as a Phase 2 product defect.
-- Phase 4 Contract Amendment is implemented and remediated; Independent Security Audit and Temp / Git Hygiene Closure passed. The attempted Baseline Staging Audit is blocked only by the status snapshot drift corrected here and must be rerun.
+- Phase 4 Contract Amendment is sealed; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure passed; all known amendment defects are resolved.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- Phase 4 production implementation, staging, commit, tag, push, merge, release, and deploy are not authorized.
+- Phase 4 production implementation has not started. Push, merge, release, and deploy were not performed.
 
 ## Exact next action
 
-Return to GPT Supervisor and rerun the focused Baseline Staging Audit after this status snapshot correction. Do not stage or commit, do not create a tag or `phase4-theme-integrity-verifier`, and do not start production implementation.
+Return to GPT Supervisor for **Phase 4 Theme Integrity Verifier production scope / branch setup**. Do not begin Phase 4 production automatically, do not create another branch automatically, and do not push.
