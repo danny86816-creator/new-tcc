@@ -1,25 +1,25 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 3 — Theme Manifest Validator
-**Current execution status:** Phase 3 implementation complete; initial independent validation FAIL; surgical remediation complete; independent re-validation PASS; Baseline Staging Audit PASS; ready for baseline sealing
-**Last updated:** 2026-09-07
+**Current approved phase:** Phase 4 — Theme Integrity Verifier (derived scope; contract amendment only)
+**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment IMPLEMENTED / REMEDIATED; Independent Security Audit PASS; Baseline Staging Audit attempted and blocked only by status snapshot drift; production implementation NOT STARTED / NOT AUTHORIZED
+**Last updated:** 2026-09-08
 
-**Commit readiness:** READY FOR BASELINE SEALING
-**User Explicit Commit Authorization:** GRANTED
-**Commit performed:** NO
-**phase3-approved tag:** NOT CREATED
-**Phase 3 Baseline Staging Audit:** PASS
-**Ready for baseline sealing:** YES
-**Target commit message:** `chore: establish approved TCC Phase 3 theme manifest validator baseline`
-**Target annotated tag:** `phase3-approved`
-**Git branch:** `phase3-theme-manifest-validator`
-**Implementation starting HEAD:** `3c1478513e5b3fd3930bff043ccb4eed4f6b9ce7`
+**Contract amendment status:** IMPLEMENTED / REMEDIATED — security audit PASS; not sealed
+**Phase 4 production implementation:** NOT STARTED
+**Commit authorization:** NOT AUTHORIZED
+**Commit status:** NOT PERFORMED
+**Tag status:** NOT CREATED
+**Git branch:** `phase4-contract-amendment`
+**Implementation starting HEAD:** `678f0730f6c626ed38a65920931660b3428ac231`
 
 ## Baseline
 
+- Phase 1 status: **APPROVED / SEALED**.
 - Phase 1 baseline/tag: `1ea18618266abf0c99e7560ed9f23b7fb4247989` / `phase1-approved`.
 - Phase 2 status: **APPROVED / SEALED**.
 - Phase 2 baseline/tag: `9ea2b6e945d3f438099dcdeb922f20c2a78a48fa` / `phase2-approved`.
+- Phase 3 status: **APPROVED / SEALED**.
+- Phase 3 baseline/tag: `678f0730f6c626ed38a65920931660b3428ac231` / `phase3-approved`.
 - Theme Architecture governance baseline: `v1.2 — APPROVED`.
 - Approved SHA-256: `960CCCB69AFDBE006CA12BECB86A1E3E6C96C6C59500CE943F176162D2B33856`.
 - Baseline interpretation: `docs/governance/TCC_THEME_ARCHITECTURE_BASELINE_APPROVAL.md`.
@@ -28,7 +28,7 @@
 - Phase 2 scope decision: `docs/adr/ADR-0002-phase2-schemas-public-contracts-scope.md`.
 - Frozen System Architecture SHA-256: `7BAF7ABEBEBFFE77F20DF964E89E7845AA54E8DE810CF6FB8C6B500881275B6F`.
 
-## Phase 3 implementation state
+## Phase 3 sealed state
 
 - Official phase name: **Phase 3 — Theme Manifest Validator**.
 - Phase 3 Planning: **COMPLETE**.
@@ -43,19 +43,53 @@
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
 - User Explicit Commit Authorization: **GRANTED**.
-- Commit readiness: **READY FOR BASELINE SEALING**.
-- Ready for baseline sealing: **YES**.
-- Target commit message: `chore: establish approved TCC Phase 3 theme manifest validator baseline`.
-- Target annotated tag: `phase3-approved`.
-- Commit performed: **NO**.
-- `phase3-approved` tag: **NOT CREATED**.
-- Phase 4 allowed: **NO — until baseline commit, tag, and post-commit verification complete**.
-- Current implementation change files: `src/Tcc.Themes/Manifests/ThemeManifestValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseThreeThemeManifestValidatorTests.cs`, `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, and `docs/CODEX_PROJECT_STATUS.md`.
+- Commit: `678f0730f6c626ed38a65920931660b3428ac231`.
+- Tag: `phase3-approved`.
+- Sealing status: **SEALED**.
+- Phase 4 contract amendment: **IMPLEMENTED / REMEDIATED; INDEPENDENT SECURITY AUDIT PASS**.
 - Validation: clean, normal restore, and locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 173/173 passed with 0 skipped; Phase 1 filter 2/2, Phase 2 filter 89/89, Phase 3 filter 78/78, signature/diagnostic/determinism/immutability filter 14/14, Phase 2 and compiled-surface negative-fixture filter 6/6, and dependency-boundary filter 5/5 passed; baseline/tag/branch/Frozen-hash/project-graph/contract/schema/scope/leakage/Git hygiene gates passed.
 - Independent re-validation evidence: Release x64 **PASS — 0 warnings / 0 errors**; all tests **173/173 PASS**; Frozen System **PASS**; Frozen Theme **PASS**; unexpected artifacts **0**; Theme / Trading separation **PASS**; Phase 2 contracts **UNCHANGED**; Phase 2 schemas **UNCHANGED**.
 - Theme / Trading Intelligence separation: **PRESERVED**.
 - Known risk: the public contract validates an already materialized manifest; raw JSON parsing, referenced personalization min/max contents, asset inventory entries, and archive/package processing remain explicit non-goals for this Phase.
-- Next action: perform exact five-file staging, staged audit, baseline commit, annotated tag creation, and post-commit verification; do not start Phase 4.
+- Next action: rerun the focused Phase 4 Contract Amendment Baseline Staging Audit after status snapshot correction; do not start production implementation.
+
+## Phase 4 Theme Integrity Verifier
+
+- Phase 4 target: **Theme Integrity Verifier**.
+- Scope source: **DERIVED** from the approved Contract Gap Resolution Proposal and sealed Theme architecture.
+- Contract Amendment: **IMPLEMENTED / REMEDIATED**; not committed, tagged, or sealed.
+- Independent Security Audit: **PASS**.
+- Independent Re-Audit #3: **SECURITY PASS**.
+- Temp / Git Hygiene Closure: **PASS**.
+- Old external fixture: **NOT FOUND**.
+- Baseline Staging Audit: **ATTEMPTED — BLOCKED ONLY BY STATUS SNAPSHOT DRIFT**.
+- Baseline Staging Audit security carry-forward: **PASS**.
+- Production implementation: **NOT STARTED**.
+- Production branch: **NOT AUTHORIZED / NOT CREATED**.
+- ThemeIntegrityVerifier production implementation: **NOT STARTED**.
+- Commit: **NOT AUTHORIZED / NOT PERFORMED**.
+- Tag: **NOT CREATED**.
+- Current branch: `phase4-contract-amendment`.
+- Completed: additive V2 integrity request/result/manifest/file contracts; V1 signature, policy, trust, signer, evidence, diagnostic, and package-content contracts; opaque `ThemePackageRef`; typed `ThemeCanonicalPath`; strict V2 enum JSON handling; exact 64-byte P1363 signature boundary; exhaustive canonical-path/inventory semantic guards; trust-policy binding and duplicate signer rejection; authoritative `P4Ixxx` diagnostic vocabulary; test-only Contract Conformance Oracle; two versioned schemas; ADR-0003; exact contract/schema inventory guards; deterministic security vectors and negative tests.
+- Resolved defects: `P4A-VAL-001` **RESOLVED**; `P4A-VAL-002` **RESOLVED**; `P4A-VAL-003` **RESOLVED**; `P4A-VAL-004` **RESOLVED**; `P4A-VAL-005` **RESOLVED**; `P4A-VAL-006` **RESOLVED**.
+- Second remediation: `P4A-REVAL-001` **RESOLVED** — SPKI named-curve and imported BCL curve must both have exact NIST P-256 OID; cryptographically valid secp256k1/brainpool signatures, other curves, explicit/unknown parameters, malformed SPKI, and malformed EC points reject with structured diagnostics.
+- Second remediation: `P4A-REVAL-002` **RESOLVED** — test-only pipeline owns raw bytes, validates actual repository schemas, deserializes with `ThemeContractJson`, validates the sealed Theme Manifest semantics, binds raw DTOs to caller DTOs, and uses those same bytes for hashes and signatures. Undefined direct-input security enums and invalid identities fail closed. Actual-schema mutations and serializer/semantic-stage negative vectors execute through the oracle.
+- Second remediation: `P4A-REVAL-003` **RESOLVED** — malformed Unicode returns invalid; null required security collections/items and null/malformed signature values produce deterministic diagnostics. Windows CNG invalid-point exception wrapping is contained. Authorized Developer absence does not accept malformed present envelopes.
+- Third remediation: `P4A-REVAL2-001` **RESOLVED** — numeric schema validation uses safe decimal conversion plus exact JSON-number equality to reject overflow, underflow, and precision loss. Unrepresentable numeric schema limits return validation errors. The raw-metadata boundary contains expected FormatException/OverflowException conversion failures with existing `P4I027`; cancellation and unrelated exceptions remain outside that filter. All previous defects remain resolved after this fix.
+- Current security defect state: **ALL KNOWN SECURITY DEFECTS RESOLVED** — `P4A-VAL-001`–`P4A-VAL-006`, `P4A-REVAL-001`–`P4A-REVAL-003`, and `P4A-REVAL2-001` are resolved.
+- Diagnostic coverage: **29/29 active codes actually emitted**; active/declared/used sets equal; unknown codes rejected; successful and failed complete results, including non-null hashes, evidence, signature status, and ordered diagnostics, are identical across 50 runs.
+- In progress: **NONE**.
+- Pending: **Focused Baseline Staging Re-Audit after this status snapshot correction**.
+- Open blockers: **NONE**.
+- Waiting for user decisions: **NONE**.
+- Changed files: `contracts/theme/schemas/ThemeIntegrity.v2.schema.json`, `contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json`, `docs/adr/ADR-0003-theme-integrity-contract-amendment.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`, `src/Tcc.Presentation.Contracts/Theme/ContractVersions.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeContractJson.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityContractsV2.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityInterfacesV2.cs`, `tests/Tcc.Architecture.Tests/JsonSchemaSubsetValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, `tests/Tcc.Architecture.Tests/PhaseFourContractAmendmentTests.cs`, and `tests/Tcc.Architecture.Tests/ThemeIntegrityContractConformanceOracle.cs`.
+- Third-remediation files: `JsonSchemaSubsetValidator.cs`, `ThemeIntegrityContractConformanceOracle.cs`, `PhaseFourContractAmendmentTests.cs`, and this status file. The overall pre-existing amendment surface remains 13 files; no new file/project/reference/package/public API/diagnostic code was added this round.
+- Validation: clean **PASS**; normal restore **6/6 PASS**; locked restore **6/6 PASS**; Release x64 build **0 warnings / 0 errors**; all tests **284/284 PASS, 0 skipped**; Phase 1 **2/2 PASS**; Phase 2 **93/93 PASS**; Phase 3 **78/78 PASS**; amendment test class **107/107 PASS**; original six-defect regressions **11/11 PASS**; REVAL-001 **5/5 PASS**; REVAL-002 **9/9 PASS**; REVAL-003 **4/4 PASS**; REVAL2-001 **17/17 PASS**; API/dependency/compiled-surface filter **13/13 PASS**. Schema, serialization, crypto, path, inventory, trust, channel, identity, diagnostics, and 50-run determinism passed in the amendment suite.
+- Numeric security proof: independently re-hashed and signed raw metadata containing `1e1000`, `-1e1000`, `79228162514264337593543950336`, negative overflow, underflow, or precision loss rejects with `P4I027` and no escaped exception. Exact legal decimals, DPI minimum `1`, and decimal maximum `79228162514264337593543950335` pass the full pipeline. Decimal minimum is representable but rejected by the actual positive-DPI constraint. All 13 raw numeric vectors have 50-run complete-result determinism checks; supporting tests cover decimal extrema, Int64 overflow, and actual schema minimum/maximum mutations.
+- Preservation/hygiene: V1 contract/schema and Phase 3 implementation/test diffs **0**; project/package/lock diffs **0**; six projects, 11 ProjectReferences, four PackageReferences unchanged; production verifier implementations **0**; Phase 5+/Trading leakage **0**; candidate secret/local-path/SKILL-artifact matches **0**; unexpected repository artifacts **0**; staged **0**, modified tracked **6**, expected untracked **7**. Only ignored bin/obj build outputs remain. Frozen hashes exact; `git diff --check` **PASS**. Temp / Git Hygiene Closure **PASS**; old external fixture **NOT FOUND**; new temporary fixture remnants **0**.
+- Validation result: **SECURITY PASS / READY FOR FOCUSED BASELINE STAGING RE-AUDIT**; Baseline Staging Audit has not yet passed.
+- Known risk: **NONE identified in the contract amendment security scope**. Production verifier behavior is unimplemented and not authorized.
+- Exact next action: return to GPT Supervisor and rerun the **focused Baseline Staging Audit** after this status snapshot correction; do not stage, commit, tag, create the production branch, or begin `ThemeIntegrityVerifier` implementation.
 
 ## AI Trading Intelligence planning state
 
@@ -76,7 +110,7 @@
 - Production files changed by 05A: **NONE**.
 - 05A validation: locked restore passed for all 6 projects; Release x64 build passed with 0 warnings/0 errors; full tests 94/94 passed with 0 skipped; dependency boundary tests 5/5 passed; Phase 1/2 refs, Frozen hashes, production/schema/runtime/project-dependency diff, Phase 3/AI leakage, staged, unexpected-artifact, skill-observation Git-surface, and `git diff --check` gates passed.
 - Open blockers: **NONE**.
-- Exact next action: **Keep the Trading Intelligence production track untouched while Phase 3 awaits the Baseline Staging Audit re-run.**
+- Exact next action: **Keep the Trading Intelligence production track untouched while the Theme Integrity Contract Amendment awaits focused Baseline Staging Re-Audit.**
 
 ## Phase 1 repository foundation
 
@@ -217,13 +251,13 @@ docs/
 ## Current risks and blockers
 
 - Open Phase 2 defects or validation blockers: none.
-- Open Phase 3 validation defects: none; the Baseline Staging Audit passed.
+- Open Phase 3 validation defects: none; Phase 3 is sealed at `678f0730f6c626ed38a65920931660b3428ac231` / `phase3-approved`.
 - Unrestricted solution-level MSBuild previously caused abnormal recursive process growth on this host; all remediation gates used `-m:1`. This is recorded as host/invocation behavior, not treated as a Phase 2 product defect.
-- Phase 3 implementation, remediation, independent re-validation, and Baseline Staging Audit are complete; the exact five-file surface is ready for authorized baseline sealing.
+- Phase 4 Contract Amendment is implemented and remediated; Independent Security Audit and Temp / Git Hygiene Closure passed. The attempted Baseline Staging Audit is blocked only by the status snapshot drift corrected here and must be rerun.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- Exact five-file staging, the Phase 3 baseline commit, and the local annotated `phase3-approved` tag are explicitly authorized; push, merge, and Phase 4 implementation remain prohibited.
+- Phase 4 production implementation, staging, commit, tag, push, merge, release, and deploy are not authorized.
 
 ## Exact next action
 
-Perform exact five-file staging, staged audit, the authorized Phase 3 baseline commit, annotated tag creation, and post-commit verification. Do not push or start Phase 4.
+Return to GPT Supervisor and rerun the focused Baseline Staging Audit after this status snapshot correction. Do not stage or commit, do not create a tag or `phase4-theme-integrity-verifier`, and do not start production implementation.

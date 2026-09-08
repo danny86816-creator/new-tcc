@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeIntegrity.v2.schema.json",
+  "title": "ThemeIntegrityV2",
+  "description": "Versioned exhaustive Theme payload inventory for Canonical Package Tree Hash v1. Canonical paths use '/' separators, are relative Unicode NFC, reject empty/dot/dot-dot segments, absolute/drive/UNC forms, backslashes, colons, controls, trailing dot/space, Windows device names, normalized duplicates, and OrdinalIgnoreCase collisions. Entry ordering is ordinal. Integrity Manifest and Signature Envelope are the only exact package-hash exclusions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "inventory_mode",
+    "theme_id",
+    "version",
+    "hash_algorithm",
+    "files",
+    "package_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "inventory_mode": {
+      "const": "exhaustive_allowed_payload"
+    },
+    "theme_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "hash_algorithm": {
+      "const": "sha256"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "canonical_path",
+          "entry_kind",
+          "sha256",
+          "length_bytes",
+          "required"
+        ],
+        "properties": {
+          "canonical_path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "TCC Package Canonical Path v1. Unicode NFC and normalized/case-insensitive collision rules require semantic validation in addition to this fail-closed lexical pattern.",
+            "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!\\.\\.?$)(?!\\.\\.?/)(?!.*\\/\\.\\.?(?:\\/|$))(?!.*\\/\\/)(?!.*[:\\u0000-\\u001F\\u007F])(?!(?:.*\\/)?(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Ll][Oo][Cc][Kk]\\$|[Cc][Oo][Nn][Ii][Nn]\\$|[Cc][Oo][Nn][Oo][Uu][Tt]\\$|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.[^/]*)?(?:\\/|$))(?!.*[. ](?:\\/|$))[^/]+(?:\\/[^/]+)*$"
+          },
+          "entry_kind": {
+            "type": "string",
+            "enum": [
+              "payload",
+              "theme_manifest"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "length_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "package_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

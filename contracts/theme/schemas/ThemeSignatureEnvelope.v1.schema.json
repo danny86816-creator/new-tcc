@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.tcc.local/theme/ThemeSignatureEnvelope.v1.schema.json",
+  "title": "ThemeSignatureEnvelopeV1",
+  "description": "Detached ECDSA P-256 with SHA-256 signature over the TCC-THEME-PACKAGE-SIGNATURE-V1 canonical payload. Signature encoding is IEEE P1363 fixed-field concatenation; trusted public keys are SubjectPublicKeyInfo bytes supplied by an immutable caller trust snapshot.",
+  "type": "object",
+  "required": [
+    "envelope_version",
+    "algorithm",
+    "publisher_id",
+    "key_id",
+    "signature_encoding",
+    "signature",
+    "signed_payload_type"
+  ],
+  "properties": {
+    "envelope_version": {
+      "const": "1.0"
+    },
+    "algorithm": {
+      "const": "ecdsa_p256_sha256"
+    },
+    "publisher_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "signature_encoding": {
+      "const": "ieee_p1363_fixed_field_concatenation"
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 88,
+      "maxLength": 88,
+      "description": "Canonical Base64 encoding of exactly 64 IEEE P1363 bytes.",
+      "pattern": "^(?:[A-Za-z0-9+/]{4}){21}[A-Za-z0-9+/]{2}==$"
+    },
+    "signed_payload_type": {
+      "const": "tcc_theme_package_signature_v1"
+    }
+  },
+  "additionalProperties": false
+}

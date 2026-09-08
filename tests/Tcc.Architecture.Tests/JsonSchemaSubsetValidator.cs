@@ -216,7 +216,13 @@ internal static class JsonSchemaSubsetValidator
                 ValidateString(schema, instance.GetString() ?? string.Empty, path, errors);
                 break;
             case JsonValueKind.Number:
-                ValidateNumber(schema, instance.GetDecimal(), path, errors);
+                if (!TryGetExactDecimal(instance, out decimal number))
+                {
+                    errors.Add($"{path}: number cannot be represented exactly as a contract decimal.");
+                    break;
+                }
+
+                ValidateNumber(schema, number, path, errors);
                 break;
         }
     }
@@ -350,17 +356,31 @@ internal static class JsonSchemaSubsetValidator
         string path,
         ICollection<string> errors)
     {
-        if (schema.TryGetProperty("minimum", out JsonElement minimum)
-            && value < minimum.GetDecimal())
+        if (schema.TryGetProperty("minimum", out JsonElement minimum))
         {
-            errors.Add($"{path}: number is below minimum.");
+            if (!TryGetExactDecimal(minimum, out decimal minimumValue))
+                errors.Add($"{path}: schema minimum is not a supported contract decimal.");
+            else if (value < minimumValue)
+                errors.Add($"{path}: number is below minimum.");
         }
 
-        if (schema.TryGetProperty("maximum", out JsonElement maximum)
-            && value > maximum.GetDecimal())
+        if (schema.TryGetProperty("maximum", out JsonElement maximum))
         {
-            errors.Add($"{path}: number is above maximum.");
+            if (!TryGetExactDecimal(maximum, out decimal maximumValue))
+                errors.Add($"{path}: schema maximum is not a supported contract decimal.");
+            else if (value > maximumValue)
+                errors.Add($"{path}: number is above maximum.");
         }
+    }
+
+    private static bool TryGetExactDecimal(JsonElement number, out decimal value)
+    {
+        value = default;
+        // TryGetDecimal may succeed after underflow or precision rounding. Mathematical
+        // JSON-number equality with the converted value also rejects that information loss.
+        return number.ValueKind == JsonValueKind.Number
+            && number.TryGetDecimal(out value)
+            && JsonElement.DeepEquals(number, JsonSerializer.SerializeToElement(value));
     }
 
     private static bool MatchesDeclaredType(JsonElement schema, JsonElement instance)
@@ -425,6 +445,7 @@ internal static class JsonSchemaSubsetValidator
         if (pattern.Contains("theme\\.", StringComparison.Ordinal)) return "theme.test";
         if (pattern.Contains("presentation\\.", StringComparison.Ordinal)) return "presentation.test";
         if (pattern.Contains("[0-9]+%", StringComparison.Ordinal)) return "100%";
+        if (pattern.Contains("[A-Za-z0-9+/]", StringComparison.Ordinal)) return Convert.ToBase64String(new byte[64]);
         if (pattern.Contains("A-Za-z", StringComparison.Ordinal)) return "en-US";
         if (pattern.Contains("\\.", StringComparison.Ordinal) && pattern.Contains("[0-9]", StringComparison.Ordinal)) return "1.0.0";
         if (pattern.Contains("a-z0-9", StringComparison.Ordinal)) return "com.example.theme";

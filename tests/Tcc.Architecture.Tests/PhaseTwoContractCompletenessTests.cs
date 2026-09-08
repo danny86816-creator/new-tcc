@@ -6,7 +6,7 @@ namespace Tcc.Architecture.Tests;
 
 public sealed class PhaseTwoContractCompletenessTests
 {
-    private static readonly string[] RequiredSchemaFiles =
+    private static readonly string[] RequiredPhaseTwoSchemaFiles =
     [
         "ThemeManifest.schema.json",
         "ThemeIntegrity.schema.json",
@@ -31,7 +31,13 @@ public sealed class PhaseTwoContractCompletenessTests
         "CopyFallbackResult.schema.json",
     ];
 
-    private static readonly string[] RequiredInterfaces =
+    private static readonly string[] ApprovedContractAmendmentSchemaFiles =
+    [
+        "ThemeIntegrity.v2.schema.json",
+        "ThemeSignatureEnvelope.v1.schema.json",
+    ];
+
+    private static readonly string[] RequiredPhaseTwoInterfaces =
     [
         "IThemePackage",
         "IThemeRuntime",
@@ -52,8 +58,14 @@ public sealed class PhaseTwoContractCompletenessTests
         "IThemeDiagnosticsEmitter",
     ];
 
+    private static readonly string[] ApprovedContractAmendmentInterfaces =
+    [
+        "IThemeIntegrityVerifierV2",
+        "IThemePackageContentReader",
+    ];
+
     [Fact]
-    public void AllRequiredSectionThirtyThreeSchemaFilesExistExactlyOnce()
+    public void SealedPhaseTwoAndApprovedAmendmentSchemaFilesExistExactlyOnce()
     {
         string schemaDirectory = Path.Combine(RepositoryPaths.ThemeContracts, "schemas");
         string[] actual = Directory
@@ -62,11 +74,16 @@ public sealed class PhaseTwoContractCompletenessTests
             .Order(StringComparer.Ordinal)
             .ToArray()!;
 
-        Assert.Equal(RequiredSchemaFiles.Order(StringComparer.Ordinal), actual);
+        string[] expected = RequiredPhaseTwoSchemaFiles
+            .Concat(ApprovedContractAmendmentSchemaFiles)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
-    public void AllRequiredSectionThirtyThreeInterfacesArePublicAndOwnedByPresentationContracts()
+    public void SealedPhaseTwoAndApprovedAmendmentInterfacesArePublicAndOwnedByPresentationContracts()
     {
         Assembly contractsAssembly = typeof(IThemePackage).Assembly;
         Type[] interfaces = contractsAssembly
@@ -74,9 +91,12 @@ public sealed class PhaseTwoContractCompletenessTests
             .Where(type => type.IsInterface)
             .ToArray();
 
-        Assert.Equal(
-            RequiredInterfaces.Order(StringComparer.Ordinal),
-            interfaces.Select(type => type.Name).Order(StringComparer.Ordinal));
+        string[] expected = RequiredPhaseTwoInterfaces
+            .Concat(ApprovedContractAmendmentInterfaces)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(expected, interfaces.Select(type => type.Name).Order(StringComparer.Ordinal));
 
         Assert.All(
             interfaces,
@@ -160,9 +180,12 @@ public sealed class PhaseTwoContractCompletenessTests
         Type[] productionTypes = productionAssemblies
             .SelectMany(assembly => assembly.GetTypes())
             .ToArray();
+        string[] guardedInterfaceNames = RequiredPhaseTwoInterfaces
+            .Concat(ApprovedContractAmendmentInterfaces)
+            .ToArray();
         Type[] requiredInterfaces = typeof(IThemePackage).Assembly
             .GetExportedTypes()
-            .Where(type => type.IsInterface && RequiredInterfaces.Contains(type.Name, StringComparer.Ordinal))
+            .Where(type => type.IsInterface && guardedInterfaceNames.Contains(type.Name, StringComparer.Ordinal))
             .ToArray();
         List<string> violations = [];
 

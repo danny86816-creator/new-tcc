@@ -10,6 +10,8 @@ public static class ContractVersions
     public const string UxContract = "1.1.0";
     public const string UxArchitectureDisplay = "v1.1";
     public const string Schema = "1.0";
+    public const string ThemeIntegritySchemaV2 = "2.0";
+    public const string ThemeSignatureEnvelopeSchemaV1 = "1.0";
 }
 
 public readonly record struct ThemeId(string Value);
@@ -31,3 +33,8 @@ public readonly record struct ThemeAssetId(string Value);
 public readonly record struct ThemePreviewSessionId(string Value);
 
 public readonly record struct ThemeCorrelationId(string Value);
+
+/// <summary>
+/// Opaque logical identity for a Theme package. It is not a filesystem path.
+/// </summary>
+public readonly record struct ThemePackageRef(string Value);
