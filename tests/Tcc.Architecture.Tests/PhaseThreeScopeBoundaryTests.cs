@@ -11,11 +11,23 @@ public sealed class PhaseThreeScopeBoundaryTests
     [
         "Tcc.Themes.AssemblyMarker",
         "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
+        "Tcc.Themes.Integrity.ThemePackageInventoryEvaluation",
+        "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
         "Tcc.Themes.Manifests.ThemeManifestValidator",
     ];
 
     private const string ApprovedNestedType =
         "Tcc.Themes.Manifests.ThemeManifestValidator+DiagnosticCodes";
+
+    private static readonly string[] ApprovedSealedBaselineCompilerArtifacts =
+    [
+        "<>z__ReadOnlyArray`1",
+        "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary+<>c",
+        "Tcc.Themes.Manifests.ThemeManifestValidator+<>O",
+        "Tcc.Themes.Manifests.ThemeManifestValidator+<>c",
+        "Tcc.Themes.Manifests.ThemeManifestValidator+<>c__DisplayClass24_0",
+        "Tcc.Themes.Manifests.ThemeManifestValidator+<>c__DisplayClass25_0",
+    ];
 
     private static readonly string[] ForbiddenCompiledSymbolFragments =
     [
@@ -88,12 +100,68 @@ public sealed class PhaseThreeScopeBoundaryTests
             violation => violation.Contains("Tcc.Themes.Integrity.UnapprovedIntegrityStage", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public void ApprovedEvaluatorAsyncStateMachineIsTheExactMethodAttributedCompilerArtifact()
+    {
+        Type evaluator = typeof(Tcc.Themes.Integrity.ThemePackageInventoryEvaluator);
+        MethodInfo method = evaluator.GetMethod(
+            "EvaluateAsync",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            ?? throw new InvalidOperationException("Approved evaluator method is missing.");
+        Type stateMachine = method.GetCustomAttribute<AsyncStateMachineAttribute>()?.StateMachineType
+            ?? throw new InvalidOperationException("Approved evaluator async state machine is missing.");
+
+        Assert.Same(evaluator, method.DeclaringType);
+        Assert.Same(evaluator, stateMachine.DeclaringType);
+        Assert.True(stateMachine.IsNestedPrivate);
+        Assert.True(stateMachine.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false));
+        Assert.True(typeof(IAsyncStateMachine).IsAssignableFrom(stateMachine));
+        Assert.True(IsApprovedEvaluatorAsyncStateMachine(stateMachine));
+    }
+
+    [Fact]
+    public void OtherGeneratedTypesOnApprovedEvaluatorFailTheCompiledSurfaceBoundary()
+    {
+        Assembly fixture = BuildFixtureAssembly(
+            markerAdditionalSource: null,
+            otherSource:
+            """
+            using System.Runtime.CompilerServices;
+
+            namespace Tcc.Themes.Integrity;
+
+            internal static class ThemeIntegrityRequestBoundary { }
+            internal sealed record ThemePackageInventoryEvaluation;
+            internal static class ThemePackageInventoryEvaluator
+            {
+                internal static async System.Threading.Tasks.Task EvaluateAsync()
+                {
+                    await System.Threading.Tasks.Task.Yield();
+                }
+
+                internal static async System.Threading.Tasks.Task UnapprovedAsync()
+                {
+                    await System.Threading.Tasks.Task.Yield();
+                }
+
+                [CompilerGenerated]
+                private sealed class GeneratedAttributeOnly { }
+            }
+            """);
+
+        string[] violations = GetCompiledSurfaceViolations(fixture);
+
+        Assert.DoesNotContain(violations, violation => violation.Contains("<EvaluateAsync>", StringComparison.Ordinal));
+        Assert.Contains(violations, violation => violation.Contains("<UnapprovedAsync>", StringComparison.Ordinal));
+        Assert.Contains(violations, violation => violation.Contains("GeneratedAttributeOnly", StringComparison.Ordinal));
+    }
+
     internal static string[] GetCompiledSurfaceViolations(Assembly assembly)
     {
         List<string> violations = [];
         Type[] allTypes = assembly.GetTypes();
         Type[] topLevelTypes = allTypes
-            .Where(type => type.DeclaringType is null && !IsCompilerGeneratedArtifact(type))
+            .Where(type => type.DeclaringType is null && !IsApprovedSealedBaselineCompilerArtifact(type))
             .OrderBy(type => type.FullName, StringComparer.Ordinal)
             .ToArray();
 
@@ -113,8 +181,9 @@ public sealed class PhaseThreeScopeBoundaryTests
 
         foreach (Type unauthorizedNestedType in allTypes.Where(type =>
                      type.IsNested
-                     && !IsCompilerGeneratedArtifact(type)
-                     && !string.Equals(type.FullName, ApprovedNestedType, StringComparison.Ordinal)))
+                     && !string.Equals(type.FullName, ApprovedNestedType, StringComparison.Ordinal)
+                     && !IsApprovedSealedBaselineCompilerArtifact(type)
+                     && !IsApprovedEvaluatorAsyncStateMachine(type)))
         {
             violations.Add(
                 $"Compiled nested production type '{unauthorizedNestedType.FullName}' is outside the exact Phase 3 surface.");
@@ -187,10 +256,31 @@ public sealed class PhaseThreeScopeBoundaryTests
             .ToArray();
     }
 
-    private static bool IsCompilerGeneratedArtifact(Type type) =>
-        !type.IsPublic
-        && type.Name.StartsWith("<>", StringComparison.Ordinal)
-        && type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false);
+    private static bool IsApprovedEvaluatorAsyncStateMachine(Type type)
+    {
+        Type? evaluator = type.DeclaringType;
+        if (evaluator is null
+            || !string.Equals(
+                evaluator.FullName,
+                "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
+                StringComparison.Ordinal)
+            || !type.IsNestedPrivate
+            || !type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false)
+            || !typeof(IAsyncStateMachine).IsAssignableFrom(type))
+        {
+            return false;
+        }
+
+        MethodInfo? method = evaluator.GetMethod(
+            "EvaluateAsync",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+        return method?.DeclaringType == evaluator
+            && method.GetCustomAttribute<AsyncStateMachineAttribute>()?.StateMachineType == type;
+    }
+
+    private static bool IsApprovedSealedBaselineCompilerArtifact(Type type) =>
+        type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false)
+        && ApprovedSealedBaselineCompilerArtifacts.Contains(type.FullName, StringComparer.Ordinal);
 
     private static string NormalizeSymbol(string symbol) =>
         new(symbol.Where(char.IsLetterOrDigit).ToArray());
