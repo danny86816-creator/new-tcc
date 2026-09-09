@@ -1,11 +1,11 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 4 — Theme Integrity Verifier (IN PROGRESS; Phase4A/B/C/D SEALED / APPROVED; Phase4E IMPLEMENTED / VALIDATED, UNSEALED CANDIDATE; Independent Phase4F PASS)
-**Current execution status:** Phase 1–3 and Contract Amendment SEALED; Phase4A/B/C/D SEALED / APPROVED; phase4d-approved exists as approved baseline; Phase4E IMPLEMENTED / VALIDATED, UNSEALED CANDIDATE; public V2 verifier IMPLEMENTED / VALIDATED; V1 implementations 0; exact V2 implementations 1; final IsVerified AVAILABLE THROUGH V2 PUBLIC VERIFIER; Phase4F COMPLETED — INDEPENDENT VALIDATION PASS; Phase4E candidate VALIDATED; Ready for Phase4E Baseline Staging Audit YES; Ready for Phase4E Seal NO until staging audit and seal task pass; push NOT PERFORMED
-**Last updated:** 2026-09-09 19:46 +08:00
+**Current approved phase:** Phase 4 — Theme Integrity Verifier (Phase4A/B/C/D/E SEALED / APPROVED; Independent Phase4F PASS)
+**Current execution status:** Phase 1–3 and Contract Amendment SEALED; Phase4A/B/C/D/E SEALED / APPROVED; phase4d-approved remains unchanged; Phase4E content baseline commit `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`; public V2 verifier SEALED / APPROVED; V1 implementations 0; exact V2 implementations 1; final IsVerified AVAILABLE THROUGH SEALED V2 PUBLIC VERIFIER; Phase4F COMPLETED — INDEPENDENT VALIDATION PASS; Phase4E candidate validation PASS; severity CRITICAL / HIGH / MEDIUM / LOW 0 / 0 / 0 / 0; Ready for Phase4E Seal being finalized in status-only seal commit; annotated `phase4e-approved` tag not yet created at this status snapshot; push NOT PERFORMED
+**Last updated:** 2026-09-09 20:36 +08:00
 
 **Contract amendment status:** SEALED — implementation/remediation complete; Independent Security Audit PASS; all known defects RESOLVED
-**Phase 4 production implementation:** PHASE4A/B/C/D SEALED / APPROVED; PHASE4E IMPLEMENTED / VALIDATED — UNSEALED CANDIDATE
+**Phase 4 production implementation:** PHASE4A/B/C/D/E SEALED / APPROVED
 **Compatibility gap:** RESOLVED
 **Approved strategy:** V2-only production runtime
 **V1 adapter:** NOT AUTHORIZED
@@ -78,14 +78,14 @@
 - Focused Baseline Staging Re-Audit: **PASS**.
 - Baseline Staging Audit security carry-forward: **PASS**.
 - Phase 4 overall: **IN PROGRESS**.
-- Production implementation: **PHASE4A/B/C/D SEALED / APPROVED; PHASE4E IMPLEMENTED / VALIDATED — UNSEALED CANDIDATE**.
+- Production implementation: **PHASE4A/B/C/D/E SEALED / APPROVED**.
 - Phase 4A: **SEALED / APPROVED** — deterministic request/reader preflight, cancellation propagation, basic required-object/value checks, and undefined security-enum rejection.
 - Phase 4A baseline: `08db235843113b987d0bdfface27cdfeb3d7c524`.
 - Phase 4B baseline content commit: `3784c256549d786bb8a71c74cb4f27e27a54dd82`.
 - Independent Phase 4A Re-Validation: **PASS** — `P4A-IV-001` **RESOLVED**; `P4A-IV-002` **RESOLVED**; CRITICAL 0, HIGH 0, MEDIUM 0, LOW 0.
 - Surgical remediation: `P4A-IV-001` **RESOLVED** — a present envelope with null, empty, or whitespace-only Signature rejects with exact `P4I013`; required-object absence retains `P4I020`. The three reproduction vectors failed with `P4I020` before the fix and pass with exact `P4I013` afterward. Each vector, each mixed `[P4I013, P4I020]` case, and the missing-object case passes 50-run complete-diagnostic determinism; no package-content or cryptographic validation was added.
 - Status remediation: `P4A-IV-002` **RESOLVED** — the current Phase 2 count is corrected from the prior snapshot's 93/93 to actual executable **92/92 PASS**, derived from `PhaseTwo*` results in this round's full-suite TRX. Phase 2 tests and classification were not changed to force the count.
-- Public `ThemeIntegrityVerifier`: **IMPLEMENTED / VALIDATED** — exact `Tcc.Themes.Integrity.ThemeIntegrityVerifier`.
+- Public `ThemeIntegrityVerifier`: **SEALED / APPROVED** — exact `Tcc.Themes.Integrity.ThemeIntegrityVerifier`.
 - `IThemeIntegrityVerifierV2` production implementations: **1 exact** — `Tcc.Themes.Integrity.ThemeIntegrityVerifier`; `IThemeIntegrityVerifier` implementations: **0**.
 - Phase 4B: **SEALED / APPROVED** — internal canonical path, exhaustive payload inventory, entry-kind, presence, length, and per-file SHA-256 evaluation; P4B-IV-001 **RESOLVED / REMEDIATED**; Independent Phase 4B Re-Validation **PASS**; CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
 - Phase 4C: **SEALED / APPROVED** — Raw Metadata Integrity baseline with verified Theme evidence entry gate, byte custody/coherence, Canonical Package Tree Hash v1, strict raw JSON, embedded authoritative schema execution, metadata materialization/binding, Theme semantic validation, and deterministic raw hashes.
@@ -97,15 +97,15 @@
 - P4D-IV-001: **RESOLVED** — final independent re-validation proved that the exact-scope authority preserves the approved identity, visibility, type-shape, and generated-provenance checks and applies the orthogonal V1/V2 verifier-interface prohibition to every production type without an abstract, generated, approved-name, namespace, sealed, record, value-type, or nesting exemption. Public evaluator/outcome, V1/V2 implementations, forged generated artifacts, wrong owners/attribute targets, missing `IAsyncStateMachine` provenance, display/iterator artifacts, unexpected Phase4D async state machines, wrong namespaces, and wrong declaring types are rejected.
 - Final Independent Phase4D severity state: **CRITICAL 0 / HIGH 0 / MEDIUM 0 / LOW 0**.
 - Phase4D Baseline Staging Audit: **PASS**; Phase4D **SEALED / APPROVED**; annotated `phase4d-approved` exists, target `8b169038f866bccf575e48e317d4debebecd0972`.
-- Phase 4E: **IMPLEMENTED / VALIDATED — UNSEALED CANDIDATE**; Phase4E candidate: **VALIDATED**; Ready for Phase4E Baseline Staging Audit: **YES**; Ready for Phase4E Seal: **NO — until Baseline Staging Audit PASS and the separately authorized seal task passes**.
+- Phase 4E: **SEALED / APPROVED**; content baseline commit: `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`; Phase4E candidate validation: **PASS**; Independent Phase4F Validation: **PASS**; Ready for Phase4E Seal: **being finalized in status-only seal commit**; annotated `phase4e-approved` tag not yet created at this status snapshot.
 - Phase 4F: **COMPLETED — INDEPENDENT VALIDATION PASS**; severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
-- Governance: Decision017 **APPROVED GOVERNANCE INPUT**; Decision018 **NOT CREATED**.
+- Governance: Decision017 **APPROVED / SEALED WITH PHASE4E BASELINE**; Decision018 **NOT CREATED**.
 - Cryptographic verification: **IMPLEMENTED INTERNALLY FOR PHASE4D**.
 - Trust evaluation: **IMPLEMENTED INTERNALLY FOR PHASE4D**.
 - Channel policy evaluation: **IMPLEMENTED INTERNALLY FOR PHASE4D**.
 - Package-level final verification: **AVAILABLE THROUGH V2 PUBLIC VERIFIER**.
 - Production branch: **ACTIVE** — `phase4-theme-integrity-verifier`; Phase 4A implementation started from HEAD `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`.
-- ThemeIntegrityVerifier production implementation: **IMPLEMENTED / VALIDATED** — public sealed, parameterless, stateless, V2-only A/B/C/D composition.
+- ThemeIntegrityVerifier production implementation: **SEALED / APPROVED** — public sealed, parameterless, stateless, V2-only A/B/C/D composition.
 - Baseline content: **COMMITTED**.
 - Contract amendment implementation commit: `f9356632a7cc9c00b5f16110f7bbb3de4eecea79`.
 - Seal reference: `phase4-contract-amendment-approved`.
@@ -119,8 +119,8 @@
 - Third remediation: `P4A-REVAL2-001` **RESOLVED** — numeric schema validation uses safe decimal conversion plus exact JSON-number equality to reject overflow, underflow, and precision loss. Unrepresentable numeric schema limits return validation errors. The raw-metadata boundary contains expected FormatException/OverflowException conversion failures with existing `P4I027`; cancellation and unrelated exceptions remain outside that filter. All previous defects remain resolved after this fix.
 - Current security defect state: prior Phase4A defects remain resolved; initial Independent Phase4D Security Validation reported **P4D-IV-001 LOW**; final independent re-validation is **PASS** and `P4D-IV-001` is **RESOLVED** with CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
 - Diagnostic coverage: **29/29 active codes actually emitted**; active/declared/used sets equal; unknown codes rejected; successful and failed complete results, including non-null hashes, evidence, signature status, and ordered diagnostics, are identical across 50 runs.
-- In progress: **NONE** — authorized Phase4E implementation and Independent Phase4F validation are complete.
-- Pending: **separately authorized Phase4E Baseline Staging Audit** of the validated unsealed candidate; no staging, commit, tag, push, or seal is authorized by this status sync.
+- In progress: **Phase4E status-only seal commit and annotated tag finalization**.
+- Pending: create and verify the annotated `phase4e-approved` tag after the status-only seal commit; push remains not authorized.
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
 - Phase4C sealed changed files (historical): exactly seven relative to sealed Phase 4B HEAD `3ae36ba78f92fbac5408a8f14f24641dee9a02a9`: pre-existing authorized Decision 013/014 append in `docs/CODEX_DECISIONS.md`; new `src/Tcc.Themes/Integrity/ThemePackageMetadataEvaluator.cs`, `src/Tcc.Themes/Integrity/ThemeMetadataSchemaValidator.cs`, and `tests/Tcc.Architecture.Tests/PhaseFourThemePackageMetadataEvaluatorTests.cs`; modified `src/Tcc.Themes/Tcc.Themes.csproj`, `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs`, and this status snapshot. Phase 4B production/tests/outcome, ADR-0003, contracts, source schemas, Contract Conformance Oracle, `ThemeIntegrityRequestBoundary`, and `ThemeManifestValidator` were not modified.
@@ -143,8 +143,8 @@
 - Numeric security proof: independently re-hashed and signed raw metadata containing `1e1000`, `-1e1000`, `79228162514264337593543950336`, negative overflow, underflow, or precision loss rejects with `P4I027` and no escaped exception. Exact legal decimals, DPI minimum `1`, and decimal maximum `79228162514264337593543950335` pass the full pipeline. Decimal minimum is representable but rejected by the actual positive-DPI constraint. All 13 raw numeric vectors have 50-run complete-result determinism checks; supporting tests cover decimal extrema, Int64 overflow, and actual schema minimum/maximum mutations.
 - Sealed amendment preservation/hygiene (historical): V1 contract/schema and Phase 3 implementation/test diffs **0**; project/package/lock diffs **0**; six projects, 11 ProjectReferences, four PackageReferences unchanged; production verifier implementations **0**; Phase 5+/Trading leakage **0**; candidate secret/local-path/SKILL-artifact matches **0**; unexpected repository artifacts **0**; pre-seal staged **0**, modified tracked **6**, expected untracked **7** (historical audit counts, not current Git state). Only ignored bin/obj build outputs remain. Frozen hashes exact; `git diff --check` **PASS**. Temp / Git Hygiene Closure **PASS**; old external fixture **NOT FOUND**; new temporary fixture remnants **0**.
 - Validation result: **CONTRACT AMENDMENT SEALED**; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure **PASS**.
-- Known boundary: sealed A/B/C/D retain preflight, inventory, raw metadata, and signature/trust/channel ownership. Phase4E now composes their outcomes into the public V2 final verdict. Independent validation and sealing remain separate authorization gates.
-- Exact next action: return to GPT Supervisor for the separately authorized **Phase4E Baseline Staging Audit**. Do not stage, commit, tag, push, or seal.
+- Known boundary: sealed A/B/C/D retain preflight, inventory, raw metadata, and signature/trust/channel ownership. Phase4E composes their outcomes into the sealed public V2 final verdict; Independent Phase4F validation passed.
+- Exact next action: finalize the authorized status-only seal commit, create and verify the annotated `phase4e-approved` tag, then return to GPT Supervisor. Do not push.
 
 ## AI Trading Intelligence planning state
 
@@ -316,7 +316,7 @@ docs/
 ## Phase4E public verifier composition implementation snapshot
 
 - Project goal: expose the approved public V2 verifier by composing sealed A/B/C/D without changing their semantics or package custody.
-- Current phase: **IMPLEMENTED / VALIDATED — UNSEALED CANDIDATE**. Independent Phase4F validation: **PASS**. Phase4E candidate: **VALIDATED**. Phase4F: **COMPLETED — INDEPENDENT VALIDATION PASS**. Ready for Phase4E Baseline Staging Audit: **YES**. Ready for Phase4E Seal: **NO — until Baseline Staging Audit PASS and the separately authorized seal task passes**.
+- Current phase: **SEALED / APPROVED**. Phase4E content baseline commit: `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`. Independent Phase4F validation: **PASS**. Phase4E candidate validation: **PASS**. Phase4F: **COMPLETED — INDEPENDENT VALIDATION PASS**. Ready for Phase4E Seal: **being finalized in status-only seal commit**. Annotated `phase4e-approved` tag not yet created at this status snapshot.
 - Authority / entry: task `49—Phase 4E Public Verifier Composition Implementation`; verified Conversation Gate PASS; branch `phase4-theme-integrity-verifier`; HEAD and approved tag target `8b169038f866bccf575e48e317d4debebecd0972`. Entry candidate was only the already-approved Decision017 governance append.
 - Governance custody: Decision017 is **APPROVED GOVERNANCE INPUT** and was read-only throughout implementation. Ledger before/after SHA-256 `10797BEB37AF40D41998014E3BC07C29F516727C84E1E8298B5901635B832604`; Decision017 heading exactly once; Decision018 absent; Decisions011–017 preserved.
 - Completed production: one public sealed concrete top-level non-generic class `Tcc.Themes.Integrity.ThemeIntegrityVerifier`, public parameterless constructor, V2-only exact ValueTask signature. V1 implementations **0**; V2 implementations **1 exact**. No dependencies, fields, cache, reader access, catch blocks, background work, or new handwritten helper type.
@@ -335,8 +335,8 @@ docs/
 - Overall candidate: **10 exact** = nine implementation files plus pre-existing `docs/CODEX_DECISIONS.md`; tracked modified **8**, untracked **2**, staged **0**, unexpected **0**. No stage/commit/tag/push/seal; branch and HEAD unchanged. Harnesses/TRX/logs remain outside the repository; only ignored bin/obj build products are present. Secret-pattern and new local-machine-path matches **0**; public cryptographic test material is intentional. `git diff --check` has no whitespace error.
 - Execution gates: implementation/focused validation complete; restore/Release/full/preservation gates complete; status synchronization and final scope review complete. Dependencies were the sealed V2/A–D inputs; principal risks were field loss, extra reads, unsigned verdict rejection, cancellation swallowing, and broad generated-artifact allowances, covered by the above gates. Reversal would be limited to this task's nine files while preserving the existing ledger candidate; no rollback was performed.
 - Independent Phase4F validation evidence: composition **52/52 PASS**; exact scope **53/53 PASS**; six historical guard suites **784/784 PASS**; Phase4A **19/19 PASS**; Phase4B **298/298 PASS**; Phase4C **183/183 PASS**; Phase4D **302/302 PASS**; focused **1019/1019 PASS**; normal and locked restore **PASS**; Release x64 **0 warnings / 0 errors**; full repository **1187/1187 PASS, 0 skipped**; dependency **5/5 PASS**; independent runtime **1489 assertions PASS**; independent architecture attacks **23/23 PASS**; independent crypto oracle **PASS**. Severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
-- Remaining / waiting: Phase4E Baseline Staging Audit requires separate authorization; no implementation blocker or pending product decision. Known limitations are the explicitly labeled source-copy observations and unsealed status. Trading / Market Data **NOT STARTED**; existing BreakoutProp coin-set and OKX/USDT.P -> Kraken/USD.PM future documentation, plus 15M/30M/1H/4H/1D/1W/1M liquidity charts, remain future-only and unchanged.
-- Exact next action: return to GPT Supervisor for the separately authorized **Phase4E Baseline Staging Audit**. Do not stage/commit/tag/push or seal. Push **NOT PERFORMED**.
+- Remaining / waiting: only the authorized status-only seal commit and annotated `phase4e-approved` tag finalization remain; no implementation blocker or pending product decision. Trading / Market Data **NOT STARTED**; existing BreakoutProp coin-set and OKX/USDT.P -> Kraken/USD.PM future documentation, plus 15M/30M/1H/4H/1D/1W/1M liquidity charts, remain future-only and unchanged.
+- Exact next action: finalize the authorized status-only seal commit, create and verify the annotated `phase4e-approved` tag, then return to GPT Supervisor. Do not push. Push **NOT PERFORMED**.
 
 ## Validation commands
 
@@ -357,8 +357,8 @@ docs/
 - Phase 4 Contract Amendment is sealed; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure passed; all known amendment defects are resolved.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- Phase4A/B/C/D are **SEALED / APPROVED**; `phase4d-approved` is unchanged. Phase4E is **IMPLEMENTED / VALIDATED — UNSEALED CANDIDATE**; V1=0, exact V2=1, final IsVerified is available through the V2 public verifier. Independent Phase4F validation is **PASS**, Phase4F is **COMPLETED — INDEPENDENT VALIDATION PASS**, severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**, and Ready for Phase4E Baseline Staging Audit is **YES**. Ready for Phase4E Seal remains **NO** until the staging audit and seal task pass. The original Windows point-import blocker remains resolved by Decision016. Exact terminal cancellation and invocation observations use a clearly labeled external source-copy harness; they are not injected callbacks in the unmodified public verifier. No hidden implementation blocker; Push **NOT PERFORMED**.
+- Phase4A/B/C/D/E are **SEALED / APPROVED**; `phase4d-approved` is unchanged. Phase4E content baseline commit is `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`; V1=0, exact V2=1, final IsVerified is available through the sealed V2 public verifier. Independent Phase4F validation is **PASS**, Phase4F is **COMPLETED — INDEPENDENT VALIDATION PASS**, severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. The status-only seal commit and annotated tag are the only remaining seal mechanics at this snapshot. The original Windows point-import blocker remains resolved by Decision016. Exact terminal cancellation and invocation observations use a clearly labeled external source-copy harness; they are not injected callbacks in the unmodified public verifier. No hidden implementation blocker; Push **NOT PERFORMED**.
 
 ## Exact next action
 
-Return to GPT Supervisor for the separately authorized Phase4E Baseline Staging Audit of the exact ten-file validated, unsealed Phase4E candidate. Do not stage, commit, tag, push, or seal.
+Finalize the authorized status-only seal commit, create and verify the annotated `phase4e-approved` tag, then return to GPT Supervisor. Do not push or begin another implementation phase.
