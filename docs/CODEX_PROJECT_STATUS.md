@@ -1,11 +1,11 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 4 — Theme Integrity Verifier (IN PROGRESS; Phase 4A SEALED / APPROVED; Phase 4B SEALED / APPROVED; Phase 4C IMPLEMENTED / VALIDATED)
-**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment SEALED; Phase 4A SEALED / APPROVED; Phase 4B SEALED / APPROVED; Phase 4C IMPLEMENTED / VALIDATED; Independent Phase 4C Re-Validation PASS; Phase 4C baseline NOT YET SEALED; Phase 4D–4F NOT STARTED; public `ThemeIntegrityVerifier` NOT CREATED
-**Last updated:** 2026-09-09 08:09 +08:00
+**Current approved phase:** Phase 4 — Theme Integrity Verifier (IN PROGRESS; Phase 4A SEALED / APPROVED; Phase 4B SEALED / APPROVED; Phase 4C SEALED / APPROVED)
+**Current execution status:** Phase 1–3 SEALED; Phase 4 Contract Amendment SEALED; Phase 4A SEALED / APPROVED; Phase 4B SEALED / APPROVED; Phase 4C SEALED / APPROVED; Phase 4C Raw Metadata Integrity APPROVED; Independent Phase 4C Re-Validation PASS; Phase 4D–4F NOT STARTED; public `ThemeIntegrityVerifier` NOT CREATED
+**Last updated:** 2026-09-09 08:39 +08:00
 
 **Contract amendment status:** SEALED — implementation/remediation complete; Independent Security Audit PASS; all known defects RESOLVED
-**Phase 4 production implementation:** PHASE 4A SEALED; PHASE 4B INTERNAL STAGE SEALED / APPROVED; PHASE 4C INTERNAL STAGE IMPLEMENTED / VALIDATED
+**Phase 4 production implementation:** PHASE 4A SEALED / APPROVED; PHASE 4B INTERNAL STAGE SEALED / APPROVED; PHASE 4C RAW METADATA INTEGRITY SEALED / APPROVED
 **Compatibility gap:** RESOLVED
 **Approved strategy:** V2-only production runtime
 **V1 adapter:** NOT AUTHORIZED
@@ -16,6 +16,7 @@
 **Git branch:** `phase4-theme-integrity-verifier`
 **Production branch base:** `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`
 **Phase 4A baseline commit:** `08db235843113b987d0bdfface27cdfeb3d7c524`
+**Phase 4C content baseline commit:** `c663c5b392681998ca6f3b7d74dcebc5bd2d3691`
 **Approved baseline tag:** `phase4a-approved`
 **Current Phase 4A changes:** SEALED — internal production foundation, narrowly scoped test access, focused tests, exact scope-boundary evolution, and status finalization
 **Implementation starting HEAD:** `71d9ebd40f46e054dab60489c15d1fa8dd2e1b85`
@@ -77,7 +78,7 @@
 - Focused Baseline Staging Re-Audit: **PASS**.
 - Baseline Staging Audit security carry-forward: **PASS**.
 - Phase 4 overall: **IN PROGRESS**.
-- Production implementation: **PHASE 4A SEALED; PHASE 4B INTERNAL STAGE SEALED / APPROVED; PHASE 4C INTERNAL STAGE IMPLEMENTED / VALIDATED**.
+- Production implementation: **PHASE 4A SEALED / APPROVED; PHASE 4B INTERNAL STAGE SEALED / APPROVED; PHASE 4C RAW METADATA INTEGRITY SEALED / APPROVED**.
 - Phase 4A: **SEALED / APPROVED** — deterministic request/reader preflight, cancellation propagation, basic required-object/value checks, and undefined security-enum rejection.
 - Phase 4A baseline: `08db235843113b987d0bdfface27cdfeb3d7c524`.
 - Phase 4B baseline content commit: `3784c256549d786bb8a71c74cb4f27e27a54dd82`.
@@ -87,9 +88,11 @@
 - Public `ThemeIntegrityVerifier`: **NOT CREATED**.
 - `IThemeIntegrityVerifierV2` production implementation: **0 / NOT STARTED**.
 - Phase 4B: **SEALED / APPROVED** — internal canonical path, exhaustive payload inventory, entry-kind, presence, length, and per-file SHA-256 evaluation; P4B-IV-001 **RESOLVED / REMEDIATED**; Independent Phase 4B Re-Validation **PASS**; CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
-- Phase 4C: **IMPLEMENTED / VALIDATED** — verified Theme evidence entry gate, byte custody/coherence, Canonical Package Tree Hash v1, strict raw JSON, embedded authoritative schema execution, metadata materialization/binding, Theme semantic validation, and deterministic raw hashes.
+- Phase 4C: **SEALED / APPROVED** — Raw Metadata Integrity baseline with verified Theme evidence entry gate, byte custody/coherence, Canonical Package Tree Hash v1, strict raw JSON, embedded authoritative schema execution, metadata materialization/binding, Theme semantic validation, and deterministic raw hashes.
 - Independent Phase 4C Re-Validation: **PASS** — `P4C-IV-001` **RESOLVED**; `P4C-IV-002` **RESOLVED**; `P4C-IV-003` **RESOLVED**; `P4C-IV-004` **CORRECTED**; CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**.
-- Phase 4C baseline: **NOT YET SEALED**.
+- Phase 4C Raw Metadata Integrity: **APPROVED**.
+- Phase 4C baseline: **SEALED / APPROVED**.
+- Phase 4C content baseline commit: `c663c5b392681998ca6f3b7d74dcebc5bd2d3691`.
 - Phase 4D: **NOT STARTED**.
 - Phase 4E: **NOT STARTED**.
 - Phase 4F: **NOT STARTED**.
@@ -112,8 +115,8 @@
 - Third remediation: `P4A-REVAL2-001` **RESOLVED** — numeric schema validation uses safe decimal conversion plus exact JSON-number equality to reject overflow, underflow, and precision loss. Unrepresentable numeric schema limits return validation errors. The raw-metadata boundary contains expected FormatException/OverflowException conversion failures with existing `P4I027`; cancellation and unrelated exceptions remain outside that filter. All previous defects remain resolved after this fix.
 - Current security defect state: **ALL KNOWN SECURITY DEFECTS RESOLVED** — `P4A-VAL-001`–`P4A-VAL-006`, `P4A-REVAL-001`–`P4A-REVAL-003`, and `P4A-REVAL2-001` are resolved.
 - Diagnostic coverage: **29/29 active codes actually emitted**; active/declared/used sets equal; unknown codes rejected; successful and failed complete results, including non-null hashes, evidence, signature status, and ordered diagnostics, are identical across 50 runs.
-- In progress: **NONE** — Phase 4C surgical remediation and required repository validation are complete.
-- Pending: **Phase4C Baseline Staging Re-Audit → Supervisor Baseline Seal authorization**. Phase 4D–4F remain **NOT STARTED**.
+- In progress: **NONE** — Phase 4C is sealed and approved; Phase 4D–4F remain **NOT STARTED**.
+- Pending: **Supervisor Phase4D scope decision/planning**. The next authorized product step is **NOT YET AUTHORIZED**.
 - Open blockers: **NONE**.
 - Waiting for user decisions: **NONE**.
 - Current round changed files: exactly seven relative to sealed Phase 4B HEAD `3ae36ba78f92fbac5408a8f14f24641dee9a02a9`: pre-existing authorized Decision 013/014 append in `docs/CODEX_DECISIONS.md`; new `src/Tcc.Themes/Integrity/ThemePackageMetadataEvaluator.cs`, `src/Tcc.Themes/Integrity/ThemeMetadataSchemaValidator.cs`, and `tests/Tcc.Architecture.Tests/PhaseFourThemePackageMetadataEvaluatorTests.cs`; modified `src/Tcc.Themes/Tcc.Themes.csproj`, `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs`, and this status snapshot. Phase 4B production/tests/outcome, ADR-0003, contracts, source schemas, Contract Conformance Oracle, `ThemeIntegrityRequestBoundary`, and `ThemeManifestValidator` were not modified.
@@ -129,7 +132,7 @@
 - Phase4C pre/post evidence: the external direct-production harness reproduced **31 failed expectations** before production modification (Unicode 22, numbers 5, schema-definition 4). After remediation, all **778/778** main/supplemental vectors pass; all original 31 names pass, with the real Phase4A/4B reachability assertion strengthened to require the exact P4I027 outcome. The original 43 Phase4C tests remain and pass; 140 new test cases bring the class to 183. At that remediation-stage snapshot, external evidence was not a substitute for the then-pending Independent Re-Validation; this historical statement is superseded by the Independent Phase 4C Re-Validation PASS recorded above. External evidence remains stored outside the repository.
 - This surgical remediation changed exactly `src/Tcc.Themes/Integrity/ThemeMetadataSchemaValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseFourThemePackageMetadataEvaluatorTests.cs`, and this status snapshot. Evaluator, project embedding, exact-scope allowlist, and the decision ledger retain their entry bytes. Final candidate remains exactly seven files relative to sealed Phase4B HEAD, with tracked modified 4 / untracked 3 / staged 0 / unexpected 0.
 - Current round preservation / hygiene: all previous approved tags and peeled commits unchanged; Frozen System and Theme SHA-256 exact; V1, V2, source schemas, ADR-0003, Contract Conformance Oracle, `ThemeIntegrityRequestBoundary`, sealed `ThemePackageInventoryEvaluator`, and `ThemeManifestValidator` unchanged. `CODEX_DECISIONS.md` SHA-256 remains the implementation-entry value `CC4B08A6738D44ACADBC8AA39B400C7C4F46B364C5D926C57923AC02362355A2`, preserving approved governance inputs Decision 013/014. Dependency surface remains **6 projects / 11 ProjectReferences / 4 PackageReferences** with new dependencies **0 / 0 / 0**. Production `ThemeIntegrityVerifier` types and `IThemeIntegrityVerifierV2` implementations remain **0**. Phase 4D crypto/trust/channel and Phase 4E public composition leakage are **0**. Exact handwritten type surface and method-attributed async artifacts pass; staged files, unexpected files, TRX, repository SKILL artifacts, and `git diff --check` violations are **0**.
-- Current round gate: Phase 4A **SEALED / APPROVED**; Phase 4B **SEALED / APPROVED**; Phase 4C **IMPLEMENTED / VALIDATED**; Independent Phase 4C Re-Validation **PASS**; ready for Phase4C Baseline Staging Re-Audit **YES**; Phase 4C baseline **NOT YET SEALED**. Decision 013 and Decision 014: **APPROVED GOVERNANCE INPUT**. Public `ThemeIntegrityVerifier`: **NOT CREATED**. `IThemeIntegrityVerifierV2` production implementations: **0**. Commit: **NOT AUTHORIZED**. Push: **NOT PERFORMED**. Phase 4D is **NOT AUTHORIZED / NOT STARTED**.
+- Current round gate: Phase 4A **SEALED / APPROVED**; Phase 4B **SEALED / APPROVED**; Phase 4C **SEALED / APPROVED**; Phase 4C Raw Metadata Integrity **APPROVED**; Independent Phase 4C Re-Validation **PASS**; severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. Decision 013 and Decision 014: **APPROVED GOVERNANCE INPUT**. Public `ThemeIntegrityVerifier`: **NOT CREATED**. `IThemeIntegrityVerifierV2` production implementations: **0**. Crypto, trust, and channel policy: **NOT IMPLEMENTED**. Package-level final `IsVerified`: **NOT AVAILABLE**. Push: **NOT PERFORMED**. Phase 4D is **NOT AUTHORIZED / NOT STARTED**.
 - Sealed amendment files (historical): `contracts/theme/schemas/ThemeIntegrity.v2.schema.json`, `contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json`, `docs/adr/ADR-0003-theme-integrity-contract-amendment.md`, `docs/CODEX_DECISIONS.md`, `docs/CODEX_PROJECT_STATUS.md`, `src/Tcc.Presentation.Contracts/Theme/ContractVersions.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeContractJson.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityContractsV2.cs`, `src/Tcc.Presentation.Contracts/Theme/ThemeIntegrityInterfacesV2.cs`, `tests/Tcc.Architecture.Tests/JsonSchemaSubsetValidator.cs`, `tests/Tcc.Architecture.Tests/PhaseTwoContractCompletenessTests.cs`, `tests/Tcc.Architecture.Tests/PhaseFourContractAmendmentTests.cs`, and `tests/Tcc.Architecture.Tests/ThemeIntegrityContractConformanceOracle.cs`.
 - Third-remediation files (historical): `JsonSchemaSubsetValidator.cs`, `ThemeIntegrityContractConformanceOracle.cs`, `PhaseFourContractAmendmentTests.cs`, and this status file. The pre-seal amendment surface was 13 files; that remediation added no new file/project/reference/package/public API/diagnostic code.
 - Sealed amendment validation (historical): clean **PASS**; normal restore **6/6 PASS**; locked restore **6/6 PASS**; Release x64 build **0 warnings / 0 errors**; all tests **284/284 PASS, 0 skipped**; Phase 1 **2/2 PASS**; Phase 2 **93/93 PASS**; Phase 3 **78/78 PASS**; amendment test class **107/107 PASS**; original six-defect regressions **11/11 PASS**; REVAL-001 **5/5 PASS**; REVAL-002 **9/9 PASS**; REVAL-003 **4/4 PASS**; REVAL2-001 **17/17 PASS**; API/dependency/compiled-surface filter **13/13 PASS**. Schema, serialization, crypto, path, inventory, trust, channel, identity, diagnostics, and 50-run determinism passed in the amendment suite.
@@ -137,7 +140,7 @@
 - Sealed amendment preservation/hygiene (historical): V1 contract/schema and Phase 3 implementation/test diffs **0**; project/package/lock diffs **0**; six projects, 11 ProjectReferences, four PackageReferences unchanged; production verifier implementations **0**; Phase 5+/Trading leakage **0**; candidate secret/local-path/SKILL-artifact matches **0**; unexpected repository artifacts **0**; pre-seal staged **0**, modified tracked **6**, expected untracked **7** (historical audit counts, not current Git state). Only ignored bin/obj build outputs remain. Frozen hashes exact; `git diff --check` **PASS**. Temp / Git Hygiene Closure **PASS**; old external fixture **NOT FOUND**; new temporary fixture remnants **0**.
 - Validation result: **CONTRACT AMENDMENT SEALED**; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure **PASS**.
 - Known boundary: Phase 4A decides whether outer inputs may proceed; Phase 4B evaluates canonical paths and payload inventory; Phase 4C now provides validated raw metadata, Canonical Package Tree Hash v1, and deterministic metadata hashes. Cryptographic signature verification, trust/channel policy, public composition, and the final package verdict remain unavailable until their separately authorized phases.
-- Exact next action: **Phase4C Baseline Staging Re-Audit → Supervisor Baseline Seal authorization**. Do not stage, commit, tag, push, begin Phase 4D, or create `ThemeIntegrityVerifier`.
+- Exact next action: **Supervisor Phase4D scope decision/planning**. Do not begin Phase 4D, push, or create `ThemeIntegrityVerifier` without explicit authorization.
 
 ## AI Trading Intelligence planning state
 
@@ -304,8 +307,8 @@ docs/
 - Phase 4 Contract Amendment is sealed; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure passed; all known amendment defects are resolved.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- Phase 4A and Phase 4B are SEALED / APPROVED. Phase 4C is IMPLEMENTED / VALIDATED with Independent Phase 4C Re-Validation PASS and severity CRITICAL / HIGH / MEDIUM / LOW 0 / 0 / 0 / 0; its baseline is NOT YET SEALED. Phase 4D–4F are NOT STARTED. Public `ThemeIntegrityVerifier` remains NOT CREATED, `IThemeIntegrityVerifierV2` production implementations remain 0, and package-level final verification remains NOT AVAILABLE. Crypto, trust, and channel policy are NOT IMPLEMENTED. Commit is NOT AUTHORIZED; push, merge, release, and deploy were not performed.
+- Phase 4A, Phase 4B, and Phase 4C are SEALED / APPROVED. Phase 4C Raw Metadata Integrity is APPROVED with Independent Phase 4C Re-Validation PASS and severity CRITICAL / HIGH / MEDIUM / LOW 0 / 0 / 0 / 0. Phase 2 remains 92/92 PASS. Phase 4D–4F are NOT STARTED. Public `ThemeIntegrityVerifier` remains NOT CREATED, `IThemeIntegrityVerifierV2` production implementations remain 0, and package-level final `IsVerified` remains NOT AVAILABLE. Crypto, trust, and channel policy are NOT IMPLEMENTED. Push, merge, release, and deploy were not performed.
 
 ## Exact next action
 
-Return to GPT Supervisor for **Phase4C Baseline Staging Re-Audit → Supervisor Baseline Seal authorization**. Do not stage, commit, tag, push, begin Phase 4D, or create `ThemeIntegrityVerifier`.
+Return to GPT Supervisor for **Phase4D scope decision/planning**. The next product step is not yet authorized. Do not begin Phase 4D, push, or create `ThemeIntegrityVerifier`.
