@@ -548,7 +548,7 @@ public sealed class PhaseFourThemePackageSignatureEvaluatorTests
         string[] expectedProperties = ["CanContinue", "Diagnostics", "KeyId", "PublisherId", "SignatureStatus"];
         Assert.Equal(expectedProperties, outcome.GetProperties().Select(property => property.Name).Order(StringComparer.Ordinal).ToArray());
         Assert.DoesNotContain(evaluator.GetFields(BindingFlags.Static | BindingFlags.NonPublic), field => !field.IsLiteral);
-        Assert.DoesNotContain(evaluator.Assembly.GetTypes(), type => typeof(IThemeIntegrityVerifierV2).IsAssignableFrom(type) || typeof(IThemeIntegrityVerifier).IsAssignableFrom(type) || type.Name == "ThemeIntegrityVerifier");
+        PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(evaluator.Assembly.GetTypes());
         // Actual production success accompanies the structural dependency guard.
         AssertSuccess(Evaluate(Golden()), Status.Valid, "publisher.example", "key-2026-01");
     }

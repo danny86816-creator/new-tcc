@@ -120,6 +120,7 @@ public sealed class PhaseTwoContractCompletenessTests
         ];
 
         Assert.Empty(FindUnauthorizedImplementationViolations(productionAssemblies));
+        PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(productionAssemblies.SelectMany(assembly => assembly.GetTypes()));
     }
 
     [Fact]
@@ -199,7 +200,10 @@ public sealed class PhaseTwoContractCompletenessTests
             {
                 bool isApprovedManifestValidator = contractInterface == typeof(IThemeManifestValidator)
                     && implementation == typeof(ThemeManifestValidator);
-                if (!isApprovedManifestValidator)
+                bool isApprovedVerifier = contractInterface == typeof(IThemeIntegrityVerifierV2)
+                    && implementation == typeof(Tcc.Themes.Integrity.ThemeIntegrityVerifier)
+                    && PhaseThreeScopeBoundaryTests.IsExactPublicVerifier(implementation);
+                if (!isApprovedManifestValidator && !isApprovedVerifier)
                 {
                     violations.Add(
                         $"{implementation.FullName} is an unauthorized production implementation of {contractInterface.FullName}.");

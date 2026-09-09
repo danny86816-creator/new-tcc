@@ -282,13 +282,7 @@ public sealed class PhaseFourThemeIntegrityVerifierTests
         Assert.Empty(typeof(ThemeIntegrityRequestBoundary).GetInterfaces());
 
         Type[] productionTypes = themesAssembly.GetTypes();
-        Assert.DoesNotContain(
-            productionTypes,
-            type => type.IsClass && !type.IsAbstract && typeof(IThemeIntegrityVerifierV2).IsAssignableFrom(type));
-        Assert.DoesNotContain(
-            productionTypes,
-            type => type.IsClass && !type.IsAbstract && typeof(IThemeIntegrityVerifier).IsAssignableFrom(type));
-        Assert.DoesNotContain(productionTypes, type => type.Name == "ThemeIntegrityVerifier");
+        PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(productionTypes);
         Assert.DoesNotContain(
             themesAssembly.GetReferencedAssemblies(),
             reference => reference.Name == typeof(ThemeIntegrityContractConformanceOracle).Assembly.GetName().Name);

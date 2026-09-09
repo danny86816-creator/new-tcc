@@ -12,6 +12,7 @@ public sealed class PhaseThreeScopeBoundaryTests
     [
         "Tcc.Themes.AssemblyMarker",
         "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
+        "Tcc.Themes.Integrity.ThemeIntegrityVerifier",
         "Tcc.Themes.Integrity.ThemePackageInventoryEvaluation",
         "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
         "Tcc.Themes.Integrity.ThemeMetadataSchemaValidator",
@@ -557,6 +558,100 @@ public sealed class PhaseThreeScopeBoundaryTests
         ];
     }
 
+    [Theory]
+    [InlineData("internal sealed class ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public abstract class ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public class ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public sealed class ThemeIntegrityVerifier<T>", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public struct ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("[CompilerGenerated] public sealed class ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public sealed class ThemeIntegrityVerifier", "IThemeIntegrityVerifier", false)]
+    [InlineData("public sealed class OtherVerifier", "IThemeIntegrityVerifierV2", false)]
+    [InlineData("public sealed class ThemeIntegrityVerifier", "IThemeIntegrityVerifierV2", true)]
+    public void PublicVerifierAllowanceRejectsEveryLookalike(string declaration, string contract, bool wrongNamespace)
+    {
+        string method = contract == "IThemeIntegrityVerifier" ? V1VerifierMethod : V2VerifierMethod;
+        string source = VerifierFixtureDeclaration(declaration, contract, method);
+        if (wrongNamespace) source = source.Replace("namespace Tcc.Themes.Integrity;", "namespace Tcc.Themes.Wrong;", StringComparison.Ordinal);
+        Assembly fixture = BuildFixtureAssembly(null, source);
+        Type target = Assert.Single(fixture.GetTypes(), type => type.Name.StartsWith("ThemeIntegrityVerifier", StringComparison.Ordinal) || type.Name == "OtherVerifier");
+        Assert.False(IsExactPublicVerifier(target));
+        Assert.Contains(GetCompiledSurfaceViolations(fixture), violation => violation.Contains(target.FullName!, StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void ExactV2AllowanceStillRejectsNestedSecondAndDualInterfaceVerifiers()
+    {
+        Assembly fixture = BuildFixtureAssembly(null, $$"""
+            using Tcc.Presentation.Contracts.Theme;
+            namespace Tcc.Themes.Integrity;
+            public sealed class ThemeIntegrityVerifier : IThemeIntegrityVerifierV2 { {{V2VerifierMethod}} }
+            public static class Owner { public sealed class ThemeIntegrityVerifier : IThemeIntegrityVerifierV2 { {{V2VerifierMethod}} } }
+            public sealed class SecondVerifier : IThemeIntegrityVerifierV2 { {{V2VerifierMethod}} }
+            public sealed class DualVerifier : IThemeIntegrityVerifierV2, IThemeIntegrityVerifier { {{V2VerifierMethod}} {{V1VerifierMethod}} }
+            """);
+        Assert.True(IsExactPublicVerifier(fixture.GetType("Tcc.Themes.Integrity.ThemeIntegrityVerifier")!));
+        string[] violations = GetCompiledSurfaceViolations(fixture);
+        foreach (string name in new[] { "Owner+ThemeIntegrityVerifier", "SecondVerifier", "DualVerifier" })
+            Assert.Contains(violations, violation => violation.Contains(name, StringComparison.Ordinal) && violation.Contains("verifier interface", StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [InlineData("wrong owner")]
+    [InlineData("wrong target")]
+    [InlineData("fake name")]
+    [InlineData("no interface")]
+    [InlineData("public nested")]
+    [InlineData("no attribute")]
+    public void PublicVerifierAsyncProvenanceRejectsForgedArtifacts(string attack)
+    {
+        AssemblyName name = new($"Tcc.Phase4E.Forged.{Guid.NewGuid():N}");
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
+        ModuleBuilder module = assembly.DefineDynamicModule(name.Name!);
+        TypeBuilder owner = module.DefineType(attack == "wrong owner" ? "Tcc.Themes.Integrity.OtherOwner" : "Tcc.Themes.Integrity.ThemeIntegrityVerifier",
+            TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Class);
+        owner.DefineDefaultConstructor(MethodAttributes.Public);
+        owner.AddInterfaceImplementation(typeof(Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2));
+        TypeBuilder artifact;
+        if (attack is "no interface" or "public nested")
+        {
+            artifact = owner.DefineNestedType("<VerifyAsync>d__7", (attack == "public nested" ? TypeAttributes.NestedPublic : TypeAttributes.NestedPrivate) | TypeAttributes.Sealed, typeof(ValueType));
+            artifact.SetCustomAttribute(CompilerGeneratedAttributeBuilder());
+            if (attack == "public nested")
+            {
+                artifact.AddInterfaceImplementation(typeof(IAsyncStateMachine));
+                DefineStateMachineMethod(artifact, "MoveNext", Type.EmptyTypes);
+                DefineStateMachineMethod(artifact, "SetStateMachine", [typeof(IAsyncStateMachine)]);
+            }
+        }
+        else artifact = DefineForgedStateMachine(owner, attack == "fake name" ? "ForgedStateMachine" : "<VerifyAsync>d__7");
+        MethodInfo contractMethod = typeof(Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2).GetMethod("VerifyAsync")!;
+        MethodBuilder method = owner.DefineMethod("VerifyAsync", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.Final | MethodAttributes.NewSlot,
+            contractMethod.ReturnType, contractMethod.GetParameters().Select(parameter => parameter.ParameterType).ToArray());
+        method.DefineParameter(3, ParameterAttributes.Optional | ParameterAttributes.HasDefault, "cancellationToken").SetConstant(null);
+        method.GetILGenerator().Emit(OpCodes.Ldnull); method.GetILGenerator().Emit(OpCodes.Throw);
+        owner.DefineMethodOverride(method, contractMethod);
+        Type target = attack == "wrong target" ? typeof(UnrelatedVerifierStateMachine) : artifact;
+        if (attack != "no attribute") method.SetCustomAttribute(new CustomAttributeBuilder(typeof(AsyncStateMachineAttribute).GetConstructor([typeof(Type)])!, [target]));
+        Type compiledArtifact = artifact.CreateType()!;
+        owner.CreateType();
+        ResolveEventHandler resolver = (_, args) => AssemblyName.ReferenceMatchesDefinition(new AssemblyName(args.Name), name) ? assembly : null;
+        AppDomain.CurrentDomain.AssemblyResolve += resolver;
+        try
+        {
+            if (attack != "wrong owner") Assert.True(IsExactPublicVerifier(compiledArtifact.DeclaringType!));
+            Assert.False(IsApprovedVerifierAsyncStateMachine(compiledArtifact));
+            Assert.Contains(GetCompiledSurfaceViolations(assembly), violation => violation.Contains(compiledArtifact.FullName!, StringComparison.Ordinal));
+        }
+        finally { AppDomain.CurrentDomain.AssemblyResolve -= resolver; }
+    }
+
+    private struct UnrelatedVerifierStateMachine : IAsyncStateMachine
+    {
+        public void MoveNext() { }
+        public void SetStateMachine(IAsyncStateMachine stateMachine) { }
+    }
+
     internal static string[] GetCompiledSurfaceViolations(Assembly assembly)
     {
         List<string> violations = [];
@@ -584,7 +679,8 @@ public sealed class PhaseThreeScopeBoundaryTests
                      type.IsNested
                      && !string.Equals(type.FullName, ApprovedNestedType, StringComparison.Ordinal)
                      && !IsApprovedSealedBaselineCompilerArtifact(type)
-                     && !IsApprovedEvaluatorAsyncStateMachine(type)))
+                     && !IsApprovedEvaluatorAsyncStateMachine(type)
+                     && !IsApprovedVerifierAsyncStateMachine(type)))
         {
             violations.Add(
                 $"Compiled nested production type '{unauthorizedNestedType.FullName}' is outside the exact Phase 3 surface.");
@@ -636,12 +732,23 @@ public sealed class PhaseThreeScopeBoundaryTests
                 "Tcc.Themes.Integrity.ThemePackageSignatureEvaluation must remain the internal top-level non-generic sealed Phase 4D record class with only its self IEquatable interface and no generated-type shape.");
         }
 
+        Type? verifier = assembly.GetType("Tcc.Themes.Integrity.ThemeIntegrityVerifier", false, false);
+        if (verifier is not null && !IsExactPublicVerifier(verifier))
+        {
+            violations.Add("Tcc.Themes.Integrity.ThemeIntegrityVerifier must have the exact public sealed V2-only shape.");
+        }
+
         foreach (Type productionType in allTypes)
         {
             foreach (string forbiddenInterface in productionType.GetInterfaces()
                          .Select(contract => contract.FullName ?? contract.Name)
                          .Where(ForbiddenVerifierInterfaces.Contains))
             {
+                if (forbiddenInterface == "Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2"
+                    && IsExactPublicVerifier(productionType))
+                {
+                    continue;
+                }
                 violations.Add(
                     $"Production type '{productionType.FullName ?? productionType.Name}' must not implement Phase 4D-forbidden verifier interface '{forbiddenInterface}'.");
             }
@@ -686,6 +793,60 @@ public sealed class PhaseThreeScopeBoundaryTests
             .Distinct(StringComparer.Ordinal)
             .Order(StringComparer.Ordinal)
             .ToArray();
+    }
+
+    internal static void AssertExactVerifierImplementations(IEnumerable<Type> productionTypes)
+    {
+        Type[] types = productionTypes.Where(type => !type.IsInterface).ToArray();
+        Assert.DoesNotContain(types, type => typeof(Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifier).IsAssignableFrom(type));
+        Type verifier = Assert.Single(types, type => typeof(Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2).IsAssignableFrom(type));
+        Assert.Same(typeof(Tcc.Themes.Integrity.ThemeIntegrityVerifier), verifier);
+        Assert.True(IsExactPublicVerifier(verifier));
+    }
+
+    internal static bool IsExactPublicVerifier(Type type)
+    {
+        if (type.FullName != "Tcc.Themes.Integrity.ThemeIntegrityVerifier"
+            || !type.IsPublic || !type.IsClass || !type.IsSealed || type.IsAbstract
+            || type.IsNested || type.IsGenericType || type.BaseType != typeof(object)
+            || type.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            || !type.GetInterfaces().SequenceEqual(new[] { typeof(Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2) }))
+        {
+            return false;
+        }
+
+        ConstructorInfo[] constructors = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+        return constructors.Length == 1 && constructors[0].IsPublic && constructors[0].GetParameters().Length == 0
+            && type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly).Length == 0
+            && methods.Length == 1 && IsExactVerifyMethod(methods[0], type);
+    }
+
+    private static bool IsExactVerifyMethod(MethodInfo method, Type owner)
+    {
+        ParameterInfo[] parameters = method.GetParameters();
+        return method.DeclaringType == owner && method.Name == "VerifyAsync"
+            && method.IsPublic && !method.IsStatic && !method.IsAbstract && !method.IsGenericMethod
+            && method.ReturnType == typeof(ValueTask<Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationResultV2>)
+            && parameters.Select(parameter => parameter.ParameterType).SequenceEqual(new[]
+            {
+                typeof(Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationRequestV2),
+                typeof(Tcc.Presentation.Contracts.Theme.IThemePackageContentReader), typeof(CancellationToken),
+            })
+            && parameters[2].HasDefaultValue && parameters[2].DefaultValue is null;
+    }
+
+    internal static bool IsApprovedVerifierAsyncStateMachine(Type type)
+    {
+        Type? owner = type.DeclaringType;
+        if (owner is null || !IsExactPublicVerifier(owner) || !type.IsNestedPrivate
+            || !type.IsValueType || type.IsGenericType
+            || !type.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            || !typeof(IAsyncStateMachine).IsAssignableFrom(type)) return false;
+        MethodInfo? method = owner.GetMethod("VerifyAsync", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        return method is not null && IsExactVerifyMethod(method, owner)
+            && method.GetCustomAttribute<AsyncStateMachineAttribute>()?.StateMachineType == type
+            && type.Name == $"<VerifyAsync>d__{GetStateMachineOrdinal(type.Name)}";
     }
 
     private static bool IsApprovedEvaluatorAsyncStateMachine(Type type)

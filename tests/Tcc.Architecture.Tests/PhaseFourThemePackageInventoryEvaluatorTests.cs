@@ -592,9 +592,7 @@ public sealed class PhaseFourThemePackageInventoryEvaluatorTests
         Assert.Equal(["CanContinue", "Diagnostics", "FileEvidence"],
             outcome.GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(property => property.Name)
                 .Order(StringComparer.Ordinal));
-        Assert.DoesNotContain(evaluator.Assembly.GetTypes(), type => type.Name == "ThemeIntegrityVerifier"
-            || typeof(IThemeIntegrityVerifierV2).IsAssignableFrom(type)
-            || typeof(IThemeIntegrityVerifier).IsAssignableFrom(type));
+        PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(evaluator.Assembly.GetTypes());
     }
 
     [Theory]

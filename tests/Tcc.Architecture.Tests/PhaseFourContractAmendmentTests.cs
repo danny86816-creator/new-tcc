@@ -695,9 +695,7 @@ public sealed class PhaseFourContractAmendmentTests
             .. typeof(Tcc.Windows.AssemblyMarker).Assembly.GetTypes(),
         ];
 
-        Assert.DoesNotContain(
-            productionTypes,
-            type => type.IsClass && !type.IsAbstract && typeof(IThemeIntegrityVerifierV2).IsAssignableFrom(type));
+        PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(productionTypes);
         Assert.Equal(typeof(PhaseFourContractAmendmentTests).Assembly, typeof(ThemeIntegrityContractConformanceOracle).Assembly);
         Assert.DoesNotContain(
             productionTypes,
