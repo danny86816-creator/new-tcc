@@ -92,3 +92,143 @@ The Theme Architecture's enumerated open technical decisions remain open unless 
 - Tree-hash consequence: Canonical Package Tree Hash v1 is unchanged. Before tree computation, Phase 4C must already have exactly one present Verified evidence item for the canonical Theme Manifest path with the required actual fields. Theme Manifest remains a required Verified tree input; all other present Verified payload evidence remains included under the existing exact reserved-metadata exclusions, while MissingAllowed contributes no record. No ordinary payload reread is authorized.
 - Required planned coverage: `CanContinue == true` with no Theme evidence; unrelated Verified payload only reproducing the sealed Phase 4B output; MissingAllowed; every other non-Verified status; false presence; absent actual fields; invalid lowercase hash format; a valid exact match permitting only subsequent second-read coherence; case-different rejection; NFC-equivalent matching; and multiple matches rejected without selection. Failure cases must prove zero Phase 4C reader calls and no tree/raw hash or downstream metadata processing. These are future implementation tests, not authorization to edit or execute tests this round.
 - Effect on earlier authority: closes the previously unspecified Phase 4C entry-evidence branch and replaces the earlier inference that Phase 4B success alone guarantees Verified Theme Manifest evidence. Decisions 011, 012, and 013 remain byte-preserved; Decision 013's admitted-evidence custody, schema, binding, read diagnostics, and Phase 4D/4E boundaries remain applicable. No ADR edit, Phase 4B reopening, V1/V2/schema amendment, new dependency, or public verifier is introduced. Planning readiness is not implementation authorization.
+
+## TCC-DEC-2026-09-09-015 — Phase 4D Signature Identity, SPKI, Channel Policy, Diagnostic and Evaluation Precedence
+
+- Date: 2026-09-09.
+- Decision source: explicit GPT Supervisor — Phase 4D Governance Resolution supplied by the user in `38—Phase 4D Scope Planning`. This decision records that supplied resolution; it does not itself declare planning PASS or silently resolve contradictions discovered during planning closure.
+- Authorized scope: append this Decision015 only to `docs/CODEX_DECISIONS.md`, then perform read-only Phase4D planning closure in the current conversation. No implementation, build, test, status edit, staging, commit, tag, push, or new conversation is authorized. Decisions011–014, ADR-0003, V1/V2 contracts, schemas, Frozen System/Theme, Phase4A/B/C production/tests, and project files remain unchanged. No further decision may be created automatically.
+- Reason and effect: clarify Phase4D signing identities, trust consumption, cryptographic representation, channel policy, deterministic diagnostics, and internal outcome while preserving sealed signed-payload bytes, upstream custody, and the Phase4E public-composition boundary. These later explicit rules supply the Phase4D production policy; existing oracle code order is not a substitute for this decision. Remaining contradictions must be reported to Supervisor, not repaired by assumption or forced into PASS.
+
+### Signed payload and signing identities
+
+- Preserve exactly `UTF8_NO_BOM("TCC-THEME-PACKAGE-SIGNATURE-V1" + NUL + ThemeId + NUL + ThemeVersion + NUL + PackageHash + NUL + ThemeManifestHash + NUL + IntegrityManifestHash + NUL + PublisherId + NUL + KeyId)`. Existing golden bytes remain authoritative. Do not change the discriminator, add field names, length prefixes, escaping, LF, or trailing NUL; do not switch to JSON or normalize fields before signing. Preserve the sealed lowercase hash representation and the exclusion of `ThemePackageRef` from publisher-signed content.
+- Apply the signing-ID profile to `SignatureEnvelope.PublisherId`, `SignatureEnvelope.KeyId`, and every `TrustSnapshot.TrustedSigners[]` publisher/key ID. Each must be non-null, non-empty, consist of valid Unicode scalar values, encode to UTF-8 successfully, and occupy 1–256 UTF-8 bytes inclusive on the exact acquired string without normalization.
+- Reject all C0/C1 control scalar values `U+0000..U+001F` and `U+007F..U+009F`, including NUL. This closes the signed-payload NUL framing ambiguity. No Trim, case conversion, OrdinalIgnoreCase, culture comparison, NFC/NFD, or compatibility normalization is permitted. Equality is `StringComparer.Ordinal` on exact validated strings; case variants, visually similar Unicode, and composed/decomposed forms remain distinct.
+- For signed packages, validated `ThemeManifest.Package.PublisherId` must Ordinal-equal `SignatureEnvelope.PublisherId` before trust lookup. `KeyId` has no invented ThemeManifest binding. Invalid envelope/snapshot signer IDs or publisher mismatch produce `P4I029` with the fixed message below, never interpolating identities or raw Unicode.
+- Resolve only the exact `(PublisherId, KeyId)` tuple using Ordinal + Ordinal. No global KeyId search, normalized match, closest match, or first/last selection.
+
+### Signature and public-key representation
+
+- Signature algorithm remains ECDSA P-256 with SHA-256 and IEEE P1363 fixed-field concatenation: exactly 64 bytes, 32-byte `r || s`, each unsigned fixed-width big-endian. DER signatures and alternate-encoding fallback are forbidden.
+- Signature text must be exactly 88 ASCII characters of canonical standard Base64, with exact `==` padding, canonical pad bits, no whitespace, URL-safe alphabet, or omitted padding. Perform strict lexical check, decode, require 64 bytes, re-encode with standard Base64, and compare Ordinal-exactly to input. Any failure is `P4I013`.
+- Phase4D v1 has no low-S-only restriction. Do not normalize `s`, reject high-S explicitly, or add a diagnostic. If BCL verifies both mathematically valid `s` and `n-s`, both are acceptable. Future low-S-only policy requires separate governance. Plan both forms; unexpected supported-provider incompatibility must be reported before implementation completion, not hidden by custom normalization. The low-S policy gap is closed for v1 by no explicit restriction.
+- `ThemeTrustedSignerV1.PublicKey` must be canonical standard Base64 containing exactly one DER SubjectPublicKeyInfo value. Require exactly 124 ASCII characters and exactly 91 decoded DER bytes; re-encoding must Ordinal-equal the original. Reject whitespace, URL-safe form, missing/noncanonical padding or pad bits, trailing text, and wrong decoded length. Malformed public-key representation is `P4I013`.
+- SPKI algorithm is exactly `id-ecPublicKey`, OID `1.2.840.10045.2.1`; parameters are named-curve OID only, exactly `1.2.840.10045.3.1.7` (P-256 / secp256r1 / prime256v1). Explicit, absent, NULL, or other curve parameters are rejected, including secp256k1 and brainpool.
+- Adopt exact DER and full consumption: the outer SPKI, AlgorithmIdentifier, parameter encoding, BIT STRING, and outer reader must be fully consumed (`ThrowIfNotEmpty` equivalent). `ImportSubjectPublicKeyInfo` bytesRead must equal decoded SPKI length. Trailing bytes are rejected.
+- The subjectPublicKey BIT STRING has exactly zero unused bits and exactly 65 EC-point bytes with first byte `0x04`: only uncompressed SEC1 is accepted. Reject compressed `0x02`/`0x03`, hybrid, point-at-infinity, and non-65-byte point representations.
+- After structural DER validation, import using BCL `ECDsa.ImportSubjectPublicKeyInfo`, require full consumption, and require `ExportParameters(false).Curve` to be named with exact OID `1.2.840.10045.3.1.7`. KeySize should be consistent with P-256; size or successful import alone is never curve-identity authority.
+- Malformed material maps to `P4I013`: noncanonical PublicKey Base64, wrong decoded length, malformed DER, invalid BIT STRING encoding, trailing malformed DER, invalid EC point material, and candidate-key-caused BCL import failure.
+- Structurally identifiable material violating the algorithm/profile maps to `P4I016`: wrong algorithm OID, wrong named curve, explicit parameters, or unsupported point encoding including compressed/hybrid form. The exact stage order below also applies. Planning must report any unresolved interaction between these supplied classifications and earlier representation gates rather than silently changing them.
+
+### Trust snapshot and resources
+
+- Consume existing `ThemeTrustSnapshotV1` with PolicyId, PolicyVersion, and `ImmutableArray<ThemeTrustedSignerV1>`. No registry, CA, network lookup, key download, mutable global cache, or trust-membership decision is introduced. Preserve the immutable caller-provided snapshot model.
+- Expected trust-policy identity/version must equal snapshot PolicyId/PolicyVersion using sealed semantics; mismatch is `P4I023` with fixed text below.
+- Validate every signer PublisherId/KeyId against this decision. Any invalid signer identity produces `P4I029`; do not select the target first and ignore invalid registry identities.
+- Duplicate means the same exact publisher/key pair using Ordinal + Ordinal. Scan the entire immutable signer array. Any duplicate, including byte-identical records or Trusted/Revoked ambiguity, fails with `P4I022`. Never first-wins or last-wins. Different KeyIds under one publisher or identical KeyIds under different publishers are not duplicate pairs.
+- After global validation, no exact envelope pair produces `P4I014`. Matching `TrustState.Revoked` produces `P4I015`; Trusted may continue. No clock, NotBefore/NotAfter, historical acceptance, or revocation timestamp is introduced.
+- Do not add an arbitrary signer-count limit: the snapshot is application-managed rather than package-controlled raw input. Use one complete O(n) deterministic scan for signer ID profile, duplicates, and target resolution; registry resource limits remain outside Phase4D v1. Preserve stage precedence: invalid snapshot ID beats duplicate, and duplicate beats target lookup. No cache, network, or package reread.
+- Signing IDs are bounded to 256 UTF-8 bytes each, PublicKey to the exact 124-character/91-byte profile, and signature to 88 characters/64 bytes.
+
+### Authoritative channel policy
+
+| Channel / requirement | Exception flag legality | Absent envelope after legal policy | Present envelope |
+|---|---|---|---|
+| Stable / Required | must be false; true is P4I018 | P4I012 | full signature/trust verification |
+| Store / Required | must be false; true is P4I018 | P4I012 | full signature/trust verification |
+| Stable or Store / Optional | Optional is P4I017; illegal exception flag is checked first | no absence evaluation after policy failure | no verification after policy failure |
+| Beta / Required | must be false; true is P4I018 | P4I012 | full verification |
+| Beta / Optional | must be false; true is P4I018 | authorized unsigned-by-policy may continue | full verification |
+| Developer / Required | must be false; true is P4I018 | P4I012 | full verification |
+| Developer / Optional | either flag value allowed with present envelope | true: authorized unsigned exception; false: P4I018 | full verification regardless of flag |
+
+- `DeveloperExceptionAuthorized` is existing explicit caller authorization, not permission evaluation by Phase4D. It never overrides Required. A true flag outside Developer is always invalid, never ignored. A present Developer signature that is invalid, malformed, unknown, or revoked must fail; no fallback to unsigned acceptance.
+
+### Diagnostics and exact evaluation precedence
+
+- Phase4D v1 is fail-fast: at most one new diagnostic per evaluation, exactly one for a Phase4D security failure. Do not accumulate Phase4D failures or conflate this with Phase4A/B/C collections. Phase4D must not run when Phase4C CanContinue=false.
+- Every Phase4D diagnostic has Severity=Error, CanonicalPath=null, and failure CanContinue=false. Do not add SignatureEnvelopePath just for diagnostics; Phase4C owns metadata-file-path diagnostics.
+- Messages are exactly the table below. Never interpolate PublisherId, KeyId, raw Unicode, public key/SPKI, signature/Base64, registry entries, host paths, provider messages/types, or stack details. Identities may appear only in the internal signed success outcome for Phase4E.
+
+| Code | Condition | Exact message |
+|---|---|---|
+| P4I012 | required signature absent after valid policy | A signature is required by the active theme integrity policy. |
+| P4I013 | invalid signature representation/verification or malformed signer public-key material | The signature or signer public-key material is invalid. |
+| P4I014 | no exact publisher/key pair | No trusted signer entry matches the envelope publisher/key identity. |
+| P4I015 | matching signer revoked | The matching signer entry is revoked. |
+| P4I016 | structurally identifiable unsupported algorithm/curve/SPKI profile | The signer public key does not match the approved ECDSA P-256 SPKI profile. |
+| P4I017 | Stable/Store with SignatureRequirement.Optional | The signature requirement is inconsistent with the selected theme release channel. |
+| P4I018 | non-Developer exception=true; Developer Required exception=true; Developer Optional absent without exception | The Developer unsigned-signature exception is not authorized for this policy state. |
+| P4I022 | duplicate exact signer pair | The trust snapshot contains duplicate publisher/key signer identities. |
+| P4I023 | expected trust-policy identity/version mismatch | The supplied trust snapshot does not match the expected trust policy identity or version. |
+| P4I029 | invalid signing ID or ThemeManifest/envelope publisher mismatch | A signing identity field is invalid or inconsistent. |
+
+Adopt exactly these stages; no later stage runs after a Phase4D failure:
+
+| Stage | Evaluation |
+|---|---|
+| 0 | Cancellation / internal entry invariant |
+| 1 | Trust policy identity/version binding |
+| 2 | DeveloperExceptionAuthorized legality |
+| 3 | Channel × SignatureRequirement consistency |
+| 4 | Envelope presence / authorized unsigned decision |
+| 5 | Envelope signing-ID profile |
+| 6 | ThemeManifest PublisherId ↔ Envelope PublisherId binding |
+| 7 | Signature canonical Base64 / 64-byte P1363 representation |
+| 8 | Trust snapshot signer-ID profile |
+| 9 | Trust snapshot duplicate pair detection |
+| 10 | Exact publisher/key pair resolution |
+| 11 | Revocation state |
+| 12 | Signer PublicKey canonical Base64 |
+| 13 | SPKI structural profile |
+| 14 | BCL key import / exact exported curve identity |
+| 15 | Signed payload construction |
+| 16 | Cancellation checkpoint |
+| 17 | ECDSA P-256/SHA-256/P1363 verification |
+| 18 | Post-verification cancellation checkpoint |
+| 19 | Success outcome |
+
+- Consequences: policy mismatch beats missing envelope; illegal exception flag beats channel inconsistency; channel inconsistency beats absence; missing required envelope beats later trust/crypto; invalid signing identity beats signature representation; representation beats trust lookup; snapshot invalid identity beats duplicate; duplicate beats target lookup; unknown pair beats revocation/SPKI/crypto; revoked pair beats SPKI/crypto; wrong SPKI profile beats signature verification. Verify only with an approved Trusted signer key.
+- Upstream-only failures: P4I026 unsupported signature encoding is normally impossible after valid Phase4C success. Do not re-run Phase4A/4C raw enum/schema validation. An impossible internal Algorithm, SignatureEncoding, or SignedPayloadType contradicting validated Phase4C input is an internal invariant/programmer fault, not a newly reachable package diagnostic.
+
+### Operation-local exceptions, cancellation, and BCL
+
+- Narrow hostile-input handling: Signature/PublicKey Base64 FormatException, candidate-SPKI ASN.1 malformed-input exception, candidate-key-caused ImportSubjectPublicKeyInfo CryptographicException, and signature-verification CryptographicException after structural/key checks map to P4I013. Recognized valid DER with unsupported algorithm/curve/explicit parameters/compressed or hybrid point follows P4I016.
+- Do not convert ObjectDisposedException, PlatformNotSupportedException, unexpected ArgumentException/InvalidOperationException, wrong fixed-API usage, or internal state corruption into package diagnostics. Propagate/fail-fast. No catch(Exception), and no whole-evaluator CryptographicException catch; catches must be operation-local.
+- OperationCanceledException propagates; no cancellation P4I. Check at least before policy/trust work, before SPKI parse/import, immediately before VerifyData/VerifyHash, and immediately after verification before returning success/failure. Cancellation observed after crypto and before outcome return discards the result and propagates. Synchronous BCL crypto does not promise mid-call cancellation.
+- BCL only: ECDsa, SHA256, System.Formats.Asn1, standard Base64 conversion, and DSASignatureFormat.IeeeP1363FixedFieldConcatenation. No new crypto NuGet. Planning must choose exactly one of VerifyData(payload, signature, SHA256, P1363) or SHA256(payload) plus VerifyHash(hash, signature, P1363), and plan exact golden-vector checks. No double hashing.
+
+### Inputs, internal outcome, and downstream boundary
+
+- Do not reopen Phase4C. Consume sealed ThemePackageMetadataEvaluation plus existing ThemeIntegrityVerificationPolicyV1, ThemeTrustSnapshotV1, and CancellationToken. No package-derived input is missing. Package-content reads=0: no ordinary payload, ThemeManifest, IntegrityManifest, or SignatureEnvelope reread.
+- Approve only the minimal internal concept in Tcc.Themes.Integrity: internal static ThemePackageSignatureEvaluator and internal sealed record ThemePackageSignatureEvaluation. No extra handwritten helper type unless planning proves unavoidable. Evaluator has metadata, policy, snapshot, cancellation inputs; no reader, filesystem/path input, or required async.
+- Outcome may contain only CanContinue, Diagnostics, existing ThemeSignatureVerificationStatus SignatureStatus, string? PublisherId, and string? KeyId. No new status enum.
+- Signed cryptographically valid Trusted success carries exact validated envelope PublisherId/KeyId. Authorized unsigned Beta Optional absence or Developer Optional authorized absence has CanContinue=true, empty diagnostics, and null PublisherId/KeyId. Planning must derive the exact existing unsigned status members without inventing semantics; otherwise report PHASE4D OUTCOME REPRESENTABILITY GAP and block.
+- Any Phase4D security failure has CanContinue=false, exactly one Phase4D diagnostic, and null PublisherId/KeyId. Planning must derive the applicable existing sealed failure status. Inspect and report every existing ThemeSignatureVerificationStatus member; if a precise mapping is impossible, block without adding enum members or silently expanding their meaning.
+- No ThemeIntegrityVerificationResultV2, public IsVerified, public verification verdict, installation/activation/cache permission, ThemeIntegrityVerifier, or IThemeIntegrityVerifierV2 implementation belongs to this stage. Phase4E retains coherent public composition. Public ThemeIntegrityVerifier count remains zero.
+- Evaluator is stateless; use and dispose an independent ECDsa instance per call. No static mutable crypto object, global mutable registry, key cache, or cross-request state.
+
+### Planning closure and future-only implementation/test surface
+
+- Re-evaluate all gaps A–N: signed payload framing, signature encoding, low-S, SPKI/curve, Phase4C input capability, trust, time/revocation, channel, Developer exception, Beta, diagnostics, precedence, BCL, and outcome representability. Do not force PASS. Return exact remaining contradictions to Supervisor; no automatic additional decision or implementation.
+- Only if planning PASS, derive the minimal future surface: new src/Tcc.Themes/Integrity/ThemePackageSignatureEvaluator.cs containing both approved internal types; new tests/Tcc.Architecture.Tests/PhaseFourThemePackageSignatureEvaluatorTests.cs; exact approved-type-only update to PhaseThreeScopeBoundaryTests.cs; and CODEX_PROJECT_STATUS.md update only after future implementation validation PASS. No Tcc.Themes.csproj, schema, contract, ADR, or Phase4C change is authorized here.
+- Future planned coverage must include literal signed-payload golden bytes; NUL collision/control rejection; 256-byte ID boundaries; Ordinal/case/NFC distinctions; manifest publisher binding; canonical signature Base64/P1363/DER rejection; low/high-S policy; canonical PublicKey Base64/91-byte DER/OIDs/full consumption/BIT STRING/uncompressed-versus-compressed/invalid point/imported-curve checks; policy identity/version; all signer IDs, duplicates, unknown/revoked pairs; exhaustive channel/requirement/exception matrix; present-signature no unsigned fallback; exact diagnostics and mixed-failure precedence; sensitive-message leakage; cancellation checkpoints/races; snapshot permutations, concurrency and zero reads; Phase4A/B/C regression; exact architecture surface; no Phase4E/public verifier leakage; and future Release x64/full required gates. These are plans only, not authorization to create or run tests.
+- Completion of this governance append does not authorize implementation, status changes, build/test, stage, commit, tag, push, or Phase4E. If planning PASS, return to GPT Supervisor for separate Phase4D Implementation Authorization; otherwise return remaining gaps without creating another decision.
+
+## TCC-DEC-2026-09-09-016 — Phase 4D Deterministic P-256 Public Point Validation and Platform Exception Boundary
+
+- Date: 2026-09-09.
+- Decision source: explicit GPT Supervisor EC Point / Platform Exception Compatibility Resolution supplied by the user in `39—Phase 4D Signature & Trust Implementation` after the Windows/.NET 10.0.11 invalid-point import reproduction.
+- Authorization: append this decision only, perform a narrow compatibility proof outside the repository, and resume the already-authorized Phase4D implementation if and only if that proof passes. Decision011–015 remain byte-unchanged. No Phase4E, public ThemeIntegrityVerifier, Trading/Market Data, stage, commit, tag, or push is authorized.
+- Reason: Windows BCL can wrap an invalid EC point import failure in PlatformNotSupportedException with an inner CryptographicException. Phase4D must establish mathematical point validity before provider import, preserving the distinction between invalid candidate material and platform capability failure.
+- Stage refinement: Decision015 Stage13 becomes Stage13A SPKI structural/profile parsing followed by Stage13B deterministic affine P-256 public-point validation. Stage14 remains BCL ImportSubjectPublicKeyInfo and exact exported curve confirmation. All other stage ordering, channel, identity, signature, diagnostic, and outcome rules remain unchanged.
+- Stage13A precondition: exact fully consumed DER SubjectPublicKeyInfo, id-ecPublicKey OID `1.2.840.10045.2.1`, named P-256 OID `1.2.840.10045.3.1.7`, zero unused BIT STRING bits, exactly 65 point bytes, and uncompressed prefix `0x04`. Stage13B reads the following 32-byte X and 32-byte Y as unsigned big-endian integers with BCL System.Numerics.BigInteger only.
+- Exact field prime p: `FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF`. Exact curve b: `5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B`. Require `0 <= X < p`, `0 <= Y < p`, and `Y * Y mod p == (X * X * X - 3 * X + b) mod p`, normalizing modulo results to non-negative form. Use exact integer arithmetic without floating point.
+- Invalid candidate point: out-of-field X/Y or an off-curve point, including X=0/Y=0, fails at Stage13B before any provider import with P4I013, SignatureStatus=Invalid, Severity=Error, CanonicalPath=null, and exact message `The signature or signer public-key material is invalid.` Standard SEC1 infinity `0x00` is rejected by the existing point profile; do not invent another infinity representation.
+- No subgroup multiplication check or custom scalar multiplication: P-256 has cofactor 1; a finite affine point on the exact curve plus existing profile and BCL import is sufficient for Phase4D v1. This arithmetic operates on public, fixed-size 256-bit coordinates, requires no constant-time implementation, and must not introduce secret-key cryptography or work/allocation proportional to package size.
+- Stage14 exception rule: a PlatformNotSupportedException from import or a crypto provider always propagates, including when its InnerException is CryptographicException. Never unwrap or convert that platform wrapper. A CryptographicException directly thrown by the candidate ImportSubjectPublicKeyInfo call after Stage13B may map to P4I013 only in an operation-local catch attributable to that specific candidate import. No whole-evaluator catch, provider-message leakage, or broad exception conversion is authorized.
+- Compatibility proof before implementation: golden valid point must pass both Stage13 substeps and import with bytesRead=91 and exact exported P-256 OID; X=0/Y=0, X=p, Y=p, and known off-curve single-bit X/Y mutations must fail before import; an independent known valid P-256 point must pass. Expected results must not be computed by calling a copy of the production point validator. PlatformNotSupportedException after valid-point proof must remain propagation-only, including its inner-CryptographicException form.
+- Approved implementation surface remains exactly five candidate files: this existing ledger candidate; new `src/Tcc.Themes/Integrity/ThemePackageSignatureEvaluator.cs`; new `tests/Tcc.Architecture.Tests/PhaseFourThemePackageSignatureEvaluatorTests.cs`; exact two-type allowance in `tests/Tcc.Architecture.Tests/PhaseThreeScopeBoundaryTests.cs`; and `docs/CODEX_PROJECT_STATUS.md` only after all implementation validation passes. Point helpers are private static methods in the evaluator; exactly two handwritten production types remain approved. No new NuGet, project, ProjectReference, contract/schema/ADR change, or Phase4C modification.
+- Tests must cover affine validity, X/Y bounds, off-curve mutations, the Windows zero-point reproduction, and provider avoidance where a direct seam permits. Do not add architecture complexity merely to mock ECDsa. If a provider-exception seam cannot be injected while preserving the two-type boundary, use a narrow external compatibility harness and disclose that limitation.
+- Preservation and completion: record ledger before/after SHA-256 and Decision015 byte-range hash; require exactly one Decision016 heading. Frozen System/Theme, V1/V2, schemas, ADR, Decision011–015, Phase4A/B/C, phase4c-approved, and ThemeManifestValidator remain unchanged. Full prior implementation tests/build/regression gates plus compatibility closure are required before Phase4D Implementation PASS and Independent Validation readiness. This decision refines only Decision015 point-validation and candidate/platform exception separation; all other approved rules remain in force.
