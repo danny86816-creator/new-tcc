@@ -13,6 +13,9 @@ public sealed class PhaseThreeScopeBoundaryTests
         "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
         "Tcc.Themes.Integrity.ThemePackageInventoryEvaluation",
         "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
+        "Tcc.Themes.Integrity.ThemeMetadataSchemaValidator",
+        "Tcc.Themes.Integrity.ThemePackageMetadataEvaluation",
+        "Tcc.Themes.Integrity.ThemePackageMetadataEvaluator",
         "Tcc.Themes.Manifests.ThemeManifestValidator",
     ];
 
@@ -40,6 +43,12 @@ public sealed class PhaseThreeScopeBoundaryTests
         "Learning",
         "PreparedOrder",
         "TradeExecution",
+    ];
+
+    private static readonly string[] ApprovedAsyncEvaluatorTypes =
+    [
+        "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
+        "Tcc.Themes.Integrity.ThemePackageMetadataEvaluator",
     ];
 
     [Fact]
@@ -110,6 +119,25 @@ public sealed class PhaseThreeScopeBoundaryTests
             ?? throw new InvalidOperationException("Approved evaluator method is missing.");
         Type stateMachine = method.GetCustomAttribute<AsyncStateMachineAttribute>()?.StateMachineType
             ?? throw new InvalidOperationException("Approved evaluator async state machine is missing.");
+
+        Assert.Same(evaluator, method.DeclaringType);
+        Assert.Same(evaluator, stateMachine.DeclaringType);
+        Assert.True(stateMachine.IsNestedPrivate);
+        Assert.True(stateMachine.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false));
+        Assert.True(typeof(IAsyncStateMachine).IsAssignableFrom(stateMachine));
+        Assert.True(IsApprovedEvaluatorAsyncStateMachine(stateMachine));
+    }
+
+    [Fact]
+    public void ApprovedMetadataEvaluatorAsyncStateMachineIsTheExactMethodAttributedCompilerArtifact()
+    {
+        Type evaluator = typeof(Tcc.Themes.Integrity.ThemePackageMetadataEvaluator);
+        MethodInfo method = evaluator.GetMethod(
+            "EvaluateAsync",
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+            ?? throw new InvalidOperationException("Approved metadata evaluator method is missing.");
+        Type stateMachine = method.GetCustomAttribute<AsyncStateMachineAttribute>()?.StateMachineType
+            ?? throw new InvalidOperationException("Approved metadata evaluator async state machine is missing.");
 
         Assert.Same(evaluator, method.DeclaringType);
         Assert.Same(evaluator, stateMachine.DeclaringType);
@@ -260,10 +288,7 @@ public sealed class PhaseThreeScopeBoundaryTests
     {
         Type? evaluator = type.DeclaringType;
         if (evaluator is null
-            || !string.Equals(
-                evaluator.FullName,
-                "Tcc.Themes.Integrity.ThemePackageInventoryEvaluator",
-                StringComparison.Ordinal)
+            || !ApprovedAsyncEvaluatorTypes.Contains(evaluator.FullName, StringComparer.Ordinal)
             || !type.IsNestedPrivate
             || !type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false)
             || !typeof(IAsyncStateMachine).IsAssignableFrom(type))

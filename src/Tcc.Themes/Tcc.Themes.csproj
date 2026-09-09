@@ -11,4 +11,13 @@
   <ItemGroup>
     <InternalsVisibleTo Include="Tcc.Architecture.Tests" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="../../contracts/theme/schemas/ThemeManifest.schema.json"
+                      LogicalName="Tcc.Themes.Schemas.ThemeManifest.schema.json" />
+    <EmbeddedResource Include="../../contracts/theme/schemas/ThemeIntegrity.v2.schema.json"
+                      LogicalName="Tcc.Themes.Schemas.ThemeIntegrity.v2.schema.json" />
+    <EmbeddedResource Include="../../contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json"
+                      LogicalName="Tcc.Themes.Schemas.ThemeSignatureEnvelope.v1.schema.json" />
+  </ItemGroup>
 </Project>
