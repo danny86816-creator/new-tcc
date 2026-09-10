@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 using System.Xml.Linq;
 
 namespace Tcc.Architecture.Tests;
@@ -20,6 +21,9 @@ public sealed class PhaseThreeScopeBoundaryTests
         "Tcc.Themes.Integrity.ThemePackageMetadataEvaluator",
         "Tcc.Themes.Integrity.ThemePackageSignatureEvaluator",
         "Tcc.Themes.Integrity.ThemePackageSignatureEvaluation",
+        "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind",
+        "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation",
+        "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator",
         "Tcc.Themes.Manifests.ThemeManifestValidator",
     ];
 
@@ -59,6 +63,37 @@ public sealed class PhaseThreeScopeBoundaryTests
     [
         "Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifier",
         "Tcc.Presentation.Contracts.Theme.IThemeIntegrityVerifierV2",
+    ];
+
+    private const string ForbiddenCompatibilityResolverInterface =
+        "Tcc.Presentation.Contracts.Theme.IThemeCompatibilityResolver";
+
+    private static readonly OpCode[] SingleByteOpCodes = BuildOpCodeTable(twoByte: false);
+    private static readonly OpCode[] TwoByteOpCodes = BuildOpCodeTable(twoByte: true);
+
+    // Fixed from the approved Phase5A Release IL/signature closure, not learned from
+    // the assembly under inspection. Type identity also pins the owning assembly.
+    private static readonly HashSet<Type> ApprovedPhaseFiveDependencyTypes =
+    [
+        typeof(ArgumentNullException), typeof(Array), typeof(bool), typeof(char),
+        typeof(EqualityComparer<>), typeof(IEnumerable<>), typeof(IEnumerator<>),
+        typeof(IReadOnlyCollection<>), typeof(IReadOnlySet<>), typeof(List<>),
+        typeof(System.Collections.IEnumerator),
+        typeof(System.Collections.Immutable.ImmutableArray),
+        typeof(System.Collections.Immutable.ImmutableArray<>),
+        typeof(System.Collections.Immutable.ImmutableArray<>.Builder),
+        typeof(Enum), typeof(System.Globalization.CultureInfo), typeof(System.Globalization.NumberStyles),
+        typeof(IComparable), typeof(IConvertible), typeof(IDisposable), typeof(IEquatable<>),
+        typeof(IFormatProvider), typeof(IFormattable), typeof(int), typeof(ISpanFormattable),
+        typeof(MemoryExtensions), typeof(Nullable<>), typeof(System.Numerics.BigInteger),
+        typeof(object), typeof(ReadOnlySpan<>), typeof(RuntimeHelpers), typeof(RuntimeTypeHandle),
+        typeof(string), typeof(StringComparison), typeof(System.Text.StringBuilder), typeof(Type),
+        typeof(ValueTuple<,>), typeof(ValueTuple<,,>), typeof(void),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityDeclaration),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityManifest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityRequest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeManifest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeVersionRange),
     ];
 
     [Fact]
@@ -117,6 +152,247 @@ public sealed class PhaseThreeScopeBoundaryTests
         Assert.Contains(
             violations,
             violation => violation.Contains("Tcc.Themes.Integrity.UnapprovedIntegrityStage", StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [MemberData(nameof(PhaseFiveForbiddenShapeSources))]
+    public void PhaseFiveGuardRejectsUnauthorizedCompatibilityShapes(
+        string targetType,
+        string source,
+        string requiredViolation)
+    {
+        Assembly fixture = BuildFixtureAssembly(markerAdditionalSource: null, otherSource: source);
+
+        AssertTargetedViolation(fixture, targetType, requiredViolation);
+    }
+
+    private const string PhaseFiveNegotiatorName = "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator";
+    private const string PhaseFiveOutcomeName = "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation";
+
+    private static string PhaseFiveFixtureSource(string helper = "", string outcomeMember = "", string extraSource = "") =>
+        $$"""
+        using Tcc.Presentation.Contracts.Theme;
+        using System.Collections.Immutable;
+        namespace Tcc.Themes.Compatibility
+        {
+            internal enum ThemeCompatibilityNegotiationFailureKind { InvalidVersionInput, UnsatisfiableVersionRange, UnsupportedManifestSchema, ConflictingVersionDeclaration, CoreVersionIncompatible, ThemeApiNoCompatibleVersion, UxContractNoCompatibleVersion }
+            internal sealed record ThemeCompatibilityVersionNegotiation(bool CanContinue, string? SelectedThemeApiVersion, string? SelectedUxContractVersion, ImmutableArray<ThemeCompatibilityNegotiationFailureKind> Failures)
+            {
+                {{outcomeMember}}
+            }
+            internal static class ThemeCompatibilityVersionNegotiator
+            {
+                internal static ThemeCompatibilityVersionNegotiation Negotiate(ThemeCompatibilityRequest request) => new(false, null, null, ImmutableArray<ThemeCompatibilityNegotiationFailureKind>.Empty);
+                {{helper}}
+            }
+        }
+        {{extraSource}}
+        """;
+
+    [Fact]
+    public void PhaseFiveApprovedCompiledFixtureIncludingGenericCallPasses()
+    {
+        Assembly fixture = BuildFixtureAssembly(null, PhaseFiveFixtureSource("private static int[] Probe() => Array.Empty<int>();"));
+        Assert.DoesNotContain(GetCompiledSurfaceViolations(fixture), violation =>
+            violation.Contains("Phase5A", StringComparison.Ordinal)
+            || violation.Contains("'Tcc.Themes.Compatibility.", StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [MemberData(nameof(PhaseFiveExceptionHandlerCases))]
+    public void PhaseFiveExceptionHandlerDependenciesAreCollected(
+        string caseName,
+        string helper,
+        string? requiredViolation,
+        string? externalSource,
+        ExceptionHandlingClauseOptions expectedFlags,
+        string? expectedCatchType)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        Assembly fixture = BuildFixtureAssembly(null, PhaseFiveFixtureSource(helper), externalSource);
+        Type negotiator = fixture.GetType(PhaseFiveNegotiatorName, throwOnError: true)!;
+        MethodInfo probe = negotiator.GetMethod(
+            "Probe",
+            BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)
+            ?? throw new InvalidOperationException("Compiled exception fixture Probe method is missing.");
+        ExceptionHandlingClause clause = Assert.Single(probe.GetMethodBody()!.ExceptionHandlingClauses);
+        Assert.Equal(expectedFlags, clause.Flags);
+        if (expectedFlags == ExceptionHandlingClauseOptions.Clause)
+        {
+            Assert.Equal(expectedCatchType, clause.CatchType?.FullName);
+        }
+        else
+        {
+            Assert.Null(expectedCatchType);
+            Assert.Throws<InvalidOperationException>(() => clause.CatchType);
+        }
+
+        string[] violations = GetCompiledSurfaceViolations(fixture);
+        if (requiredViolation is null)
+        {
+            Assert.DoesNotContain(violations, violation =>
+                violation.Contains("Phase5A", StringComparison.Ordinal)
+                || violation.Contains("'Tcc.Themes.Compatibility.", StringComparison.Ordinal));
+        }
+        else
+        {
+            AssertTargetedViolation(fixture, PhaseFiveNegotiatorName, requiredViolation);
+        }
+    }
+
+    public static IEnumerable<object?[]> PhaseFiveExceptionHandlerCases()
+    {
+        yield return
+        [
+            "FileNotFoundException catch-only",
+            "private static int Probe(string text) { try { return int.Parse(text); } catch (System.IO.FileNotFoundException) { return -1; } }",
+            "System.IO.FileNotFoundException",
+            null,
+            ExceptionHandlingClauseOptions.Clause,
+            "System.IO.FileNotFoundException",
+        ];
+        yield return
+        [
+            "neutral external catch-only",
+            "private static int Probe(string text) { try { return int.Parse(text); } catch (Remote.Components.ExternalException) { return -1; } }",
+            "Remote.Components.ExternalException",
+            "namespace Remote.Components { public sealed class ExternalException : System.Exception { } }",
+            ExceptionHandlingClauseOptions.Clause,
+            "Remote.Components.ExternalException",
+        ];
+        yield return
+        [
+            "approved catch",
+            "private static int Probe(string text) { try { return int.Parse(text); } catch (System.ArgumentNullException) { return -1; } }",
+            null,
+            null,
+            ExceptionHandlingClauseOptions.Clause,
+            "System.ArgumentNullException",
+        ];
+        yield return
+        [
+            "finally",
+            "private static int Probe(int value) { try { return value; } finally { _ = value; } }",
+            null,
+            null,
+            ExceptionHandlingClauseOptions.Finally,
+            null,
+        ];
+        yield return
+        [
+            "forbidden filter IL",
+            "private static int Probe(string text) { try { return int.Parse(text); } catch (System.ArgumentNullException) when (Remote.Components.FilterProbe.Check()) { return -1; } }",
+            "Remote.Components.FilterProbe",
+            "namespace Remote.Components { public static class FilterProbe { public static bool Check() => true; } }",
+            ExceptionHandlingClauseOptions.Filter,
+            null,
+        ];
+    }
+
+    [Fact]
+    public void PhaseFiveFaultClauseHasNoCatchTypeDependency()
+    {
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(
+            new AssemblyName($"PhaseFiveFaultFixture{Guid.NewGuid():N}"),
+            AssemblyBuilderAccess.Run);
+        TypeBuilder typeBuilder = assembly.DefineDynamicModule("Fixture").DefineType(
+            "PhaseFiveFaultFixture",
+            TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.Abstract);
+        MethodBuilder methodBuilder = typeBuilder.DefineMethod(
+            "Probe",
+            MethodAttributes.Private | MethodAttributes.Static,
+            typeof(void),
+            Type.EmptyTypes);
+        ILGenerator il = methodBuilder.GetILGenerator();
+        il.BeginExceptionBlock();
+        il.Emit(OpCodes.Nop);
+        il.BeginFaultBlock();
+        il.Emit(OpCodes.Nop);
+        il.EndExceptionBlock();
+        il.Emit(OpCodes.Ret);
+
+        Type fixtureType = typeBuilder.CreateType()!;
+        MethodInfo probe = fixtureType.GetMethod(
+            "Probe",
+            BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)!;
+        ExceptionHandlingClause clause = Assert.Single(probe.GetMethodBody()!.ExceptionHandlingClauses);
+        Assert.Equal(ExceptionHandlingClauseOptions.Fault, clause.Flags);
+        Assert.Throws<InvalidOperationException>(() => clause.CatchType);
+        Assert.DoesNotContain(typeof(Exception), GetMemberDependencyTypes(fixtureType));
+    }
+
+    [Theory]
+    [MemberData(nameof(PhaseFiveRemediationAttackSources))]
+    public void PhaseFiveRemediationAttackIsCompiledAndRejected(
+        string caseName, string targetType, string source, string requiredViolation, string? externalSource)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        Assembly fixture = BuildFixtureAssembly(null, source, externalSource);
+        AssertTargetedViolation(fixture, targetType, requiredViolation);
+        if (caseName == "generic method FileInfo")
+        {
+            // Prove FileInfo itself was collected, independently of rejecting Unsafe.
+            Assert.Contains(typeof(FileInfo), GetMemberDependencyTypes(fixture.GetType(targetType, true)!));
+        }
+    }
+
+    public static IEnumerable<object[]> PhaseFiveRemediationAttackSources()
+    {
+        string source = PhaseFiveFixtureSource();
+        yield return ["public negotiator", PhaseFiveNegotiatorName, source.Replace("internal static class ThemeCompatibilityVersionNegotiator", "public static class ThemeCompatibilityVersionNegotiator", StringComparison.Ordinal), "exact internal static Phase5A negotiator", null!];
+        yield return ["second negotiator", "Tcc.Themes.Compatibility.SecondNegotiator", source + "namespace Tcc.Themes.Compatibility { internal static class SecondNegotiator { } }", "outside the exact Phase 3 surface", null!];
+        yield return ["wrong namespace negotiator", "Tcc.Themes.Wrong.ThemeCompatibilityVersionNegotiator", source.Replace("namespace Tcc.Themes.Compatibility", "namespace Tcc.Themes.Wrong", StringComparison.Ordinal), "outside the exact Phase 3 surface", null!];
+        yield return ["public outcome", PhaseFiveOutcomeName, source.Replace("internal sealed record", "public sealed record", StringComparison.Ordinal).Replace("internal enum", "public enum", StringComparison.Ordinal), "exact internal sealed Phase5A outcome record", null!];
+        yield return ["public failure enum", "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind", source.Replace("internal enum", "public enum", StringComparison.Ordinal), "exact internal Phase5A failure enum", null!];
+        yield return ["resolver implementation", "Tcc.Themes.Compatibility.RogueCompatibilityResolver", source + "namespace Tcc.Themes.Compatibility { internal sealed class RogueCompatibilityResolver : IThemeCompatibilityResolver { public ThemeCompatibilityResult Resolve(ThemeCompatibilityRequest request) => null!; } }", "IThemeCompatibilityResolver", null!];
+        yield return ["filesystem signature", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static System.IO.FileInfo Probe() => null!;"), "System.IO.FileInfo", null!];
+        yield return ["filesystem private body", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static bool Probe() => System.IO.File.Exists(\"probe\");"), "System.IO.File", null!];
+        yield return ["package reader signature", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe(IThemePackageContentReader reader) { }"), "IThemePackageContentReader", null!];
+        yield return ["package reader private body", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() { IThemePackageContentReader reader = null!; _ = reader.ReadContentAsync(default, \"probe\"); }"), "IThemePackageContentReader", null!];
+        yield return ["verifier private body", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() => Tcc.Themes.Integrity.ThemeIntegrityVerifier.Touch();", extraSource: "namespace Tcc.Themes.Integrity { public sealed class ThemeIntegrityVerifier { public static void Touch() { } } }"), "Tcc.Themes.Integrity.ThemeIntegrityVerifier", null!];
+        yield return ["Trading private body", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() => External.Trading.Position.Execute();"), "External.Trading.Position", "namespace External.Trading { public static class Position { public static void Execute() { } } }"];
+        yield return ["AI private body", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() => External.AI.Intelligence.Evaluate();"), "External.AI.Intelligence", "namespace External.AI { public static class Intelligence { public static void Evaluate() { } } }"];
+        yield return ["generic method FileInfo", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static int Probe() => System.Runtime.CompilerServices.Unsafe.SizeOf<System.IO.FileInfo>();"), "System.IO.FileInfo", null!];
+        yield return ["private Safe property", PhaseFiveOutcomeName, PhaseFiveFixtureSource(outcomeMember: "private bool Safe => true;"), "exact internal sealed Phase5A outcome record", null!];
+    }
+
+    [Theory]
+    [MemberData(nameof(PhaseFiveAdditionalRemediationSources))]
+    public void PhaseFiveAdditionalCompiledRegressionIsRejected(
+        string caseName, string targetType, string source, string requiredViolation, string? externalSource)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        Assembly fixture = BuildFixtureAssembly(null, source, externalSource);
+        AssertTargetedViolation(fixture, targetType, requiredViolation);
+    }
+
+    public static IEnumerable<object[]> PhaseFiveAdditionalRemediationSources()
+    {
+        yield return ["renamed external domain", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() => Remote.Components.Widget.Touch();"), "Remote.Components.Widget", "namespace Remote.Components { public static class Widget { public static void Touch() { } } }"];
+        foreach (string member in new[]
+        {
+            "private int Extra => 1;",
+            "private readonly int extra = 1;",
+            "private event Action Extra { add { } remove { } }",
+            "[System.Runtime.CompilerServices.CompilerGenerated] private int Extra => 1;",
+            "private int Extra() => 1;",
+        })
+        {
+            yield return [member, PhaseFiveOutcomeName, PhaseFiveFixtureSource(outcomeMember: member), "exact internal sealed Phase5A outcome record", null!];
+        }
+        yield return ["nested generic array argument", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static int Probe() => System.Runtime.CompilerServices.Unsafe.SizeOf<System.Collections.Generic.List<System.IO.FileInfo[][]>>();"), "System.IO.FileInfo", null!];
+        yield return ["generic constructor argument", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() { _ = new System.Collections.Generic.List<System.IO.FileInfo>(); }"), "System.IO.FileInfo", null!];
+        yield return ["generic field argument", PhaseFiveNegotiatorName, PhaseFiveFixtureSource("private static void Probe() { _ = System.Collections.Immutable.ImmutableArray<System.IO.FileInfo>.Empty; }"), "System.IO.FileInfo", null!];
+    }
+
+    [Fact]
+    public void PhaseFiveTypeTraversalReachesNestedElementAndGenericArguments()
+    {
+        Type wrapped = typeof(List<FileInfo[][]>).MakeArrayType().MakePointerType().MakeByRefType();
+        List<Type> dependencies = [];
+        AddTypeAndGenericArguments(dependencies, wrapped);
+        Assert.Contains(typeof(FileInfo), dependencies);
+        Assert.Contains(typeof(List<FileInfo[][]>), dependencies);
     }
 
     [Fact]
@@ -442,6 +718,105 @@ public sealed class PhaseThreeScopeBoundaryTests
             "nested production type");
     }
 
+    public static IEnumerable<object[]> PhaseFiveForbiddenShapeSources()
+    {
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator",
+            "namespace Tcc.Themes.Compatibility; public static class ThemeCompatibilityVersionNegotiator { }",
+            "exact internal static Phase5A negotiator",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.SecondNegotiator",
+            "namespace Tcc.Themes.Compatibility; internal static class ThemeCompatibilityVersionNegotiator { } internal static class SecondNegotiator { }",
+            "outside the exact Phase 3 surface",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation",
+            "namespace Tcc.Themes.Compatibility; public sealed record ThemeCompatibilityVersionNegotiation;",
+            "exact internal sealed Phase5A outcome record",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind",
+            "namespace Tcc.Themes.Compatibility; public enum ThemeCompatibilityNegotiationFailureKind { InvalidVersionInput }",
+            "exact internal Phase5A failure enum",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.RogueCompatibilityResolver",
+            "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility; public sealed class RogueCompatibilityResolver : IThemeCompatibilityResolver { public ThemeCompatibilityResult Resolve(ThemeCompatibilityRequest request) => throw new NotSupportedException(); }",
+            "IThemeCompatibilityResolver",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.FileSystemCompatibilityProbe",
+            "namespace Tcc.Themes.Compatibility; internal static class FileSystemCompatibilityProbe { internal static System.IO.Stream Open() => throw new NotSupportedException(); }",
+            "System.IO.Stream",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator",
+            """
+            using Tcc.Presentation.Contracts.Theme;
+            namespace Tcc.Themes.Compatibility
+            {
+                internal enum ThemeCompatibilityNegotiationFailureKind { InvalidVersionInput, UnsatisfiableVersionRange, UnsupportedManifestSchema, ConflictingVersionDeclaration, CoreVersionIncompatible, ThemeApiNoCompatibleVersion, UxContractNoCompatibleVersion }
+                internal sealed record ThemeCompatibilityVersionNegotiation(bool CanContinue, string? SelectedThemeApiVersion, string? SelectedUxContractVersion, System.Collections.Immutable.ImmutableArray<ThemeCompatibilityNegotiationFailureKind> Failures);
+                internal static class ThemeCompatibilityVersionNegotiator
+                {
+                    internal static ThemeCompatibilityVersionNegotiation Negotiate(ThemeCompatibilityRequest request) => throw new NotSupportedException();
+                    private static bool ProbeFileSystem() => System.IO.File.Exists("probe");
+                }
+            }
+            """,
+            "System.IO.File",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.PackageReaderCompatibilityProbe",
+            "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility; internal static class PackageReaderCompatibilityProbe { internal static void Read(IThemePackageContentReader reader) { } }",
+            "IThemePackageContentReader",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator",
+            """
+            using Tcc.Presentation.Contracts.Theme;
+            namespace Tcc.Themes.Integrity
+            {
+                internal static class ThemePackageSignatureEvaluator { internal static void Evaluate() { } }
+                internal sealed record ThemePackageSignatureEvaluation;
+            }
+            namespace Tcc.Themes.Compatibility
+            {
+                internal enum ThemeCompatibilityNegotiationFailureKind { InvalidVersionInput, UnsatisfiableVersionRange, UnsupportedManifestSchema, ConflictingVersionDeclaration, CoreVersionIncompatible, ThemeApiNoCompatibleVersion, UxContractNoCompatibleVersion }
+                internal sealed record ThemeCompatibilityVersionNegotiation(bool CanContinue, string? SelectedThemeApiVersion, string? SelectedUxContractVersion, System.Collections.Immutable.ImmutableArray<ThemeCompatibilityNegotiationFailureKind> Failures);
+                internal static class ThemeCompatibilityVersionNegotiator
+                {
+                    internal static ThemeCompatibilityVersionNegotiation Negotiate(ThemeCompatibilityRequest request) => throw new NotSupportedException();
+                    private static void ProbeIntegrity() => Tcc.Themes.Integrity.ThemePackageSignatureEvaluator.Evaluate();
+                }
+            }
+            """,
+            "Tcc.Themes.Integrity.ThemePackageSignatureEvaluator",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Wrong.ThemeCompatibilityVersionNegotiator",
+            "namespace Tcc.Themes.Wrong; internal static class ThemeCompatibilityVersionNegotiator { }",
+            "outside the exact Phase 3 surface",
+        ];
+        yield return
+        [
+            "Tcc.Themes.Compatibility.ThemeCompatibilityTradingAI",
+            "namespace Tcc.Themes.Compatibility; internal static class ThemeCompatibilityTradingAI { }",
+            "TradingAI",
+        ];
+    }
+
     public static IEnumerable<object[]> PhaseFourDForbiddenShapeSources()
     {
         yield return
@@ -738,6 +1113,36 @@ public sealed class PhaseThreeScopeBoundaryTests
             violations.Add("Tcc.Themes.Integrity.ThemeIntegrityVerifier must have the exact public sealed V2-only shape.");
         }
 
+        Type? negotiator = assembly.GetType(
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator",
+            throwOnError: false,
+            ignoreCase: false);
+        if (negotiator is not null && !IsExactPhaseFiveNegotiator(negotiator))
+        {
+            violations.Add(
+                "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator must remain the exact internal static Phase5A negotiator.");
+        }
+
+        Type? negotiation = assembly.GetType(
+            "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation",
+            throwOnError: false,
+            ignoreCase: false);
+        if (negotiation is not null && !IsExactPhaseFiveNegotiation(negotiation))
+        {
+            violations.Add(
+                "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation must remain the exact internal sealed Phase5A outcome record.");
+        }
+
+        Type? failureKind = assembly.GetType(
+            "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind",
+            throwOnError: false,
+            ignoreCase: false);
+        if (failureKind is not null && !IsExactPhaseFiveFailureKind(failureKind))
+        {
+            violations.Add(
+                "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind must remain the exact internal Phase5A failure enum.");
+        }
+
         foreach (Type productionType in allTypes)
         {
             foreach (string forbiddenInterface in productionType.GetInterfaces()
@@ -751,6 +1156,54 @@ public sealed class PhaseThreeScopeBoundaryTests
                 }
                 violations.Add(
                     $"Production type '{productionType.FullName ?? productionType.Name}' must not implement Phase 4D-forbidden verifier interface '{forbiddenInterface}'.");
+            }
+        }
+
+        foreach (Type productionType in allTypes.Where(type => !type.IsInterface
+                     && type.GetInterfaces().Any(contract => string.Equals(
+                         contract.FullName,
+                         ForbiddenCompatibilityResolverInterface,
+                         StringComparison.Ordinal))))
+        {
+            violations.Add(
+                $"Production type '{productionType.FullName ?? productionType.Name}' must not implement Phase5A-forbidden interface '{ForbiddenCompatibilityResolverInterface}'.");
+        }
+
+        foreach (Type compatibilityType in allTypes.Where(type => string.Equals(
+                     type.Namespace,
+                     "Tcc.Themes.Compatibility",
+                     StringComparison.Ordinal)))
+        {
+            if (compatibilityType.IsVisible)
+            {
+                violations.Add(
+                    $"Phase5A compatibility type '{compatibilityType.FullName ?? compatibilityType.Name}' must not be public.");
+            }
+
+            foreach (Type dependencyType in GetMemberDependencyTypes(compatibilityType))
+            {
+                string dependencyName = dependencyType.FullName ?? dependencyType.Name;
+                if (IsForbiddenPhaseFiveDependency(dependencyType, assembly))
+                {
+                    violations.Add(
+                        $"Phase5A compatibility type '{compatibilityType.FullName ?? compatibilityType.Name}' has forbidden dependency '{dependencyName}'.");
+                }
+            }
+
+            string[] admissionNames =
+            [
+                "Compatible", "Verified", "Installable", "Installed", "Enabled", "Active",
+                "Activatable", "Safe", "Accessible", "MigrationReady", "RollbackAvailable", "RollbackReady",
+            ];
+            foreach (MemberInfo member in compatibilityType.GetMembers(
+                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            {
+                // The approved failure enum has NoCompatibleVersion members, not admission flags.
+                if (!compatibilityType.IsEnum && admissionNames.Any(name =>
+                        NormalizeSymbol(member.Name).Contains(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    violations.Add($"Phase5A type '{compatibilityType.FullName}' has unauthorized admission member '{member.Name}'.");
+                }
             }
         }
 
@@ -820,6 +1273,371 @@ public sealed class PhaseThreeScopeBoundaryTests
         return constructors.Length == 1 && constructors[0].IsPublic && constructors[0].GetParameters().Length == 0
             && type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly).Length == 0
             && methods.Length == 1 && IsExactVerifyMethod(methods[0], type);
+    }
+
+    private static bool IsExactPhaseFiveNegotiator(Type type)
+    {
+        MethodInfo[] nonPrivateMethods = type.GetMethods(
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            .Where(method => !method.IsPrivate)
+            .ToArray();
+        if (!string.Equals(type.FullName, "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator", StringComparison.Ordinal)
+            || !type.IsNotPublic || type.IsVisible || !type.IsClass || !type.IsAbstract || !type.IsSealed
+            || type.IsNested || type.IsGenericType || type.BaseType != typeof(object)
+            || type.GetInterfaces().Length != 0 || type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false)
+            || type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly).Length != 0
+            || nonPrivateMethods.Length != 1)
+        {
+            return false;
+        }
+
+        MethodInfo method = nonPrivateMethods[0];
+        ParameterInfo[] parameters = method.GetParameters();
+        return method.Name == "Negotiate" && method.IsAssembly && method.IsStatic && !method.IsGenericMethod
+            && method.ReturnType.FullName == "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation"
+            && parameters.Length == 1
+            && parameters[0].ParameterType == typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityRequest);
+    }
+
+    private static bool IsExactPhaseFiveNegotiation(Type type)
+    {
+        Type? failureKind = type.Assembly.GetType(
+            "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind",
+            throwOnError: false,
+            ignoreCase: false);
+        if (failureKind is null)
+        {
+            return false;
+        }
+
+        Dictionary<string, Type> expected = new(StringComparer.Ordinal)
+        {
+            ["CanContinue"] = typeof(bool),
+            ["SelectedThemeApiVersion"] = typeof(string),
+            ["SelectedUxContractVersion"] = typeof(string),
+            ["Failures"] = typeof(System.Collections.Immutable.ImmutableArray<>).MakeGenericType(failureKind),
+        };
+        const BindingFlags declared = BindingFlags.Public | BindingFlags.NonPublic
+            | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+        PropertyInfo[] properties = type.GetProperties(declared);
+        FieldInfo[] fields = type.GetFields(declared);
+        PropertyInfo? equalityContract = properties.SingleOrDefault(property => property.Name == "EqualityContract");
+        PropertyInfo[] dataProperties = properties.Where(property => property.Name != "EqualityContract").ToArray();
+
+        return string.Equals(type.FullName, "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation", StringComparison.Ordinal)
+            && type.IsNotPublic && !type.IsVisible && type.IsClass && !type.IsAbstract && type.IsSealed
+            && !type.IsNested && !type.IsGenericType && type.BaseType == typeof(object)
+            && !type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false)
+            && type.GetInterfaces().SequenceEqual(new[] { typeof(IEquatable<>).MakeGenericType(type) })
+            && properties.Length == expected.Count + 1
+            && equalityContract is not null && equalityContract.PropertyType == typeof(Type)
+            && equalityContract.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            && equalityContract.GetMethod is { IsPrivate: true, IsStatic: false }
+            && equalityContract.SetMethod is null && equalityContract.GetIndexParameters().Length == 0
+            && dataProperties.Length == expected.Count
+            && dataProperties.All(property => property.GetMethod is { IsPublic: true, IsStatic: false }
+                && property.SetMethod is { IsPublic: true, IsStatic: false }
+                && property.SetMethod.ReturnParameter.GetRequiredCustomModifiers().SequenceEqual(new[] { typeof(IsExternalInit) })
+                && property.GetIndexParameters().Length == 0
+                && expected.TryGetValue(property.Name, out Type? propertyType)
+                && property.PropertyType == propertyType)
+            && fields.Length == expected.Count
+            && expected.All(pair => fields.Count(field => field.Name == $"<{pair.Key}>k__BackingField"
+                && field.FieldType == pair.Value && field.IsPrivate && field.IsInitOnly && !field.IsStatic
+                && field.IsDefined(typeof(CompilerGeneratedAttribute), false)) == 1)
+            && type.GetEvents(declared).Length == 0
+            && HasExactPhaseFiveRecordInfrastructure(type, expected.Values.ToArray());
+    }
+
+    private static bool HasExactPhaseFiveRecordInfrastructure(Type type, Type[] dataTypes)
+    {
+        const BindingFlags declared = BindingFlags.Public | BindingFlags.NonPublic
+            | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+        List<(string Name, Type Result, Type[] Parameters, bool Public, bool Static)> expected =
+        [
+            ("get_EqualityContract", typeof(Type), [], false, false),
+            ("ToString", typeof(string), [], true, false),
+            ("PrintMembers", typeof(bool), [typeof(System.Text.StringBuilder)], false, false),
+            ("op_Inequality", typeof(bool), [type, type], true, true),
+            ("op_Equality", typeof(bool), [type, type], true, true),
+            ("GetHashCode", typeof(int), [], true, false),
+            ("Equals", typeof(bool), [typeof(object)], true, false),
+            ("Equals", typeof(bool), [type], true, false),
+            ("<Clone>$", type, [], true, false),
+            ("Deconstruct", typeof(void), dataTypes.Select(dataType => dataType.MakeByRefType()).ToArray(), true, false),
+        ];
+        string[] names = ["CanContinue", "SelectedThemeApiVersion", "SelectedUxContractVersion", "Failures"];
+        for (int index = 0; index < names.Length; index++)
+        {
+            expected.Add(($"get_{names[index]}", dataTypes[index], [], true, false));
+            expected.Add(($"set_{names[index]}", typeof(void), [dataTypes[index]], true, false));
+        }
+
+        MethodInfo[] methods = type.GetMethods(declared);
+        ConstructorInfo[] constructors = type.GetConstructors(declared);
+        // CompilerGenerated is necessary only for these exact signatures; it is
+        // never a blanket exemption for added fields, properties, or methods.
+        return methods.Length == expected.Count && expected.All(shape => methods.Count(method =>
+                method.Name == shape.Name && method.ReturnType == shape.Result
+                && method.GetParameters().Select(parameter => parameter.ParameterType).SequenceEqual(shape.Parameters)
+                && method.IsPublic == shape.Public && (shape.Public || method.IsPrivate)
+                && method.IsStatic == shape.Static && !method.IsGenericMethod && !method.IsAbstract
+                && method.IsDefined(typeof(CompilerGeneratedAttribute), false)) == 1)
+            && constructors.Length == 2
+            && constructors.Count(constructor => constructor.IsPublic && !constructor.IsStatic
+                && constructor.GetParameters().Select(parameter => parameter.ParameterType).SequenceEqual(dataTypes)) == 1
+            && constructors.Count(constructor => constructor.IsPrivate && !constructor.IsStatic
+                && constructor.GetParameters().Select(parameter => parameter.ParameterType).SequenceEqual(new[] { type })
+                && constructor.IsDefined(typeof(CompilerGeneratedAttribute), false)) == 1;
+    }
+
+    private static bool IsExactPhaseFiveFailureKind(Type type) =>
+        string.Equals(type.FullName, "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind", StringComparison.Ordinal)
+        && type.IsNotPublic
+        && !type.IsVisible
+        && type.IsEnum
+        && Enum.GetUnderlyingType(type) == typeof(int)
+        && Enum.GetNames(type).SequenceEqual(
+            new[]
+            {
+                "InvalidVersionInput",
+                "UnsatisfiableVersionRange",
+                "UnsupportedManifestSchema",
+                "ConflictingVersionDeclaration",
+                "CoreVersionIncompatible",
+                "ThemeApiNoCompatibleVersion",
+                "UxContractNoCompatibleVersion",
+            },
+            StringComparer.Ordinal);
+
+    private static List<Type> GetMemberDependencyTypes(Type type)
+    {
+        List<Type> dependencies = [];
+        if (type.BaseType is not null)
+        {
+            AddTypeAndGenericArguments(dependencies, type.BaseType);
+        }
+
+        foreach (Type implementedInterface in type.GetInterfaces())
+        {
+            AddTypeAndGenericArguments(dependencies, implementedInterface);
+        }
+
+        foreach (FieldInfo field in type.GetFields(
+                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+        {
+            AddTypeAndGenericArguments(dependencies, field.FieldType);
+        }
+
+        foreach (PropertyInfo property in type.GetProperties(
+                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+        {
+            AddTypeAndGenericArguments(dependencies, property.PropertyType);
+            foreach (ParameterInfo parameter in property.GetIndexParameters())
+            {
+                AddTypeAndGenericArguments(dependencies, parameter.ParameterType);
+            }
+        }
+
+        foreach (EventInfo eventInfo in type.GetEvents(
+                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+        {
+            if (eventInfo.EventHandlerType is not null)
+            {
+                AddTypeAndGenericArguments(dependencies, eventInfo.EventHandlerType);
+            }
+        }
+
+        MethodBase[] methods =
+        [
+            .. type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            .. type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance),
+        ];
+        foreach (MethodBase method in methods)
+        {
+            MethodBody? methodBody = method.GetMethodBody();
+            if (method.IsGenericMethod)
+            {
+                foreach (Type argument in method.GetGenericArguments())
+                {
+                    AddTypeAndGenericArguments(dependencies, argument);
+                }
+            }
+
+            foreach (LocalVariableInfo local in methodBody?.LocalVariables ?? Enumerable.Empty<LocalVariableInfo>())
+            {
+                AddTypeAndGenericArguments(dependencies, local.LocalType);
+            }
+
+            foreach (ExceptionHandlingClause clause in methodBody?.ExceptionHandlingClauses
+                         ?? Enumerable.Empty<ExceptionHandlingClause>())
+            {
+                if (clause.Flags == ExceptionHandlingClauseOptions.Clause
+                    && clause.CatchType is Type catchType)
+                {
+                    AddTypeAndGenericArguments(dependencies, catchType);
+                }
+            }
+
+            if (method is MethodInfo methodInfo)
+            {
+                AddTypeAndGenericArguments(dependencies, methodInfo.ReturnType);
+            }
+
+            foreach (ParameterInfo parameter in method.GetParameters())
+            {
+                AddTypeAndGenericArguments(dependencies, parameter.ParameterType);
+            }
+
+            foreach (MemberInfo referencedMember in GetReferencedMembers(method))
+            {
+                if (referencedMember.DeclaringType is not null)
+                {
+                    AddTypeAndGenericArguments(dependencies, referencedMember.DeclaringType);
+                }
+
+                if (referencedMember is MethodInfo referencedMethod)
+                {
+                    AddTypeAndGenericArguments(dependencies, referencedMethod.ReturnType);
+                }
+
+                // MethodBase covers constructors too. Return/parameter types alone
+                // do not expose arguments such as Unsafe.SizeOf<FileInfo>().
+                if (referencedMember is MethodBase referencedCallable)
+                {
+                    foreach (ParameterInfo parameter in referencedCallable.GetParameters())
+                    {
+                        AddTypeAndGenericArguments(dependencies, parameter.ParameterType);
+                    }
+                    if (referencedCallable.IsGenericMethod)
+                    {
+                        foreach (Type argument in referencedCallable.GetGenericArguments())
+                        {
+                            AddTypeAndGenericArguments(dependencies, argument);
+                        }
+                    }
+                }
+                else if (referencedMember is FieldInfo referencedField)
+                {
+                    AddTypeAndGenericArguments(dependencies, referencedField.FieldType);
+                }
+                else if (referencedMember is Type referencedType)
+                {
+                    AddTypeAndGenericArguments(dependencies, referencedType);
+                }
+            }
+        }
+
+        return dependencies;
+    }
+
+    private static void AddTypeAndGenericArguments(List<Type> dependencies, Type type)
+    {
+        if (type.HasElementType)
+        {
+            AddTypeAndGenericArguments(dependencies, type.GetElementType()!);
+            return;
+        }
+
+        if (dependencies.Contains(type))
+        {
+            return;
+        }
+
+        dependencies.Add(type);
+        if (type.IsGenericParameter)
+        {
+            foreach (Type constraint in type.GetGenericParameterConstraints())
+            {
+                AddTypeAndGenericArguments(dependencies, constraint);
+            }
+        }
+        foreach (Type argument in type.GetGenericArguments())
+        {
+            AddTypeAndGenericArguments(dependencies, argument);
+        }
+    }
+
+    private static List<MemberInfo> GetReferencedMembers(MethodBase method)
+    {
+        byte[]? il = method.GetMethodBody()?.GetILAsByteArray();
+        List<MemberInfo> members = [];
+        if (il is null)
+        {
+            return members;
+        }
+
+        int position = 0;
+        while (position < il.Length)
+        {
+            OpCode opcode = il[position++] == 0xfe
+                ? TwoByteOpCodes[il[position++]]
+                : SingleByteOpCodes[il[position - 1]];
+            int operandSize = GetOperandSize(opcode.OperandType, il, position);
+            if (opcode.OperandType is OperandType.InlineField
+                or OperandType.InlineMethod
+                or OperandType.InlineTok
+                or OperandType.InlineType)
+            {
+                int metadataToken = BitConverter.ToInt32(il, position);
+                MemberInfo? member = method.Module.ResolveMember(
+                    metadataToken,
+                    method.DeclaringType?.GetGenericArguments(),
+                    method.IsGenericMethod ? method.GetGenericArguments() : null);
+                if (member is not null)
+                {
+                    members.Add(member);
+                }
+            }
+
+            position += operandSize;
+        }
+
+        return members;
+    }
+
+    private static int GetOperandSize(OperandType operandType, byte[] il, int operandPosition) =>
+        operandType switch
+        {
+            OperandType.InlineNone => 0,
+            OperandType.ShortInlineBrTarget or OperandType.ShortInlineI or OperandType.ShortInlineVar => 1,
+            OperandType.InlineVar => 2,
+            OperandType.InlineBrTarget or OperandType.InlineField or OperandType.InlineI
+                or OperandType.InlineMethod or OperandType.InlineSig or OperandType.InlineString
+                or OperandType.InlineTok or OperandType.InlineType or OperandType.ShortInlineR => 4,
+            OperandType.InlineI8 or OperandType.InlineR => 8,
+            OperandType.InlineSwitch => 4 + (BitConverter.ToInt32(il, operandPosition) * 4),
+            _ => throw new InvalidOperationException($"Unsupported IL operand type '{operandType}'."),
+        };
+
+    private static OpCode[] BuildOpCodeTable(bool twoByte)
+    {
+        OpCode[] table = new OpCode[256];
+        foreach (FieldInfo field in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+        {
+            if (field.GetValue(null) is not OpCode opcode || opcode.Size != (twoByte ? 2 : 1))
+            {
+                continue;
+            }
+
+            table[unchecked((byte)opcode.Value)] = opcode;
+        }
+
+        return table;
+    }
+
+    private static bool IsForbiddenPhaseFiveDependency(Type type, Assembly productionAssembly)
+    {
+        Type definition = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+        if (ApprovedPhaseFiveDependencyTypes.Contains(definition))
+        {
+            return false;
+        }
+
+        return type.Assembly != productionAssembly || type.FullName is not
+            ("Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator"
+            or "Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation"
+            or "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind");
     }
 
     private static bool IsExactVerifyMethod(MethodInfo method, Type owner)
@@ -1158,7 +1976,7 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static CustomAttributeBuilder CompilerGeneratedAttributeBuilder() =>
         new(typeof(CompilerGeneratedAttribute).GetConstructor(Type.EmptyTypes)!, []);
 
-    internal static Assembly BuildFixtureAssembly(string? markerAdditionalSource, string? otherSource)
+    internal static Assembly BuildFixtureAssembly(string? markerAdditionalSource, string? otherSource, string? externalSource = null)
     {
         string fixtureRoot = Path.Combine(
             Path.GetTempPath(),
@@ -1179,7 +1997,7 @@ public sealed class PhaseThreeScopeBoundaryTests
                         new XElement("RootNamespace", "Tcc.Themes"),
                         new XElement("Nullable", "enable"),
                         new XElement("ImplicitUsings", "enable"),
-                        new XElement("NuGetAudit", "false")),
+                        new XElement("NuGetAudit", "true")),
                     new XElement(
                         "ItemGroup",
                         new XElement(
@@ -1187,6 +2005,30 @@ public sealed class PhaseThreeScopeBoundaryTests
                             new XAttribute("Include", "Tcc.Presentation.Contracts"),
                             new XElement("HintPath", contractsAssembly),
                             new XElement("Private", "true")))));
+            if (externalSource is not null)
+            {
+                string externalRoot = Path.Combine(fixtureRoot, "External");
+                Directory.CreateDirectory(externalRoot);
+                string externalName = $"BoundaryComponent{Guid.NewGuid():N}";
+                new XDocument(new XElement("Project", new XAttribute("Sdk", "Microsoft.NET.Sdk"),
+                    new XElement("PropertyGroup",
+                        new XElement("TargetFramework", "net10.0-windows"),
+                        new XElement("AssemblyName", externalName),
+                        new XElement("NuGetAudit", "true"))))
+                    .Save(Path.Combine(externalRoot, "Fixture.csproj"));
+                File.WriteAllText(Path.Combine(externalRoot, "Component.cs"), externalSource);
+                BuildFixtureProject(externalRoot);
+                string externalPath = Directory.EnumerateFiles(
+                    Path.Combine(externalRoot, "bin"), $"{externalName}.dll", SearchOption.AllDirectories).Single();
+                project.Root!.Add(new XElement("ItemGroup",
+                    new XElement("Compile", new XAttribute("Remove", "External/**")),
+                    new XElement("Reference", new XAttribute("Include", externalName),
+                        new XElement("HintPath", externalPath))));
+                // Load from bytes so fixture cleanup holds no file locks. The
+                // unique assembly belongs only to this compiled negative fixture.
+                using MemoryStream externalBytes = new(File.ReadAllBytes(externalPath));
+                AssemblyLoadContext.Default.LoadFromStream(externalBytes);
+            }
             project.Save(Path.Combine(fixtureRoot, "Fixture.csproj"));
 
             File.WriteAllText(
@@ -1217,29 +2059,7 @@ public sealed class PhaseThreeScopeBoundaryTests
                 File.WriteAllText(Path.Combine(fixtureRoot, "OtherProductionSource.cs"), otherSource);
             }
 
-            ProcessStartInfo startInfo = new("dotnet")
-            {
-                WorkingDirectory = fixtureRoot,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-            };
-            startInfo.ArgumentList.Add("build");
-            startInfo.ArgumentList.Add("Fixture.csproj");
-            startInfo.ArgumentList.Add("--configuration");
-            startInfo.ArgumentList.Add("Release");
-            startInfo.ArgumentList.Add("-p:Platform=x64");
-            startInfo.ArgumentList.Add("-m:1");
-            startInfo.ArgumentList.Add("--nologo");
-
-            using Process process = Process.Start(startInfo)
-                ?? throw new InvalidOperationException("Could not start fixture build.");
-            string standardOutput = process.StandardOutput.ReadToEnd();
-            string standardError = process.StandardError.ReadToEnd();
-            process.WaitForExit();
-            Assert.True(
-                process.ExitCode == 0,
-                $"Fixture build failed.{Environment.NewLine}{standardOutput}{Environment.NewLine}{standardError}");
+            BuildFixtureProject(fixtureRoot);
 
             string assemblyPath = Directory
                 .EnumerateFiles(Path.Combine(fixtureRoot, "bin"), "Tcc.Themes.dll", SearchOption.AllDirectories)
@@ -1253,5 +2073,32 @@ public sealed class PhaseThreeScopeBoundaryTests
                 Directory.Delete(fixtureRoot, recursive: true);
             }
         }
+    }
+
+    private static void BuildFixtureProject(string fixtureRoot)
+    {
+        ProcessStartInfo startInfo = new("dotnet")
+        {
+            WorkingDirectory = fixtureRoot,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        startInfo.ArgumentList.Add("build");
+        startInfo.ArgumentList.Add("Fixture.csproj");
+        startInfo.ArgumentList.Add("--configuration");
+        startInfo.ArgumentList.Add("Release");
+        startInfo.ArgumentList.Add("-p:Platform=x64");
+        startInfo.ArgumentList.Add("-m:1");
+        startInfo.ArgumentList.Add("--nologo");
+
+        using Process process = Process.Start(startInfo)
+            ?? throw new InvalidOperationException("Could not start fixture build.");
+        string standardOutput = process.StandardOutput.ReadToEnd();
+        string standardError = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+        Assert.True(
+            process.ExitCode == 0,
+            $"Fixture build failed.{Environment.NewLine}{standardOutput}{Environment.NewLine}{standardError}");
     }
 }
