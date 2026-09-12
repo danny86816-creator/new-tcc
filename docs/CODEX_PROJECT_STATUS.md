@@ -1,8 +1,8 @@
 # Codex Project Status
 
-**Current approved phase:** Phase 4 — Theme Integrity Verifier (Phase4A/B/C/D/E SEALED / APPROVED; Independent Phase4F PASS); Phase5A SEALED / APPROVED; Phase5B Candidate A authorized by TCC-P5B-66 and supplemental S1–S9
-**Current execution status:** Phase 1–4 SEALED / APPROVED; annotated `phase4e-approved` object `21d048a57125bc3ac38b959f456b10517efabae0` peels to `3799cc6f90f6d4068e3dec39167612513d76dc43`; Phase5A SEALED / APPROVED; Phase5A Baseline Staging Audit PASS; Phase5A content baseline committed at `af9e2c5bab2f5273e6d4e622dac5a4d603a0f888`; Phase5A Baseline Seal COMPLETED; latest Independent Phase5A Exception Handler Re-Validation PASS with CRITICAL / HIGH / MEDIUM / LOW 0 / 0 / 0 / 0; historical Original Independent Phase5A Validation FAIL and Independent Architecture Guard Re-Validation FAIL preserved; P5A-IV-001 / P5A-IV-002 / P5A-IV-003 / P5A-RIV-001 RESOLVED; public `IThemeCompatibilityResolver` implementations 0; Phase5A sealed baseline YES; TCC-P5B-66 Candidate A self-validation PASS; TCC-P5B-67 Independent Phase 5B Contract Amendment Validation FAIL preserved; TCC-P5B-68 surgical remediation PASS; TCC-P5B-69 Independent Phase 5B Contract Guard Re-Validation PASS; P5B-IV-001 / P5B-IV-002 RESOLVED; Candidate A IMPLEMENTED / INDEPENDENTLY VALIDATED / UNSEALED; Ready for Candidate A Baseline Staging Audit YES; Ready for Candidate A Seal NO; Candidate B NOT STARTED; Phase5C full-workstream validation NOT STARTED; push NOT PERFORMED
-**Last updated:** 2026-09-12 17:25 +08:00
+**Current approved phase:** Phase 4 — Theme Integrity Verifier (Phase4A/B/C/D/E SEALED / APPROVED; Independent Phase4F PASS); Phase5A SEALED / APPROVED; Phase5B Candidate A SEALED / APPROVED
+**Current execution status:** Phase 1–4 SEALED / APPROVED; annotated `phase4e-approved` object `21d048a57125bc3ac38b959f456b10517efabae0` peels to `3799cc6f90f6d4068e3dec39167612513d76dc43`; Phase5A SEALED / APPROVED; Phase5B Candidate A SEALED / APPROVED; Decision019 + Contract Amendment SEALED / APPROVED; content baseline `66e64edc10019b6eaa61246bf7789b6b1f3e22c0`; TCC-P5B-72B BASELINE SEAL COMPLETED; historical TCC-P5B-67 FAIL and TCC-P5B-72 BLOCKED preserved; TCC-P5B-72A PASS; P5B-IV-001 / P5B-IV-002 RESOLVED; Candidate B NOT STARTED; resolver, binder, materializer and runtime owner evidence producers ABSENT; Ready for Candidate B AWAITING SEPARATE SUPERVISOR AUTHORIZATION; push NOT PERFORMED
+**Last updated:** 2026-09-12 21:34 +08:00
 
 **Phase4 contract amendment status:** SEALED — implementation/remediation complete; Independent Security Audit PASS; all known defects RESOLVED
 **Phase 4 production implementation:** PHASE4A/B/C/D/E SEALED / APPROVED
@@ -407,6 +407,20 @@ docs/
 - Gate: Ready for Candidate A Baseline Staging Audit **YES**. Ready for Candidate A Seal **NO** because the Baseline Staging Audit has not yet completed. Ready for Phase5B Resolver Implementation **NO**. Candidate B **NOT STARTED**.
 - Exact next action: return to GPT Supervisor for `71—Phase 5B Candidate A Baseline Staging Audit` (`TCC-P5B-71`). Do not begin Candidate B.
 
+## Phase5B Candidate A baseline seal retry — TCC-P5B-72B
+
+- Phase5A: **SEALED / APPROVED**.
+- Phase5B Candidate A: **SEALED / APPROVED**.
+- Decision019 + Contract Amendment: **SEALED / APPROVED**.
+- Validation authority: TCC-P5B-66 **PASS**; TCC-P5B-67 **FAIL**; TCC-P5B-68 **PASS**; TCC-P5B-69 **PASS**; TCC-P5B-70 **PASS**; TCC-P5B-71 **PASS**; TCC-P5B-72 **BLOCKED** solely at the cached diff whitespace gate, with no commit or tag created; TCC-P5B-72A **PASS** after whitespace-only remediation; TCC-P5B-72B **BASELINE SEAL COMPLETED**.
+- Defects: **P5B-IV-001 RESOLVED**; **P5B-IV-002 RESOLVED**. Whitespace / EOF findings: **5/5 RESOLVED**. Semantic changes **0**; C# token differences **0**; public API differences **0**; behavior differences **0**.
+- Content baseline commit: `66e64edc10019b6eaa61246bf7789b6b1f3e22c0`.
+- Baseline seal: **COMPLETED**.
+- Candidate B: **NOT STARTED**. `ThemeCompatibilityResolverV2`: **ABSENT**. Binder: **ABSENT**. Materializer: **ABSENT**. Runtime owner evidence producers: **ABSENT**.
+- Ready for Candidate B: **AWAITING SEPARATE SUPERVISOR AUTHORIZATION**.
+- Historical failure and blocker custody: TCC-P5B-67 **FAIL** and TCC-P5B-72 **BLOCKED** remain preserved; neither is rewritten as PASS.
+- Push: **NOT PERFORMED**.
+
 ## Validation commands
 
 - `dotnet clean Tcc.slnx --configuration Release -p:Platform=x64 -m:1`
@@ -426,8 +440,8 @@ docs/
 - Phase 4 Contract Amendment is sealed; Independent Security Audit, Focused Baseline Staging Re-Audit, and Temp / Git Hygiene Closure passed; all known amendment defects are resolved.
 - AI Trading production implementation has not started and is not authorized.
 - The current Frozen System Architecture permits only read-only connectors; any future Prepared Order transmission or trade execution path requires a separately approved architecture amendment.
-- Phase4A/B/C/D/E are **SEALED / APPROVED**; `phase4d-approved` and `phase4e-approved` are unchanged. Phase4E content baseline commit is `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`; V1=0, exact V2=1, final IsVerified is available through the sealed V2 public verifier. Independent Phase4F validation is **PASS**, Phase4F is **COMPLETED — INDEPENDENT VALIDATION PASS**, severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. Phase5A is **SEALED / APPROVED** at content baseline `af9e2c5bab2f5273e6d4e622dac5a4d603a0f888`; P5A-IV-001/002/003 and P5A-RIV-001 are independently **RESOLVED**; latest Independent Phase5A Exception Handler Re-Validation is **PASS** with CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. Phase5A Baseline Staging Audit **PASS**; Phase5A Baseline Seal **COMPLETED**; Phase5B Candidate A **IMPLEMENTED / INDEPENDENTLY VALIDATED — UNSEALED CANDIDATE**; P5B-IV-001/002 **RESOLVED**; Candidate B **NOT STARTED**. Push **NOT PERFORMED**.
+- Phase4A/B/C/D/E are **SEALED / APPROVED**; `phase4d-approved` and `phase4e-approved` are unchanged. Phase4E content baseline commit is `0ea8e0a45c20c8f87e5b8db9f9f6ff57cb8d3986`; V1=0, exact V2=1, final IsVerified is available through the sealed V2 public verifier. Independent Phase4F validation is **PASS**, Phase4F is **COMPLETED — INDEPENDENT VALIDATION PASS**, severity CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. Phase5A is **SEALED / APPROVED** at content baseline `af9e2c5bab2f5273e6d4e622dac5a4d603a0f888`; P5A-IV-001/002/003 and P5A-RIV-001 are independently **RESOLVED**; latest Independent Phase5A Exception Handler Re-Validation is **PASS** with CRITICAL / HIGH / MEDIUM / LOW **0 / 0 / 0 / 0**. Phase5A Baseline Staging Audit **PASS**; Phase5A Baseline Seal **COMPLETED**; Phase5B Candidate A **SEALED / APPROVED** at content baseline `66e64edc10019b6eaa61246bf7789b6b1f3e22c0`; P5B-IV-001/002 **RESOLVED**; Candidate B **NOT STARTED**. Push **NOT PERFORMED**.
 
 ## Exact next action
 
-Return to GPT Supervisor for `71—Phase 5B Candidate A Baseline Staging Audit` (`TCC-P5B-71`). Do not begin Candidate B, stage, commit, tag, push, seal, publish, release, or deploy.
+Return to GPT Supervisor. Do not begin Candidate B automatically. Candidate B implementation requires separate Supervisor authorization against the sealed Phase5B Candidate A baseline. Do not push, publish, release, or deploy.
