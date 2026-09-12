@@ -361,3 +361,1274 @@ SPACE    := U+0020 only
 - Future tests must cover exact schema IDs, canonical/invalid tokens, operator/range boundaries, discrete empty ranges, semantic equality/conflict, highest authorized overlap/no-overlap, tested non-rescue, multi-dimension failures, BigInteger values, en-US/tr-TR/zh-TW, permutations, immutable snapshots, concurrency, no side effects, and compiled public resolver count zero. Pure numeric multi-version test vectors must not widen actual production support.
 - Future implementation gates remain focused tests, required architecture/integration/regression tests, locked restore, Release x64 build, all tests, Frozen hash verification, sealed/scope preservation, and Git hygiene. The current ledger-only closure uses append-prefix/hash/diff/scope/baseline verification; it does not claim a newly executed production build or runtime validation.
 - Planning PASS permits return to Supervisor for explicit `55—Phase 5A Compatibility Negotiation Implementation` authorization only. It does not start implementation, self-approve a candidate, authorize 5B/5C execution, or authorize commit/tag/push/seal.
+
+## TCC-DEC-2026-09-10-019 — Additive Phase5B Compatibility V2 Contracts and Trusted Evidence Composition
+
+- Date: 2026-09-10.
+- Decision source: approved TCC-P5B-65 design, explicit TCC-P5B-66 Candidate A implementation authorization, and its later Supervisor Supplemental Contract Authority S1–S9.
+- Status: APPENDED / UNSEALED CANDIDATE. The authorized design is recorded here; independent contract validation and sealing remain separate gates.
+- Reason: preserve V1 while describing missing/failed compatibility facts truthfully and preventing ordinary callers from fabricating trusted runtime evidence.
+- Scope: additive V2 runtime API ownership in Tcc.Themes and portable description/result ownership in Tcc.Presentation.Contracts.
+- Supersedes: no historical decision text or Phase5A semantics; this narrowly supplements Phase2 ownership and Decision018's deferred Phase5B design. Decisions001–018 remain byte-preserved.
+
+### Locked Supervisor Decisions
+
+A:
+V1 完整保留；新增獨立 V2 family。
+
+B:
+Caller-constructible IsVerified=true record 不構成 provenance。
+必須經過受控 binder 及不透明 context。
+
+C:
+未選定、未評估、不適用或未知值使用明確狀態及 null；
+不使用空字串、假版本或 caller backfill。
+
+D:
+Resolver 組合 owner evidence；
+不執行 capability、accessibility、Safety、migration、rollback policy。
+
+E:
+Phase5A 三個 internal algorithm types、演算法及 Decision018 保留。
+V1 resolver implementations=0。
+V2 contract amendment 階段 implementations=0。
+後續批准的 resolver implementation candidate 完成時：
+V2 implementations=1 exact；第二個 implementation 拒絕。
+
+Conformance: PASS
+
+### Recommended Architecture
+
+Single recommended design: B。
+
+公開 V2 runtime API、request及不透明 trust objects：
+Tcc.Themes.Compatibility.V2，assembly Tcc.Themes。
+
+穩定 environment/result/failure/notice DTO與 enums：
+Tcc.Presentation.Contracts.Theme，assembly Tcc.Presentation.Contracts。
+
+受控內容取得、verifier composition及 materialization：
+Tcc.Themes.Compatibility.Binding，internal。
+
+依賴維持：
+Tcc.Themes → Tcc.Presentation.Contracts。
+
+Why:
+
+1. 不透明 context 的 internal constructor 位於 verifier/binder 所在 assembly。
+2. Contracts 不需要反向引用 Tcc.Themes。
+3. Theme Architecture §§3.1、3.4、4.2 允許 Theme runtime/API
+   由 Tcc.Themes 擁有，穩定 presentation data 留在 Contracts。
+4. 保留原 Tcc.Themes.Compatibility namespace，
+   可完整保留 Phase5A 原本的三型別及功能測試。
+5. 不需新 project、PackageReference、ProjectReference 或 friend assembly。
+
+治理說明：
+
+Phase2 ADR 將當時的公開 Theme contracts 放在 Presentation.Contracts。
+本設計需要 Decision019及新的 additive ADR，明確批准
+「具有受控建構要求的 V2 runtime API」的窄例外。
+這不是宣稱原 ADR 已經包含該例外，也不修改原 ADR。
+
+### Trusted Evidence Boundary
+
+Type:
+Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2
+
+Owner:
+Tcc.Themes。
+
+Visibility/kind:
+public sealed class；非 record；無 public/protected constructor；
+無 public setter/init、clone、with、token-import或 FromResult 方法。
+
+Construction:
+internal constructor，只有受信任 assembly 程式可呼叫。
+Production 唯一建構 owner：
+Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder。
+
+Context 代表「受控取得及綁定作業的結果」。
+它可以攜帶成功內容，也可以攜帶真實 acquisition/refusal/schema failure；
+其存在本身不等於 Compatible，亦不保證 IsVerified=true。
+
+Context 的 internal、get-only內容：
+
+- ThemePackageRef PackageRef
+- ThemeIntegrityVerificationResultV2? Integrity
+- ThemeManifest? Manifest
+- ThemeCompatibilityManifest? Compatibility
+- string? CompatibilityManifestHash
+- ImmutableArray<ThemeCompatibilityFailureV2> BindingFailures
+
+成功完整綁定時：
+Integrity、兩份 manifests、CompatibilityManifestHash 均非 null，
+Integrity.IsVerified=true，BindingFailures 為空。
+
+失敗時：
+只保留實際已取得的證據，未產生資料為 null；
+BindingFailures 說明真正失敗階段。
+不得構造不一致的成功內容。
+
+Fabrication resistance:
+
+普通外部 caller 無法：
+- new context；
+- 繼承 context；
+- 將 V1或自行建立的 V2 result 轉成 context；
+- 透過 public factory提交 hash/DTO以取得信任；
+- 反序列化成合法可消費的 trusted context。
+
+Threat model:
+
+支持的防護目標是一般受支持 API 使用、惡意 package data、
+外部 caller 自行建立 DTO及混接合法物件。
+
+不涵蓋：
+reflection/private-member access、unsafe memory mutation、
+runtime patching、惡意替換已載入 assembly、
+冒充現有 test friend assembly或任意受信任程式碼執行。
+
+Tcc.Themes及既有 Tcc.Architecture.Tests friend 是明確 TCB。
+本設計不新增 InternalsVisibleTo，也不把 internal 宣稱為進程隔離。
+
+Lifecycle relationship:
+
+未来 ThemeApplicationService/lifecycle orchestration，在 Tcc.Themes 內
+呼叫 binder；DesktopHost 仍是唯一組態/DI composition root。
+
+Binder 是固定資料流程元件，不能註冊服務、查 service locator、
+選取任意 verifier/provider或成為第二個 composition root。
+
+目前尚無公開 lifecycle issuance入口。
+契約階段不可新增接受任意 DTO的捷徑來補上它。
+
+### Same-Content Binding
+
+唯一 production 路徑：
+
+1. 可信 orchestration 提供 Phase4 request及 package reader。
+   Policy、TrustSnapshot 必須由其核准 owner提供；
+   不接受 Theme package自行指定信任根。
+
+2. 深複製 request 的 nested inventory、policy、trust collections。
+   以一次作業專用內容快照取得 package bytes。
+
+3. 新增 internal ThemeCompatibilityContentSnapshot：
+   - 實作既有 IThemePackageContentReader。
+   - 保存本次取得的完整 enumeration records。
+   - 對合法 regular-file logical paths取得並複製 bytes。
+   - duplicate/unsupported enumeration資訊不可正規化或刪除。
+   - 不合法 path不得送入底層 ReadContentAsync。
+   - 取得失敗即產生 acquisition failure。
+   - bytes及 lookup structure 完成後不可修改。
+   - 不暴露 backing byte[]。
+
+4. 同一份 immutable snapshot reader交給真正的、
+   封存 ThemeIntegrityVerifier.VerifyAsync，恰好一次。
+   不接受 caller提交的 verification result替代此呼叫。
+
+5. 只有真實 IsVerified=true才繼續綁定。
+   Beta及 Developer合法 unsigned成功仍接受，
+   不額外要求 SignatureStatus.Valid。
+
+6. Theme Manifest從快照內同一份 raw bytes materialize。
+   比對該 bytes的 SHA-256、長度、ThemeManifestHash及對應 FileEvidence。
+
+7. Compatibility Manifest固定 logical path為 compatibility.json：
+   - 必須有唯一、存在且 Verified的實際 FileEvidence。
+   - ActualLengthBytes及 ActualSha256必須對應快照 bytes。
+   - 執行既有 schema後，從相同 bytes materialize。
+   - ThemeId/Version與已綁定 Theme Manifest必須一致。
+
+8. PackageHash直接沿用這次真實 verifier result。
+   Binder不另寫 Canonical Package Tree Hash演算法。
+
+9. Context保存深度不可變 DTO/evidence，不保存 raw package bytes。
+   作業完成後，snapshot不由 resolver或全域狀態持有。
+
+重要區別：
+
+- Hash comparison只用來核對 binder自行保管、
+  已送入真實 verifier的 bytes。
+- 不是比較兩組 caller自行提供的 hash字串。
+- ThemeId/Version equality是附加一致性檢查，不是信任根。
+- PackageRef是來源脈絡，不是 proof。
+- 此作業專用 immutable content image不是 provenance registry/cache。
+
+Package A＋Package B DTO攻擊：
+
+不存在公開 DTO輸入槽。
+兩份 DTO均由 binder從同一份被 verifier消費的快照產生，
+普通受支持 API无法混入 caller的 Package B DTO。
+
+內容變更：
+
+Context證明特定歷史快照。
+不表示來源路徑被永久鎖定或目前仍是同一內容。
+後續 lifecycle若要使用不同/變更內容，必須重建快照並重新驗證。
+
+### Compatibility Manifest Materialization
+
+Owner:
+internal static ThemeCompatibilityManifestMaterializer，
+namespace Tcc.Themes.Compatibility.Binding。
+
+Raw bytes:
+只使用 ThemeCompatibilityContentSnapshot 中的 compatibility.json。
+不另開 filesystem，不向原 reader再次讀取。
+
+Schema validation:
+呼叫既有 ThemeMetadataSchemaValidator.Validate，
+新增 embedded resource：
+Tcc.Themes.Schemas.ThemeCompatibility.schema.json。
+
+Schema source保持原檔：
+contracts\theme\schemas\ThemeCompatibility.schema.json
+
+SHA-256:
+3278CC92A93AF636380739A34063F2A889E63AB89E0A56132F768836E126B2BC
+
+現有 validator已提供指定 resource name的入口；
+無須修改 sealed ThemeMetadataSchemaValidator。
+
+Deserialization:
+使用 ThemeContractJson既有設定，
+schema成功後 materialize既有 ThemeCompatibilityManifest。
+拒絕重複 JSON properties、unknown properties、缺少欄位及型別錯誤。
+
+版本 range語意仍交給 Phase5A；
+materializer不複製 required-range parser。
+
+固定分類：
+- 文件不存在/無 Verified evidence/bytes不符：trusted-evidence failure。
+- 可辨識但不支援的 schema identifier：UnsupportedManifestSchema。
+- 支援 schema之 JSON/結構驗證失敗：ManifestSchemaInvalid。
+- materialization失敗：ManifestSchemaInvalid。
+- identity/version與同一 package不符：trusted-evidence failure。
+- required range語法錯誤：後續 Phase5A InvalidVersionInput。
+
+若 Theme Manifest已在 Phase4失敗，維持 integrity refusal；
+不跳過 Phase4以改判一個較漂亮的 compatibility schema狀態。
+
+Required changes:
+- New internal production types: YES，於後續 implementation candidate。
+- New public manifest DTO: NO。
+- New schema contract: NO。
+- JSON schema changes: NO。
+- Tcc.Themes.csproj新增一項 EmbeddedResource: YES。
+- PackageReference/ProjectReference changes: NO。
+
+### V2 Public Surface
+
+下列為完整新型別清單。
+
+共同規則：
+
+C namespace = Tcc.Presentation.Contracts.Theme
+C assembly = Tcc.Presentation.Contracts
+
+R namespace = Tcc.Themes.Compatibility.V2
+R assembly = Tcc.Themes
+
+所有 DTO constructor皆要求完整欄位；
+集合須 eager immutable snapshot，不提供成功預設值。
+可序列化資料不具有 trusted provenance。
+
+| Type | Location | Visibility/kind | Construction | Purpose |
+|---|---|---|---|---|
+| IThemeCompatibilityResolverV2 | R | public interface | 無 | 同步 V2 API |
+| ThemeCompatibilityRequestV2 | R | public sealed class | public完整 constructor | 明確 request |
+| ThemeCompatibilityContextV2 | R | public sealed class | internal | acquisition/content provenance |
+| ThemeCompatibilityEvidenceV2 | R | public sealed class | internal | owner evidence bundle |
+| ThemeCompatibilityEnvironmentV2 | C | public sealed class | public完整 constructor | 不可變 target environment |
+| ThemeCompatibilityRuntimeTargetV2 | C | public sealed record | public完整 constructor | 單一 surface/profile/viewport target |
+| ThemeCompatibilityResultV2 | C | public sealed class | public完整 constructor | 穩定結果資料 |
+| ThemeCompatibilityFailureV2 | C | public sealed record | public完整 constructor | 固定 failure detail |
+| ThemeCompatibilityNoticeV2 | C | public sealed record | public完整 constructor | 非阻擋降級資訊 |
+| ThemeCompatibilityStatusV2 | C | public enum | 不適用 | primary status |
+| ThemeCompatibilityFailureKindV2 | C | public enum | 不適用 | failure kind |
+| ThemeCompatibilityDimensionV2 | C | public enum | 不適用 | failure category |
+| ThemeCompatibilityEvaluationStateV2 | C | public enum | 不適用 | 未評估/拒絕/已評估 |
+| ThemeCompatibilityEvidenceStatusV2 | C | public enum | 不適用 | owner evidence狀態 |
+| ThemeCompatibilityAccessibilityStatusV2 | C | public enum | 不適用 | accessibility狀態 |
+| ThemeCompatibilitySafetyStatusV2 | C | public enum | 不適用 | sealed Safety語意＋未評估 |
+| ThemeCompatibilityInstallationModeV2 | C | public enum | 不適用 | Installer/Portable |
+| ThemeCompatibilityOperationV2 | C | public enum | 不適用 | package/transition評估目的 |
+| ThemeCompatibilityNoticeKindV2 | C | public enum | 不適用 | 固定 notice語彙 |
+| ThemeCompatibilityJsonV2 | C | public static class | 無 instance | V2 result專用序列化 |
+
+Internal evidence types：
+
+以下六個型別均為 R內的 internal sealed class，
+internal完整 constructor、get-only fields；
+僅由該責任的核准 production owner或 trusted test fixture建構：
+
+- ThemeCompatibilityRuntimeEvidenceV2
+- ThemeCompatibilityCapabilityEvidenceV2
+- ThemeCompatibilityAccessibilityEvidenceV2
+- ThemeCompatibilitySafetyEvidenceV2
+- ThemeCompatibilityMigrationEvidenceV2
+- ThemeCompatibilityRollbackEvidenceV2
+
+每份 receipt都有：
+- ThemeCompatibilityContextV2 Context
+- ThemeCompatibilityEnvironmentV2 Environment
+
+Reference binding為精確同一 context/environment物件。
+這是明確物件資料流，不查 token table。
+
+後續 implementation types：
+
+- Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder
+  internal static class。
+- Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot
+  internal sealed class，private constructor。
+- Tcc.Themes.Compatibility.Binding.ThemeCompatibilityManifestMaterializer
+  internal static class。
+- Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2
+  public sealed class，public parameterless constructor。
+
+除編譯器產生且經精確來源驗證的 artifacts外，
+不新增其他 production helper types。
+
+### V2 Request
+
+精確 API：
+
+ThemeCompatibilityResultV2 Resolve(
+    ThemeCompatibilityRequestV2 request);
+
+Request只有三個 get-only properties：
+
+| Field | Type | 必要性/nullable | Owner |
+|---|---|---|---|
+| Context | ThemeCompatibilityContextV2? | 必要；null可表示缺少輸入 | trusted binder |
+| Environment | ThemeCompatibilityEnvironmentV2? | 必要；null導致 refusal | DesktopHost及 lifecycle/context owners |
+| Evidence | ThemeCompatibilityEvidenceV2? | 最終成功必要；null表示尚未取得 | trusted owner-evidence composition |
+
+request本身為 null：
+ArgumentNullException，屬 API呼叫錯誤。
+缺少其可空欄位則回傳結構化結果，不丟一般驗證例外。
+
+Environment精確 fields：
+
+| Field | Type | Nullability/規則 |
+|---|---|---|
+| CoreVersion | string? | 必要；null由 Phase5A判 invalid |
+| SupportedThemeApiVersions | ImmutableArray<string?>? | 必要；保留 null及 malformed tokens |
+| SupportedUxContractVersions | ImmutableArray<string?>? | 同上 |
+| SupportedManifestSchemaVersions | ImmutableArray<string?>? | 必要；依本決策專屬規則 |
+| Platform | string? | 必要；production canonical value為 windows |
+| Architecture | string? | 必要；目前只支援 x64 |
+| InstallationMode | ThemeCompatibilityInstallationModeV2 | 必要；不得為 NotSpecified |
+| RuntimeBuildId | string | 必要；host受控 build identity |
+| ValidationProfileVersion | string | 必要；核准驗證 profile版本 |
+| RuntimeTargets | ImmutableArray<ThemeCompatibilityRuntimeTargetV2> | 必要；非空 |
+| Operation | ThemeCompatibilityOperationV2 | 必要；不得為 NotSpecified |
+| CurrentThemeId | ThemeId? | transition需要時由 lifecycle提供 |
+| CurrentThemeVersion | ThemeVersion? | 與 CurrentThemeId成對 |
+| ThemeStateRevision | string? | 涉及既有 theme-owned state時必要 |
+
+此 environment是評估目標資料，不是驗證證據。
+外部 caller可以建立另一個 environment，
+但不能因此取得與它相符的 trusted receipts。
+
+RuntimeTarget精確 fields：
+
+- string TargetId
+- ThemeVariantId Variant
+- UxSurfaceId Surface
+- decimal DpiScale
+- decimal ViewportWidthDip
+- decimal ViewportHeightDip
+- ThemeAccessibilityProfile AccessibilityProfile
+
+DpiScale、viewport dimensions、profile.TextScale/profile.Zoom必須 >0。
+TargetId唯一且只為 logical identifier。
+Profile沿用既有全部欄位，包括 contrast、color vision、
+reduced modes、audio controls、keyboard、screen reader。
+
+Snapshot semantics：
+
+- Environment constructor深複製所有集合及 runtime targets。
+- Request捕捉的是不可變 context/environment/evidence references。
+- Receipt產生後不得重新指向別的 environment。
+- Evidence bundle內所有 receipts必須指向相同 Context/Environment。
+- Request與 bundle不一致：RefusedPrecondition。
+- 不依當前 ambient DPI、profile、theme state或全域設定補值。
+
+### V2 Result
+
+精確 fields：
+
+- string ContractVersion
+- ThemeCompatibilityStatusV2 Status
+- ThemeCompatibilityEvaluationStateV2 EvaluationState
+- ThemeId? ThemeId
+- ThemeVersion? ThemeVersion
+- string? PackageHash
+
+- string? SelectedCoreVersion
+- string? SelectedThemeApiVersion
+- string? SelectedUxContractVersion
+- string? SelectedManifestSchemaVersion
+
+- ThemeCompatibilityEvidenceStatusV2 RuntimeValidationStatus
+- ThemeCompatibilityEvidenceStatusV2 CapabilityEvidenceStatus
+- ImmutableArray<string> AuthorizedCapabilities
+- ImmutableArray<string> EnabledCapabilities
+- ImmutableArray<string> DisabledCapabilities
+- ImmutableArray<ThemeCompatibilityNoticeV2> Notices
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+- ThemeCompatibilityAccessibilityStatusV2 AccessibilityValidationStatus
+- ThemeCompatibilitySafetyStatusV2 SafetyInvariantsStatus
+- ImmutableArray<ThemeCompatibilitySafetyStatusV2> SafetyFailures
+
+- ThemeCompatibilityEvidenceStatusV2 MigrationEvidenceStatus
+- bool? MigrationRequired
+- bool? MigrationReady
+
+- ThemeCompatibilityEvidenceStatusV2 RollbackEvidenceStatus
+- bool? RollbackRequired
+- bool? RollbackAvailable
+
+Identity/hash只有在可信內容已建立時輸出，
+不從 caller填回，也不回顯不可信 raw值。
+
+Capabilities集合可為空，但必須結合 CapabilityEvidenceStatus理解：
+NotEvaluated＋空集合表示未取得判定，不能解讀為已授權或全部禁用。
+
+Selected-version規則：
+
+1. 硬 refusal或 schema gate失敗：
+   四個 selected versions全部 null。
+
+2. Schema gate成功：
+   SelectedManifestSchemaVersion="1.0"。
+   後續版本或 owner evidence失敗不抹除這個真實選定事實。
+
+3. Theme API/UX：
+   逐字沿用 Phase5A的 nullable selections。
+   不以 caller值、tested[]或預設版本補 null。
+
+4. Core：
+   只有 Phase5A outcome能證明 Core輸入/宣告/相容性成立才輸出。
+   若出現任一 InvalidVersionInput、UnsatisfiableVersionRange、
+   ConflictingVersionDeclaration、UnsupportedManifestSchema或
+   CoreVersionIncompatible，SelectedCoreVersion=null。
+   因 generic failures沒有 dimension，採保守 null，
+   不重跑 parser來猜測 Core其實成功。
+   若只存在 API/UX no-compatible failures，Core通過可被證明，
+   此時可輸出 canonical request.CoreVersion。
+
+5. 已選定版本不代表整體 Compatible。
+
+Migration/rollback未評估為 null；
+不適用的 Ready可為 null；
+不使用 false同時表示「不知道」與「確定不需要」。
+
+### Status Model
+
+ThemeCompatibilityEvaluationStateV2：
+
+- NotEvaluated = 0
+- RefusedPrecondition = 1
+- Evaluated = 2
+
+ThemeCompatibilityStatusV2，按以下列序固定數值，自0起：
+
+0. NotEvaluated
+1. RefusedPrecondition
+2. TrustedEvidenceFailure
+3. UnsupportedManifestSchema
+4. ManifestSchemaInvalid
+5. InvalidVersionInput
+6. UnsatisfiableVersionRange
+7. ConflictingVersionDeclaration
+8. IncompatibleCoreVersion
+9. IncompatibleThemeApiVersion
+10. IncompatibleUxContractVersion
+11. UnsupportedPlatform
+12. UnsupportedInstallationMode
+13. RuntimeValidationFailed
+14. AccessibilityValidationFailed
+15. SafetyValidationFailed
+16. BlockedCapability
+17. MigrationNotReady
+18. RollbackUnavailable
+19. EvidenceUnavailable
+20. Compatible
+21. CompatibleWithDegradation
+22. CompatibleUntestedDpiWithScalableFallback
+
+Default status不是成功。
+
+NotEvaluated：
+尚無已執行評估的描述性狀態；
+正常 Resolve不以它作為缺少必要輸入的模糊替代品。
+
+硬前提不足：
+EvaluationState=RefusedPrecondition；
+Status依原因為 RefusedPrecondition或 TrustedEvidenceFailure。
+
+Context來源可靠、schema/內容可評估之後的失敗：
+EvaluationState=Evaluated。
+未完成的 owner維度保持 NotEvaluated。
+
+Compatibility Manifest schema失敗：
+來源可靠，已執行 schema stage，
+但未執行 negotiation；EvaluationState=Evaluated，
+selected versions全部 null。
+
+### Failure Model
+
+ThemeCompatibilityDimensionV2：
+
+Precondition
+Integrity
+ManifestSchema
+VersionDeclarations
+CoreVersion
+ThemeApiVersion
+UxContractVersion
+PlatformMode
+Runtime
+Accessibility
+Safety
+Capability
+Migration
+Rollback
+
+ThemeCompatibilityFailureKindV2：
+
+MissingTrustedContext
+InvalidRuntimeContext
+ContextBindingMismatch
+ContentSnapshotUnavailable
+IntegrityNotVerified
+ContentEvidenceMismatch
+UnsupportedManifestSchema
+ManifestSchemaInvalid
+InvalidSchemaSupportInput
+InvalidVersionInput
+UnsatisfiableVersionRange
+ConflictingVersionDeclaration
+CoreVersionIncompatible
+ThemeApiNoCompatibleVersion
+UxContractNoCompatibleVersion
+PlatformUnsupported
+InstallationModeUnsupported
+RuntimeValidationFailed
+AccessibilityValidationFailed
+SafetyValidationFailed
+AssetInventoryInvalid
+MotionSafetyFailed
+AudioSafetyFailed
+CapabilityBlocked
+MigrationNotReady
+RollbackUnavailable
+EvidenceMissing
+EvidenceNotEvaluated
+EvidenceScopeMismatch
+EvidenceMalformed
+
+上述 failure enum固定順序、自0起；數值不是排序權威。
+
+ThemeCompatibilityFailureV2：
+
+- ThemeCompatibilityFailureKindV2 Kind
+- ThemeCompatibilityDimensionV2 Dimension
+- int Sequence
+- string? DiagnosticCode
+- string Message
+
+Sequence為最終輸出位置，從0開始連續。
+DiagnosticCode在初版一律 null；Kind已提供穩定 machine identity。
+未來若新增診斷碼，須另行治理。
+
+Message：
+由 Kind/Dimension對應的固定文字模板產生；
+不插入 filesystem paths、raw JSON、caller version text、
+secret資料或 exception.Message。
+
+不重用 P3M/P4I碼。
+原 Phase4 result仍保存在 context內作為 upstream evidence；
+不把 P4I碼冒充 Phase5B自己的語義。
+
+相同 kind可能代表不同 upstream failure occurrence；
+不得去重而丟失 Phase5A evidence。
+
+### Phase5A Mapping
+
+| Internal kind | V2 Kind | V2 Dimension | Primary Status |
+|---|---|---|---|
+| InvalidVersionInput | InvalidVersionInput | VersionDeclarations | InvalidVersionInput |
+| UnsatisfiableVersionRange | UnsatisfiableVersionRange | VersionDeclarations | UnsatisfiableVersionRange |
+| UnsupportedManifestSchema | UnsupportedManifestSchema | ManifestSchema | UnsupportedManifestSchema |
+| ConflictingVersionDeclaration | ConflictingVersionDeclaration | VersionDeclarations | ConflictingVersionDeclaration |
+| CoreVersionIncompatible | CoreVersionIncompatible | CoreVersion | IncompatibleCoreVersion |
+| ThemeApiNoCompatibleVersion | ThemeApiNoCompatibleVersion | ThemeApiVersion | IncompatibleThemeApiVersion |
+| UxContractNoCompatibleVersion | UxContractNoCompatibleVersion | UxContractVersion | IncompatibleUxContractVersion |
+
+前三種 generic version/declaration failures不附 source field。
+VersionDeclarations是計算類別，不宣称必然來自 package某一欄位；
+InvalidVersionInput也可能來自 caller Core/support tokens。
+
+保留 Phase5A Failures原順序及重複 occurrence。
+不從 occurrence index猜測來源維度。
+
+Resolver只呼叫一次封存 Negotiate。
+為呼叫舊 internal signature，建立短生命週期 V1 request projection：
+- manifests來自 context；
+-版本/集合來自 immutable environment；
+- accessibility若尚無驗證，使用誠實的 Unvalidated表示。
+Phase5A不讀取其未使用欄位。
+
+這不是 V1 resolver implementation、public adapter或 V1成功結果。
+
+### Failure Precedence
+
+精確順序：
+
+0. Context/environment/bundle identity及結構前提。
+1. 真實 integrity verdict與same-content binding。
+2. Schema identifiers、caller schema support、raw schema/materialization。
+3. Phase5A完整 Failures序列：
+   declarations → Core → Theme API → UX，
+   逐項保留封存實際順序。
+4. Platform、architecture、Installer/Portable declarations。
+5. Runtime/DPI/profile validation evidence。
+6. Accessibility evidence。
+7. Safety evidence：
+   Home Safety Core → critical alerts → risk/permission clarity
+   → confirmation semantics → accessibility
+   → asset inventory → motion safety → audio safety。
+8. Capability evidence。
+9. Migration evidence。
+10. Rollback evidence。
+
+硬 refusal：
+
+0或1失敗時停止；
+不執行 negotiation、platform或其他 owner evidence組合。
+可回報同一安全前提階段已知的多項失敗；
+不得穿越失敗階段補做推論。
+
+Schema失敗：
+
+停止 schema-dependent negotiation及後續判斷；
+只保留該階段真正取得的 failures。
+
+其餘：
+
+在共同 context/environment可信且可獨立評估時，
+收集所有獨立失敗，不因 Core失敗而丟棄有效 owner evidence。
+
+同一 owner維度內：
+Missing → ScopeMismatch → Malformed → NotEvaluated → Failed。
+只有實際適用的情況才輸出，不為一個 missing receipt重複附加
+scope/malformed/failed等推測。
+
+非 Phase5A同階 failures依：
+固定 Kind順序 →固定 safety suborder →核准 logical requirement ID
+作 Ordinal排序，再指派 Sequence。
+
+Primary status：
+取上述最先的 failure所對應 status。
+EvidenceMissing/EvidenceNotEvaluated映射 EvidenceUnavailable；
+scope/malformed跨物件前提問題映射 RefusedPrecondition。
+
+無 failure時：
+- 有已驗證的 untested-DPI scalable-fallback notice：
+  CompatibleUntestedDpiWithScalableFallback。
+- 否則有核准 decoration degradation：
+  CompatibleWithDegradation。
+- 否則：Compatible。
+
+不以 enum數值排序替代上述 precedence。
+
+### Compatible Semantics
+
+Status=Compatible當且僅當：
+
+- Context來自核准 binder且完整 verified content binding成功。
+- schema支援與materialization成功。
+- Phase5A CanContinue=true。
+- 四個 selected versions均有合法值。
+- platform/architecture/mode符合支援條件。
+- runtime receipt Passed。
+- accessibility receipt Validated。
+- Safety receipt Passed且其必要子驗證已通過。
+- capability receipt Passed且無blocking decisions。
+- migration/rollback necessity已有適用owner判定。
+- Required=true的 migration/rollback能力證據成功。
+- 所有receipt指向相同context/environment。
+- Failures為空。
+- 無需另標示的degradation/fallback notice。
+
+CompatibleWithDegradation及
+CompatibleUntestedDpiWithScalableFallback也必須滿足全部安全條件，
+只允許已核准的可用性保持/裝飾降級。
+
+Compatible certifies：
+該內容快照對該environment及指定operation，
+本契約所要求的相容性證據完整且無阻擋。
+
+Does not certify：
+Installed、Enabled、Active、Installable、Activatable、
+Migration executed、Rollback executed、
+current filesystem custody、永久有效性、全面產品安全認證。
+
+它不執行任何上述狀態轉換。
+
+### Capability Evidence
+
+Producer：
+ThemeCapabilityGate及其核准的 Theme capability composition owner。
+目前 producer尚未實作，不在Phase5B內代建policy engine。
+
+ThemeCompatibilityCapabilityEvidenceV2 fields：
+
+- Context
+- Environment
+- ThemeCompatibilityEvidenceStatusV2 Status
+- ImmutableArray<string> AuthorizedCapabilities
+- ImmutableArray<string> EnabledCapabilities
+- ImmutableArray<string> DisabledCapabilities
+- ImmutableArray<ThemeCompatibilityNoticeV2> Notices
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+Producer obligations：
+
+- Allowed不自動等於Enabled。
+- Enabled必須是authorized且declared的capability。
+- 未宣告與unknown capability不得授權。
+- 只能disable optional presentation capability。
+- 不得degrade Safety、Q93、critical alerts或其他Core invariants。
+- Policy判斷、optional判斷、degradation是否合法均由producer完成。
+
+Resolver：
+只驗證receipt形狀/綁定並投影結果；
+不從manifest宣告推導policy，不呼叫ThemeCapabilityGate。
+
+Missing：
+CapabilityEvidenceStatus=NotEvaluated；
+failure=EvidenceMissing/Capability；
+絕不產生任何compatible成功status。
+
+### Accessibility Evidence
+
+Producer：
+Tcc.Themes的核准accessibility validation owner，
+配合AccessibilityRuntime及既有IThemeAccessibilityValidator。
+不得只包裝caller提交的ThemeAccessibilityValidationResult。
+
+Receipt fields：
+
+- Context
+- Environment
+- ThemeCompatibilityAccessibilityStatusV2 Status
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+Statuses：
+NotEvaluated=0
+Validated=1
+Failed=2
+
+Runtime binding：
+
+必須涵蓋environment的全部runtime targets、
+DPI、viewport、text scale、zoom、variant、surface及完整profile；
+並完成ValidationProfileVersion要求的Q93矩陣、
+deep/light及必要reduced/keyboard/screen-reader驗證。
+
+變更任一target/profile/build/context，需要新的receipt。
+ProfileId字串相等不足以替代完整snapshot identity。
+
+q93_compliant_claim、pass_required及matrix存在只屬宣告。
+不構成Validated。
+
+Missing：
+NotEvaluated＋EvidenceMissing/Accessibility。
+有receipt但未執行：
+NotEvaluated＋EvidenceNotEvaluated/Accessibility。
+任一必要項失敗：
+Failed＋AccessibilityValidationFailed。
+
+### Safety Evidence
+
+Producer：
+Tcc.Themes中核准的Theme Safety validation orchestration，
+組合各驗證owner的實際結果；
+不引用Risk、Permission、Domain或Recovery implementation。
+
+ThemeCompatibilitySafetyStatusV2：
+
+NotEvaluated
+Passed
+FailedHomeSafetyCore
+FailedCriticalAlerts
+FailedRiskPermissionClarity
+FailedConfirmationSemantics
+FailedAccessibility
+
+其serialization保留對應意義：
+
+not_evaluated
+passed
+failed_home_safety_core
+failed_critical_alerts
+failed_risk_permission_clarity
+failed_confirmation_semantics
+failed_accessibility
+
+Receipt fields：
+
+- Context
+- Environment
+- ThemeCompatibilitySafetyStatusV2 Status
+- ImmutableArray<ThemeCompatibilitySafetyStatusV2> Failures
+- ThemeCompatibilityEvidenceStatusV2 AssetInventoryStatus
+- ThemeCompatibilityEvidenceStatusV2 MotionSafetyStatus
+- ThemeCompatibilityEvidenceStatusV2 AudioSafetyStatus
+- ImmutableArray<ThemeCompatibilityFailureV2> Details
+
+Passed必要條件：
+SafetyFailures空；
+asset inventory及motion safety Passed；
+audio safety Passed，或owner已證明不適用。
+
+如此保留Theme §10.5的asset/motion/audio驗證責任，
+不把Phase4 FileEvidence當成這些語意驗證。
+
+EvidenceStatusV2：
+NotEvaluated=0、Passed=1、Failed=2、NotApplicable=3。
+
+NotApplicable只可用於確實無適用audio功能等明確可選子項；
+不得用於整體runtime、capability、accessibility或Safety。
+
+Missing required Safety evidence：
+NotEvaluated＋EvidenceMissing/Safety。
+不得填passed。
+Resolver不執行Safety validation。
+
+### Migration / Rollback
+
+Migration receipt：
+
+- Context
+- Environment
+- ThemeCompatibilityEvidenceStatusV2 Status
+- bool? MigrationRequired
+- bool? MigrationReady
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+Producer：
+ThemeApplicationService下的theme-owned state migration owner。
+
+MigrationRequired：
+針對指定source theme/state revision與target package，
+是否需要theme-owned state轉換的相容性事實。
+
+MigrationReady：
+適用計畫與必要前提是否已被其owner確認。
+不是「已執行」。
+
+規則：
+- 未評估：Required=null，Ready=null。
+- 已確認不需要：Required=false，Ready=null。
+- 需要：Required=true，Ready必須有明確true/false。
+- Required=true且Ready非true：阻擋。
+- 不從MAJOR版本或manifest宣告單獨推論Ready。
+
+Rollback receipt：
+
+- Context
+- Environment
+- ThemeCompatibilityEvidenceStatusV2 Status
+- bool? RollbackRequired
+- bool? RollbackAvailable
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+Producer：
+ThemeRollbackManager及其核准lifecycle owner。
+
+RollbackRequired：
+指定operation是否要求具備可回復路徑的前提事實。
+
+RollbackAvailable：
+當次owner確認存在適用、具體且已驗證的rollback選項。
+不是version range存在，也不是已執行rollback。
+
+規則：
+- 未評估：Required=null，Available=null。
+- 已確認不要求：Required=false；
+  Available保留實際true/false；未檢查則null。
+- Required=true且Available非true：阻擋。
+
+兩份receipt均為最終成功必要輸入；
+「已證明不需要」也是有效的owner判定，
+不能由resolver填false代替。
+
+Source state、operation、target或environment變更後，重新取得receipt。
+
+Resolver：
+零state migration、零backup、零rollback execution。
+
+### Platform / Portable / DPI
+
+Inputs：
+Environment.Platform、Architecture、InstallationMode、
+RuntimeBuildId及RuntimeTargets。
+
+Authority：
+目前production windows/x64。
+Installer與Portable保持同一核心功能及驗證要求。
+
+Declaration checks：
+- Manifest.SupportedPlatforms包含windows。
+- Manifest.PortableSupported保持核准語意。
+- Compatibility.Windows的installer/portable/multi-monitor宣告成立。
+- 不把其他platform aliases自動正規化成windows。
+
+三種資訊必須區分：
+
+1. Declared support：package宣告。
+2. Tested coverage：maximum_tested_dpi_scale、
+   dpi_ranges_tested及tested[]。
+3. Runtime validated compatibility：owner receipt。
+
+maximum_tested_dpi_scale不是硬支援上限。
+超過tested bucket不自動失敗，也不自動成功。
+只有實際scalable layout/reflow/scroll及安全fallback驗證成功，
+才可輸出CompatibleUntestedDpiWithScalableFallback。
+
+minimum_dpi_scale不作為忽略Q93或OS-supported scale的藉口。
+Resolver不新增未核准的數值admission閾值；
+實際可用性由runtime/accessibility owner驗證。
+
+Runtime receipt：
+
+- Context
+- Environment
+- ThemeCompatibilityEvidenceStatusV2 Status
+- ImmutableArray<ThemeCompatibilityNoticeV2> Notices
+- ImmutableArray<ThemeCompatibilityFailureV2> Failures
+
+Producer：
+Theme runtime/platform validation owner；
+Windows資料經DesktopHost注入的既有boundary取得，
+不新增Tcc.Themes → Tcc.Windows reference。
+
+DPI/monitor/profile變更：
+重新取得environment及相應證據；
+Resolver不查當前桌面狀態。
+
+### Manifest Schema Support
+
+Sealed authority:
+{"1.0"}
+
+Collection rules：
+
+| Input | Result |
+|---|---|
+| null collection | InvalidSchemaSupportInput，schema gate停止 |
+| empty collection | UnsupportedManifestSchema |
+| 缺少"1.0" | UnsupportedManifestSchema |
+| {"1.0","2.0"} | 有效交集僅{"1.0"}；2.0不授予支援 |
+| 只有有效但未知identifier | UnsupportedManifestSchema |
+| 含malformed/null元素 | InvalidSchemaSupportInput，不能靜默丟棄 |
+| duplicates | Ordinal去重，語意不變 |
+| enumeration order不同 | 結果相同 |
+
+Schema support token grammar：
+canonical非負十進位major.minor：
+(0|[1-9][0-9]*) "." (0|[1-9][0-9]*)
+
+這是新V2 caller schema-support collection的詞法規則，
+不是修改Theme Package schema或Phase5A版本語法。
+
+拒絕：
+空字串、whitespace、"v1.0"、"1.0.0"、"01.0"、Unicode數字。
+不Trim、不補版本段。
+
+先驗證全部tokens，再与{"1.0"}取交集。
+Caller不能擴張sealed schema authority。
+InvalidSchemaSupportInput對應：
+Status=RefusedPrecondition，Dimension=ManifestSchema。
+
+### Determinism
+
+Snapshots：
+
+必須eager snapshot：
+- Phase4 request inventory/trust nested collections。
+- package enumeration records及raw byte buffers。
+- ThemeManifest全部nested lists。
+- Compatibility manifest tested arrays、DPI arrays、accessibility dictionary。
+- Integrity FileEvidence、AssetEvidence、Diagnostics。
+- 所有support collections。
+- environment runtime targets及profiles。
+- 每個owner receipt的lists/notices/failures。
+- 最終result collections。
+
+Caller須在acquisition期間保持來源穩定；
+不承諾安全複製正在被同時修改的集合。
+
+取得後caller mutation不影響result。
+不使用caller comparer決定語意。
+識別、集合及文字排序使用Ordinal。
+版本計算保持Decision018及BigInteger語意。
+
+State：
+無clock、RNG、全域registry、AsyncLocal、ThreadLocal、
+nonce table、service locator、mutable provenance cache。
+
+Concurrency：
+Resolver無instance fields及mutable static state；
+同一instance可處理獨立concurrent calls。
+
+Sync：
+Resolve保持同步。
+不使用Task.Run、sync-over-async或在Resolve內等待verifier。
+
+Constructor：
+public ThemeCompatibilityResolverV2()
+
+DI：
+未來由DesktopHost註冊時建議Singleton。
+Request/context/evidence為每次作業的immutable data；
+不得存成singleton mutable state。
+契約修訂不建立DI infrastructure。
+
+### V1 Preservation
+
+完全保留：
+
+- IThemeCompatibilityResolver
+- ThemeCompatibilityRequest
+- ThemeCompatibilityResult
+- ThemeCompatibilityStatus
+- ThemeFailureReason
+- ThemeAccessibilityStatus
+- 其餘V1 enums、DTO、serialization semantics
+
+V1 implementation count: 0。
+
+不增加V1 adapter、dual-interface implementation或fallback。
+V2 family不改Theme API production support "1.0.0"。
+
+新增identifier：
+ContractVersions.ThemeCompatibilityContractV2 = "2.0"
+
+含義：
+V2 runtime composition/result contract identifier。
+
+不是：
+Theme API version、ThemeManifest schema、
+Compatibility Manifest schema或Integrity schema升版。
+
+### Guard Evolution
+
+核准將新V2 types放在：
+Tcc.Themes.Compatibility.V2
+
+將binding types放在：
+Tcc.Themes.Compatibility.Binding
+
+原namespace：
+Tcc.Themes.Compatibility
+仍精確只有三個Phase5A handwritten top-level types。
+
+因此，不必為新增V2去削弱Phase5A既有namespace-wide限制。
+
+實際需演進：
+
+1. File:
+tests\Tcc.Architecture.Tests\PhaseThreeScopeBoundaryTests.cs
+
+Test:
+ActualCompiledThemeAssemblyMatchesExactPhaseThreeTypeSurface
+
+Helper:
+GetCompiledSurfaceViolations
+
+Current:
+ApprovedTopLevelTypes固定清單；
+新API、context、binder、resolver等均會被拒絕。
+Nested artifacts也必須列入精確來源規則。
+
+Smallest change:
+分A/B候選階段，加入本決策逐名列出的新型別及精確shape。
+保留原Phase5A type/dependency/outcome/exception-handler guards全部原樣。
+新增獨立V2 resolver guard及binder的窄依賴guard。
+
+2. File:
+tests\Tcc.Architecture.Tests\PhaseTwoContractCompletenessTests.cs
+
+Test:
+RequiredInterfacesHaveOnlyPhaseApprovedProductionImplementations
+
+Helper:
+FindUnauthorizedImplementationViolations
+
+Current:
+IThemePackageContentReader的production implementation未獲准。
+
+Conflict:
+後續ThemeCompatibilityContentSnapshot需要實作該既有reader介面。
+
+Smallest change:
+只允許精確internal sealed snapshot type。
+不允許其他reader、不放寬resolver/capability/lifecycle implementations。
+
+不需改動的歷史測試：
+
+3. File:
+tests\Tcc.Architecture.Tests\PhaseFiveThemeCompatibilityNegotiationTests.cs
+
+Test:
+CompiledPhaseFiveSurfaceIsInternalSynchronousAndStateless
+
+原assertion：
+原compatibility namespace精確三個internal types、
+negotiator同步stateless、assembly內V1 implementations=0。
+
+本核准設計完全符合：
+V2在獨立子namespace且只實作V2 interface。
+因此整檔可byte-preserve，不需刪除或弱化該test。
+
+4. File:
+tests\Tcc.Architecture.Tests\PhaseFourThemePackageMetadataEvaluatorTests.cs
+
+Test:
+EmbeddedSchemasHaveExactNamesAndSourceBytes
+
+實際assertion：
+逐一驗證原三份resource存在及bytes/hash；
+不是禁止assembly增加第四份resource的exact-set assertion。
+
+因此不修改。
+新增Compatibility resource另由新binding tests驗證。
+
+5. File:
+tests\Tcc.Architecture.Tests\PhaseFourContractAmendmentTests.cs
+
+Test:
+AmendmentAddsNoVerifierImplementationOrPhaseFiveOrTradingLeakage
+
+實際scope：
+驗證原integrity implementation規則及固定四個integrity amendment檔案。
+本設計不修改該四檔，不因method名稱包含PhaseFive就假定需放寬。
+
+V2 count：
+
+A契約候選完成：
+V1=0、V2=0。
+
+B實作候選完成：
+V1=0、V2=1，唯一允許：
+Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2。
+
+Second resolver attack：
+掃描全部production types；
+abstract、generic、nested、generated、wrong namespace、
+dual V1/V2或第二個implementation皆不得繞過。
+不要只計算public concrete types。
+
+Resolver dependencies：
+固定closed allowlist；
+涵蓋signatures、fields、locals、IL calls、generic arguments/
+constraints、typed catch metadata及filter IL。
+
+Binder限定可依賴sealed verifier、content reader、
+JSON/schema、SHA256及immutable snapshot所需BCL。
+不得把binder的I/O/crypto allowlist套用到resolver或Phase5A。
+
+### Serialization
+
+Stable serialization required：
+
+- ThemeCompatibilityResultV2。
+- 其nested failures/notices/enums。
+- V2 environment/runtime target可作描述性資料使用，
+  不構成trust proof。
+
+ThemeCompatibilityJsonV2 public methods：
+
+- string SerializeResult(ThemeCompatibilityResultV2 result)
+- ThemeCompatibilityResultV2 DeserializeResult(string json)
+
+規則：
+- snake_case。
+- 固定property order及enum string values。
+- 所有selected null明確序列化為null。
+- 拒絕unknown fields、unknown/numeric enums、缺required members、
+  duplicate JSON properties及矛盾狀態。
+- 驗證ContractVersion精確"2.0"。
+- 失敗排序及Sequence必须合法。
+- 不修改ThemeContractJson既有V1/Phase4設定。
+
+Opaque runtime objects：
+
+ThemeCompatibilityContextV2、ThemeCompatibilityEvidenceV2、
+request及internal receipts不屬portable serialized trust artifacts。
+Canonical V2 serializer不提供它們的serialize/import入口。
+一般serializer可能輸出描述或空object，
+但不能藉此取得合法trusted instance。
+
+Public result即使反序列化成功仍只是資料，
+不能用來建立context/evidence，也不能作為activation authorization。
+
+### Supplemental contract closure S1–S6
+
+The explicit later Supervisor supplement to TCC-P5B-66 closes the five missing definitions without creating Decision020.
+
+- `ThemeCompatibilityInstallationModeV2`: `NotSpecified=0`, `Installer=1`, `Portable=2`; wire strings `not_specified`, `installer`, `portable`. No additional members. NotSpecified is invalid for actual evaluation; Installer and Portable share all mandatory requirements.
+- `ThemeCompatibilityOperationV2`: `NotSpecified=0`, `PackageEvaluation=1`, `TransitionEvaluation=2`; wire strings `not_specified`, `package_evaluation`, `transition_evaluation`. No additional members. PackageEvaluation requires CurrentThemeId, CurrentThemeVersion and ThemeStateRevision all null. At DTO construction, source identity/version are both present or both absent. Valid TransitionEvaluation composition requires both present; revision remains nullable and the later owner must refuse if applicable state requires it. Operation grants no execution authority.
+- `ThemeCompatibilityNoticeKindV2`: `NotSpecified=0`, `OptionalCapabilityDisabled=1`, `DecorativePresentationDegradation=2`, `UntestedDpiScalableFallback=3`; wire strings `not_specified`, `optional_capability_disabled`, `decorative_presentation_degradation`, `untested_dpi_scalable_fallback`. NotSpecified is invalid in a final result. OptionalCapabilityDisabled requires Capability dimension; DecorativePresentationDegradation allows Runtime or Capability; UntestedDpiScalableFallback requires Runtime.
+- All enum values are explicit and sequential in the listed order. Numeric and unknown enum input is rejected by canonical transport. Descriptive environment enum transport uses these exact strings with strict string-enum settings; the canonical V2 API transports results only.
+
+Exact notice shape, public sealed record, five public get-only properties:
+
+```csharp
+public ThemeCompatibilityNoticeV2(
+    ThemeCompatibilityNoticeKindV2 kind,
+    ThemeCompatibilityDimensionV2 dimension,
+    int sequence,
+    string? diagnosticCode,
+    string message)
+```
+
+Properties and wire order: `Kind/kind`, `Dimension/dimension`, `Sequence/sequence`, `DiagnosticCode/diagnostic_code`, `Message/message`.
+Kind must not be NotSpecified; Sequence must be nonnegative; Message must be non-null and non-empty; DiagnosticCode must be null in Candidate A. No caller text, raw JSON, exception, version token, secret, credential, filesystem path or machine data may enter Message. Contract implementation fixes the detail template to `{Kind} in {Dimension}.` using defined enum names only, for both failures and notices. This selects the fixed descriptive template required by the approved design without adding diagnostic codes or policy ownership.
+
+Evidence bundle: public sealed non-record `ThemeCompatibilityEvidenceV2`, with exactly eight internal get-only properties and this sole internal constructor:
+
+```csharp
+internal ThemeCompatibilityEvidenceV2(
+    ThemeCompatibilityContextV2 context,
+    ThemeCompatibilityEnvironmentV2 environment,
+    ThemeCompatibilityRuntimeEvidenceV2? runtime,
+    ThemeCompatibilityCapabilityEvidenceV2? capability,
+    ThemeCompatibilityAccessibilityEvidenceV2? accessibility,
+    ThemeCompatibilitySafetyEvidenceV2? safety,
+    ThemeCompatibilityMigrationEvidenceV2? migration,
+    ThemeCompatibilityRollbackEvidenceV2? rollback)
+```
+
+Properties: `Context`, `Environment`, `Runtime`, `Capability`, `Accessibility`, `Safety`, `Migration`, `Rollback`, matching these parameter types and nullabilities exactly. No additional public data properties, token, nonce or registry key. Null context/environment throw ArgumentNullException. All six slots may be absent. Each present receipt must reference the exact same context and environment; all mismatches consistently throw ArgumentException. Never drop, rebind or manufacture receipts. Future Resolve checks request/bundle reference identity and returns RefusedPrecondition/ContextBindingMismatch; Candidate A does not implement that resolver behavior.
+
+No public/protected constructor, factory, clone/with, mutable setter/init, FromResult, FromDto, import or deserialize path exists for context/evidence. Canonical serializer has only SerializeResult and DeserializeResult. A result is descriptive data only, never a portable proof or activation/installation authority.
+
+Notice and failure arrays independently use contiguous Sequence 0..N-1 in supplied order. Never reorder or repair deserialized input. Compatible requires no failures and no notices. CompatibleWithDegradation requires no failures, one or more notices and no UntestedDpiScalableFallback notice. CompatibleUntestedDpiWithScalableFallback requires no failures and at least one such notice, and may also carry ordinary degradation. All three require complete successful mandatory evidence. Notices cannot rescue failure. Q93, Home Safety Core, critical alerts, risk/permission clarity, confirmation semantics and required accessibility are never degraded.
+
+### Current authorization and phase gates
+
+Only the ten Candidate A files explicitly listed by TCC-P5B-66 are authorized. Candidate A defines data shapes, immutable snapshots, internal construction and strict result transport only. V1 resolver implementations=0 and Candidate A V2 resolver implementations=0. Future Candidate B resolver implementations must equal exactly one after separate authorization. The binder, content snapshot reader, compatibility materializer, evidence producers, lifecycle issuance, DI registration and resolver remain absent. All binding/materialization/owner behavior described above is normative future work, not a claim of implemented or validated runtime trust.
+
+No changes to Phase5A production or functional tests, V1 source/semantics, package schemas, csproj/lock files, project/package references, friend assemblies or earlier ADRs. No Trading, Market Data, AI, execution connector or business policy ownership. No filesystem, reader, crypto, lifecycle or raw-content authority enters Resolve. The existing six-project/eleven-ProjectReference/four-PackageReference graph and Frozen sources remain unchanged.
+
+Required gates: focused contract/scope/Phase2/Phase5A/dependency tests, normal and locked restore with NuGet audit, single-node Release x64 build, fresh full tests with zero failures/skips, Frozen/sealed preservation, exact scope, Git hygiene and truthful status synchronization. Implementation self-validation does not grant independent approval, resolver authorization or seal. No stage/commit/tag/push is authorized.

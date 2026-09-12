@@ -12,6 +12,17 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static readonly string[] ApprovedTopLevelTypes =
     [
         "Tcc.Themes.AssemblyMarker",
+        "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRequestV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRuntimeEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityCapabilityEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityAccessibilityEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilitySafetyEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityMigrationEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRollbackEvidenceV2",
+
         "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
         "Tcc.Themes.Integrity.ThemeIntegrityVerifier",
         "Tcc.Themes.Integrity.ThemePackageInventoryEvaluation",
@@ -1169,6 +1180,19 @@ public sealed class PhaseThreeScopeBoundaryTests
                 $"Production type '{productionType.FullName ?? productionType.Name}' must not implement Phase5A-forbidden interface '{ForbiddenCompatibilityResolverInterface}'.");
         }
 
+        foreach (Type productionType in allTypes)
+        {
+            if (productionType.GetInterfaces().Any(contract => contract.FullName == "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2"))
+                violations.Add($"Candidate A forbids every V2 resolver implementation: {productionType.FullName}.");
+            violations.AddRange(PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeShapeViolations(productionType));
+            if (PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeTypeNames.Contains(productionType.FullName, StringComparer.Ordinal))
+            {
+                foreach (Type dependency in GetMemberDependencyTypes(productionType))
+                    if (!PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeDependencyAllowed(dependency, assembly))
+                        violations.Add($"Candidate A dependency outside exact allowlist: {productionType.FullName} -> {dependency.FullName}.");
+            }
+        }
+
         foreach (Type compatibilityType in allTypes.Where(type => string.Equals(
                      type.Namespace,
                      "Tcc.Themes.Compatibility",
@@ -1976,7 +2000,8 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static CustomAttributeBuilder CompilerGeneratedAttributeBuilder() =>
         new(typeof(CompilerGeneratedAttribute).GetConstructor(Type.EmptyTypes)!, []);
 
-    internal static Assembly BuildFixtureAssembly(string? markerAdditionalSource, string? otherSource, string? externalSource = null)
+    internal static Assembly BuildFixtureAssembly(string? markerAdditionalSource, string? otherSource, string? externalSource = null,
+        bool includeCandidateAContracts = true)
     {
         string fixtureRoot = Path.Combine(
             Path.GetTempPath(),
@@ -2057,6 +2082,18 @@ public sealed class PhaseThreeScopeBoundaryTests
             if (otherSource is not null)
             {
                 File.WriteAllText(Path.Combine(fixtureRoot, "OtherProductionSource.cs"), otherSource);
+            }
+
+            // Preserve the original Phase5A positive assertions: their fixtures now
+            // include the independently guarded additive contract family as well.
+            // Deliberate V2 shape attacks supply their own declarations instead.
+            if (includeCandidateAContracts)
+            {
+                foreach (string file in new[] { "ThemeCompatibilityApiV2.cs", "ThemeCompatibilityEvidenceV2.cs" })
+                {
+                    File.WriteAllText(Path.Combine(fixtureRoot, file), File.ReadAllText(Path.Combine(
+                        RepositoryPaths.Root, "src", "Tcc.Themes", "Compatibility", "V2", file)));
+                }
             }
 
             BuildFixtureProject(fixtureRoot);
