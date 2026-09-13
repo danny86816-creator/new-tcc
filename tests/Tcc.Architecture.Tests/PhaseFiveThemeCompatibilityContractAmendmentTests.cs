@@ -56,6 +56,8 @@ public sealed class PhaseFiveThemeCompatibilityContractAmendmentTests
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityMigrationEvidenceV2",
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRollbackEvidenceV2",
     ];
+    internal const string ResolverTypeName =
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2";
 
     private static readonly Dictionary<Type, (string Name, Type Type)[]> Shapes = new()
     {
@@ -172,15 +174,64 @@ public sealed class PhaseFiveThemeCompatibilityContractAmendmentTests
             yield return "Candidate A has unauthorized mutable or hidden state.";
     }
 
+    internal static IEnumerable<string> ResolverShapeViolations(Type type)
+    {
+        if (!type.GetInterfaces().Any(contract => string.Equals(
+                contract.FullName,
+                "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2",
+                StringComparison.Ordinal))
+            && !string.Equals(type.FullName, ResolverTypeName, StringComparison.Ordinal))
+        {
+            yield break;
+        }
+
+        const BindingFlags declared = BindingFlags.Public | BindingFlags.NonPublic
+            | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+        ConstructorInfo[] constructors = type.GetConstructors(declared);
+        MethodInfo[] methods = type.GetMethods(declared);
+        MethodInfo[] publicMethods = methods.Where(method => method.IsPublic).ToArray();
+        MethodInfo? resolve = publicMethods.Length == 1 ? publicMethods[0] : null;
+        ParameterInfo[] parameters = resolve?.GetParameters() ?? [];
+        bool exactInterface = type.GetInterfaces().Length == 1
+            && string.Equals(type.GetInterfaces()[0].FullName,
+                "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2", StringComparison.Ordinal);
+        if (!string.Equals(type.FullName, ResolverTypeName, StringComparison.Ordinal)
+            || !string.Equals(type.Assembly.GetName().Name, "Tcc.Themes", StringComparison.Ordinal)
+            || !type.IsPublic || !type.IsClass || !type.IsSealed || type.IsAbstract
+            || type.IsNested || type.IsGenericType || type.BaseType != typeof(object)
+            || type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false)
+            || !exactInterface
+            || constructors.Length != 1 || !constructors[0].IsPublic || constructors[0].IsStatic
+            || constructors[0].GetParameters().Length != 0
+            || type.GetFields(declared).Length != 0 || type.GetProperties(declared).Length != 0
+            || type.GetEvents(declared).Length != 0 || type.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic).Length != 0
+            || methods.Any(method => !method.IsPublic && !method.IsPrivate)
+            || resolve is null || resolve.Name != "Resolve" || !resolve.IsPublic || resolve.IsStatic
+            || resolve.IsAbstract || resolve.IsGenericMethod || resolve.ReturnType != typeof(ThemeCompatibilityResultV2)
+            || parameters.Length != 1
+            || parameters[0].ParameterType.FullName != typeof(ThemeCompatibilityRequestV2).FullName
+            || parameters[0].ParameterType.IsByRef || parameters[0].ParameterType.IsPointer
+            || parameters[0].IsOut || parameters[0].IsOptional || parameters[0].HasDefaultValue
+            || parameters[0].IsDefined(typeof(ParamArrayAttribute), false))
+        {
+            yield return $"Illegal V2 resolver implementation shape or identity: {type.FullName}.";
+        }
+    }
+
     [Fact]
-    public void ExactPublicAndInternalInventoriesAndZeroImplementations()
+    public void ExactPublicAndInternalInventoriesAndAuthorizedImplementations()
     {
         Assembly runtime = typeof(ThemeCompatibilityContextV2).Assembly;
-        Assert.Equal(RuntimeTypeNames.Order(StringComparer.Ordinal), runtime.GetTypes().Where(t => t.Namespace == "Tcc.Themes.Compatibility.V2").Select(t => t.FullName).Order(StringComparer.Ordinal));
+        string[] expectedRuntimeTypes = RuntimeTypeNames.Append(ResolverTypeName).Order(StringComparer.Ordinal).ToArray();
+        Assert.Equal(expectedRuntimeTypes, runtime.GetTypes().Where(t => t.Namespace == "Tcc.Themes.Compatibility.V2").Select(t => t.FullName).Order(StringComparer.Ordinal));
         foreach (Type type in runtime.GetTypes()) Assert.Empty(RuntimeShapeViolations(type));
         Assembly[] assemblies = [runtime, typeof(ContractVersions).Assembly, typeof(Tcc.Windows.AssemblyMarker).Assembly, typeof(Tcc.Features.Themes.AssemblyMarker).Assembly];
-        foreach (Type type in assemblies.SelectMany(a => a.GetTypes()))
-            Assert.DoesNotContain(type.GetInterfaces(), i => i == typeof(IThemeCompatibilityResolver) || i == typeof(IThemeCompatibilityResolverV2));
+        Type[] productionTypes = assemblies.SelectMany(assembly => assembly.GetTypes()).ToArray();
+        Assert.DoesNotContain(productionTypes, type => !type.IsInterface && type.GetInterfaces().Contains(typeof(IThemeCompatibilityResolver)));
+        Type resolver = Assert.Single(productionTypes, type => !type.IsInterface
+            && type.GetInterfaces().Contains(typeof(IThemeCompatibilityResolverV2)));
+        Assert.Equal(ResolverTypeName, resolver.FullName);
+        Assert.Empty(ResolverShapeViolations(resolver));
         string[] expected = Shapes.Keys.Where(t => t.Namespace == "Tcc.Presentation.Contracts.Theme").Select(t => t.Name)
             .Concat(EnumCases().Select(c => ((Type)c[0]).Name)).Append(nameof(ThemeCompatibilityJsonV2)).Order(StringComparer.Ordinal).ToArray();
         Assert.Equal(expected, typeof(ContractVersions).Assembly.GetExportedTypes().Where(t => t.Name.StartsWith("ThemeCompatibility", StringComparison.Ordinal) && t.Name.EndsWith("V2", StringComparison.Ordinal)).Select(t => t.Name).Order(StringComparer.Ordinal));
@@ -541,14 +592,14 @@ public sealed class PhaseFiveThemeCompatibilityContractAmendmentTests
     [Theory]
     [InlineData("public abstract class Alternate : IThemeCompatibilityResolverV2 { public abstract ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request); }")]
     [InlineData("public sealed class Alternate<T> : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; }")]
-    public void CandidateARejectsAbstractAndGenericV2Implementations(string declaration)
+    public void CandidateBRejectsAbstractAndGenericV2Implementations(string declaration)
     {
         Assembly fixture = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(null,
             "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility.V2 { "
             + "public sealed class ThemeCompatibilityRequestV2 {} public interface IThemeCompatibilityResolverV2 { ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request); } "
             + declaration + " }", includeCandidateAContracts: false);
         Assert.Contains(PhaseThreeScopeBoundaryTests.GetCompiledSurfaceViolations(fixture),
-            v => v.Contains("Candidate A forbids every V2 resolver implementation", StringComparison.Ordinal));
+            v => v.Contains("Illegal V2 resolver implementation shape or identity", StringComparison.Ordinal));
     }
 
     [Fact]

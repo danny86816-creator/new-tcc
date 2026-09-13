@@ -22,6 +22,11 @@ public sealed class PhaseThreeScopeBoundaryTests
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilitySafetyEvidenceV2",
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityMigrationEvidenceV2",
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRollbackEvidenceV2",
+        "Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2",
+
+        "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder",
+        "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot",
+        "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityManifestMaterializer",
 
         "Tcc.Themes.Integrity.ThemeIntegrityRequestBoundary",
         "Tcc.Themes.Integrity.ThemeIntegrityVerifier",
@@ -107,12 +112,202 @@ public sealed class PhaseThreeScopeBoundaryTests
         typeof(Tcc.Presentation.Contracts.Theme.ThemeVersionRange),
     ];
 
+    private static readonly HashSet<Type> ApprovedCandidateBResolverDependencyTypes =
+    [
+        typeof(ArgumentNullException), typeof(Array), typeof(bool), typeof(char), typeof(Enum),
+        typeof(HashSet<>), typeof(IEnumerable<>), typeof(IEnumerator<>), typeof(IEqualityComparer<>),
+        typeof(IReadOnlyList<>), typeof(IReadOnlySet<>), typeof(List<>), typeof(System.Collections.IEnumerator),
+        typeof(IDisposable), typeof(int), typeof(InvalidOperationException), typeof(MemoryExtensions),
+        typeof(Nullable<>), typeof(object), typeof(ReadOnlySpan<>), typeof(string), typeof(StringComparer),
+        typeof(StringComparison), typeof(System.Runtime.CompilerServices.DefaultInterpolatedStringHandler),
+        typeof(ValueTuple<,>), typeof(void), typeof(System.Collections.Immutable.ImmutableArray),
+        typeof(System.Collections.Immutable.ImmutableArray<>), typeof(System.Collections.Immutable.ImmutableArray<>.Builder),
+        typeof(System.Collections.Immutable.ImmutableArray<>.Enumerator),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeAccessibilityStatus),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeAccessibilityValidationResult),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityAccessibilityStatusV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityDeclaration),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityDimensionV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityEnvironmentV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityEvaluationStateV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityEvidenceStatusV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityFailureKindV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityFailureV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityInstallationModeV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityManifest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityNoticeKindV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityNoticeV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityOperationV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityRequest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityResultV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilitySafetyStatusV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeCompatibilityStatusV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeId),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationResultV2),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeManifest),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemePackageIdentity),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeVersion),
+        typeof(Tcc.Presentation.Contracts.Theme.ThemeWindowsCompatibility),
+        typeof(Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind),
+        typeof(Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiation),
+        typeof(Tcc.Themes.Compatibility.ThemeCompatibilityVersionNegotiator),
+        typeof(Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityAccessibilityEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityCapabilityEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityMigrationEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityRequestV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityRollbackEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityRuntimeEvidenceV2),
+        typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilitySafetyEvidenceV2),
+    ];
+
     [Fact]
     public void ActualCompiledThemeAssemblyMatchesExactPhaseThreeTypeSurface()
     {
         string[] violations = GetCompiledSurfaceViolations(typeof(Tcc.Themes.AssemblyMarker).Assembly);
 
         Assert.Empty(violations);
+    }
+
+    [Fact]
+    public void CandidateBResolverCallsThePhaseFiveANegotiatorExactlyOnce()
+    {
+        MethodInfo resolve = typeof(Tcc.Themes.Compatibility.V2.ThemeCompatibilityResolverV2)
+            .GetMethod("Resolve", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)!;
+        MemberInfo[] calls = GetReferencedMembers(resolve)
+            .Where(member => member is MethodInfo method
+                && method.Name == "Negotiate"
+                && method.DeclaringType?.FullName == PhaseFiveNegotiatorName)
+            .ToArray();
+
+        Assert.Single(calls);
+    }
+
+    [Fact]
+    public void CandidateBResolverCardinalityRejectsZeroAndSecondImplementations()
+    {
+        Assembly zero = BuildFixtureAssembly(null, null, includeCandidateAContracts: false);
+        Assert.Contains(GetCompiledSurfaceViolations(zero), violation =>
+            violation.Contains("exactly one legal V2 resolver implementation; found 0", StringComparison.Ordinal));
+
+        Assembly second = BuildFixtureAssembly(
+            null,
+            "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility.V2; public sealed class AlternateResolver : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; }");
+        Assert.Contains(GetCompiledSurfaceViolations(second), violation =>
+            violation.Contains("exactly one legal V2 resolver implementation; found 2", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void CandidateBSurfaceRejectsWrongAssemblySubstitute()
+    {
+        Assembly fixture = BuildFixtureAssembly(
+            null,
+            null,
+            includeCandidateAContracts: true,
+            assemblyName: "Tcc.Themes.Substitute");
+
+        string[] violations = GetCompiledSurfaceViolations(fixture);
+        Assert.Contains(violations, violation =>
+            violation.Contains("Illegal V2 resolver implementation shape or identity", StringComparison.Ordinal));
+        Assert.Contains(violations, violation =>
+            violation.Contains("ThemeCompatibilityContentSnapshot", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void ForgedCandidateBAsyncStateMachineIsRejected()
+    {
+        AssemblyName name = new($"Tcc.Themes.CandidateBForgery.{Guid.NewGuid():N}");
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
+        ModuleBuilder module = assembly.DefineDynamicModule(name.Name!);
+        TypeBuilder owner = module.DefineType(
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder",
+            TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.NotPublic);
+        TypeBuilder artifact = owner.DefineNestedType(
+            "<VerifyAndBindAsync>d__1",
+            TypeAttributes.NestedPrivate | TypeAttributes.Sealed,
+            typeof(ValueType));
+        artifact.SetCustomAttribute(CompilerGeneratedAttributeBuilder());
+        artifact.AddInterfaceImplementation(typeof(IAsyncStateMachine));
+        DefineStateMachineMethod(artifact, nameof(IAsyncStateMachine.MoveNext), Type.EmptyTypes);
+        DefineStateMachineMethod(artifact, nameof(IAsyncStateMachine.SetStateMachine), [typeof(IAsyncStateMachine)]);
+        artifact.CreateType();
+        Type forgedOwner = owner.CreateType()!;
+
+        Assert.Contains(GetCompiledSurfaceViolations(forgedOwner.Assembly), violation =>
+            violation.Contains("<VerifyAndBindAsync>d__1", StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [MemberData(nameof(CandidateBResolverIdentityAttackSources))]
+    public void CandidateBResolverIdentityMutantsAreRejected(string caseName, string source)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        Assembly fixture = BuildFixtureAssembly(null, source, includeCandidateAContracts: false);
+
+        Assert.Contains(GetCompiledSurfaceViolations(fixture), violation =>
+            violation.Contains("Illegal V2 resolver implementation shape or identity", StringComparison.Ordinal));
+    }
+
+    public static IEnumerable<object[]> CandidateBResolverIdentityAttackSources()
+    {
+        const string prefix = "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility.V2 { public sealed class ThemeCompatibilityRequestV2 { } public interface IThemeCompatibilityResolverV2 { ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request); } ";
+        const string suffix = " }";
+        yield return ["wrong name", prefix + "public sealed class AlternateResolver : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; }" + suffix];
+        yield return ["internal substitute", prefix + "internal sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; }" + suffix];
+        yield return ["nested substitute", prefix + "public sealed class Owner { public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; } }" + suffix];
+        yield return ["generated substitute", prefix + "[System.Runtime.CompilerServices.CompilerGenerated] public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; }" + suffix];
+        yield return ["mutable static state", prefix + "public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { private static int state; public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) { state++; return null!; } }" + suffix];
+        yield return ["wrong namespace", prefix + suffix + " namespace Tcc.Themes.Compatibility.Attack { public sealed class ThemeCompatibilityResolverV2 : global::Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(global::Tcc.Themes.Compatibility.V2.ThemeCompatibilityRequestV2 request) => null!; } }"];
+        yield return ["dual V1 and V2", prefix + "public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2, IThemeCompatibilityResolver { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; public ThemeCompatibilityResult Resolve(ThemeCompatibilityRequest request) => null!; }" + suffix];
+    }
+
+    [Theory]
+    [MemberData(nameof(CandidateBBindingSurfaceAttackSources))]
+    public void CandidateBBindingSurfaceMutantsAreRejected(string caseName, string source, string target)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        Assembly fixture = BuildFixtureAssembly(null, source, includeCandidateAContracts: false);
+
+        Assert.Contains(GetCompiledSurfaceViolations(fixture), violation =>
+            violation.Contains(target, StringComparison.Ordinal));
+    }
+
+    public static IEnumerable<object[]> CandidateBBindingSurfaceAttackSources()
+    {
+        yield return ["public binder", "namespace Tcc.Themes.Compatibility.Binding; public static class ThemeCompatibilityEvidenceBinder { }", "ThemeCompatibilityEvidenceBinder"];
+        yield return ["public materializer", "namespace Tcc.Themes.Compatibility.Binding; public static class ThemeCompatibilityManifestMaterializer { }", "ThemeCompatibilityManifestMaterializer"];
+        yield return ["mutable binder state", "namespace Tcc.Themes.Compatibility.Binding; internal static class ThemeCompatibilityEvidenceBinder { private static int state; internal static int Read() => state++; }", "mutable or reference-backed static state"];
+        yield return ["public snapshot", "namespace Tcc.Themes.Compatibility.Binding; public sealed class ThemeCompatibilityContentSnapshot : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { public global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Tcc.Presentation.Contracts.Theme.ThemePackageContentEntryV1>> EnumerateEntriesAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, global::System.Threading.CancellationToken cancellationToken = default) => default; public global::System.Threading.Tasks.ValueTask<global::System.ReadOnlyMemory<byte>> ReadContentAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, string canonicalPath, global::System.Threading.CancellationToken cancellationToken = default) => default; }", "ThemeCompatibilityContentSnapshot"];
+        yield return ["extra public DTO", "namespace Tcc.Themes.Compatibility.V2; public sealed class CandidateBExtraDto { }", "CandidateBExtraDto"];
+        yield return ["extra enum", "namespace Tcc.Themes.Compatibility.V2; public enum CandidateBExtraKind { Value }", "CandidateBExtraKind"];
+        yield return ["trust factory", "namespace Tcc.Themes.Compatibility.Binding; public static class ThemeCompatibilityTrustFactory { }", "ThemeCompatibilityTrustFactory"];
+    }
+
+    [Theory]
+    [InlineData("reader", "_ = typeof(IThemePackageContentReader);")]
+    [InlineData("filesystem", "_ = typeof(System.IO.FileInfo);")]
+    [InlineData("network", "_ = typeof(System.Net.Http.HttpClient);")]
+    [InlineData("crypto", "_ = typeof(System.Security.Cryptography.SHA256);")]
+    [InlineData("verifier", "_ = typeof(Tcc.Themes.Integrity.ThemeIntegrityVerifier);")]
+    [InlineData("binder and snapshot", "_ = typeof(Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder); _ = typeof(Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot);")]
+    [InlineData("generic hidden", "_ = typeof(System.Collections.Generic.List<System.IO.FileInfo[]>);")]
+    [InlineData("typed catch hidden", "try { throw new System.Exception(); } catch (System.IO.FileNotFoundException) { }")]
+    public void CandidateBResolverForbiddenDependenciesAreRejected(string caseName, string body)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(caseName));
+        string source = "using Tcc.Presentation.Contracts.Theme; namespace Tcc.Themes.Compatibility.V2 { "
+            + "public sealed class ThemeCompatibilityRequestV2 { } public interface IThemeCompatibilityResolverV2 { ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request); } "
+            + "public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { public ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) { "
+            + body + " return null!; } } } "
+            + "namespace Tcc.Themes.Compatibility.Binding { internal static class ThemeCompatibilityEvidenceBinder { } internal sealed class ThemeCompatibilityContentSnapshot { } } "
+            + "namespace Tcc.Themes.Integrity { internal sealed class ThemeIntegrityVerifier { } }";
+        Assembly fixture = BuildFixtureAssembly(null, source, includeCandidateAContracts: false);
+
+        Assert.Contains(GetCompiledSurfaceViolations(fixture), violation =>
+            violation.Contains("Candidate B resolver dependency outside exact allowlist", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -479,6 +674,43 @@ public sealed class PhaseThreeScopeBoundaryTests
         Assert.DoesNotContain(violations, violation => violation.Contains("<EvaluateAsync>", StringComparison.Ordinal));
         Assert.Contains(violations, violation => violation.Contains("<UnapprovedAsync>", StringComparison.Ordinal));
         Assert.Contains(violations, violation => violation.Contains("GeneratedAttributeOnly", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void CandidateBAsyncStateMachineWithMutableStaticStateIsCompiledAndRejected()
+    {
+        Assembly fixture = BuildCandidateBAsyncStateMachineWithMutableStaticState();
+        Type stateMachine = fixture.GetTypes().Single(type => type.Name.StartsWith(
+            "<VerifyAndBindAsync>d__", StringComparison.Ordinal));
+
+        Assert.Equal("HiddenCache", Assert.Single(stateMachine.GetFields(
+            BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)).Name);
+        Assert.False(IsApprovedCandidateBAsyncStateMachine(stateMachine));
+        Assert.Contains(GetCompiledSurfaceViolations(fixture), violation =>
+            violation.Contains(stateMachine.FullName!, StringComparison.Ordinal)
+            && violation.Contains("mutable static state", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void AuthorizedCandidateBAsyncStateMachinesHaveZeroMutableStaticFields()
+    {
+        foreach ((Type owner, string methodName) in new[]
+        {
+            (typeof(Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot), "CaptureAsync"),
+            (typeof(Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder), "VerifyAndBindAsync"),
+        })
+        {
+            MethodInfo method = owner.GetMethod(
+                methodName,
+                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)!;
+            Type stateMachine = GetAsyncStateMachineType(method)!;
+            Assert.NotNull(stateMachine);
+            Assert.DoesNotContain(
+                stateMachine.GetFields(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly),
+                field => !field.IsLiteral);
+            Assert.True(IsApprovedCandidateBAsyncStateMachine(stateMachine));
+        }
     }
 
     [Theory]
@@ -1061,12 +1293,21 @@ public sealed class PhaseThreeScopeBoundaryTests
             violations.Add($"Compiled production type '{unauthorizedType}' is outside the exact Phase 3 surface.");
         }
 
+        foreach (Type candidateBGeneratedArtifact in allTypes.Where(type =>
+                     HasCandidateBGeneratedArtifactShape(type)
+                     && !HasNoMutableStaticFields(type)))
+        {
+            violations.Add(
+                $"Candidate B generated artifact forbids mutable static state: {candidateBGeneratedArtifact.FullName}.");
+        }
+
         foreach (Type unauthorizedNestedType in allTypes.Where(type =>
                      type.IsNested
                      && !string.Equals(type.FullName, ApprovedNestedType, StringComparison.Ordinal)
                      && !IsApprovedSealedBaselineCompilerArtifact(type)
                      && !IsApprovedEvaluatorAsyncStateMachine(type)
-                     && !IsApprovedVerifierAsyncStateMachine(type)))
+                     && !IsApprovedVerifierAsyncStateMachine(type)
+                     && !IsApprovedCandidateBAsyncStateMachine(type)))
         {
             violations.Add(
                 $"Compiled nested production type '{unauthorizedNestedType.FullName}' is outside the exact Phase 3 surface.");
@@ -1154,6 +1395,62 @@ public sealed class PhaseThreeScopeBoundaryTests
                 "Tcc.Themes.Compatibility.ThemeCompatibilityNegotiationFailureKind must remain the exact internal Phase5A failure enum.");
         }
 
+        Type? binder = assembly.GetType(
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder", false, false);
+        if (binder is null)
+        {
+            violations.Add("ThemeCompatibilityEvidenceBinder is required by the exact Candidate B surface.");
+        }
+        else if (!IsExactCandidateBStaticType(binder,
+                     "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder"))
+        {
+            violations.Add("ThemeCompatibilityEvidenceBinder must remain the exact internal top-level non-generic static Candidate B binder.");
+        }
+
+        Type? materializer = assembly.GetType(
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityManifestMaterializer", false, false);
+        if (materializer is null)
+        {
+            violations.Add("ThemeCompatibilityManifestMaterializer is required by the exact Candidate B surface.");
+        }
+        else if (!IsExactCandidateBStaticType(materializer,
+                     "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityManifestMaterializer"))
+        {
+            violations.Add("ThemeCompatibilityManifestMaterializer must remain the exact internal top-level non-generic static Candidate B materializer.");
+        }
+
+        Type? snapshot = assembly.GetType(
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot", false, false);
+        if (snapshot is null)
+        {
+            violations.Add("ThemeCompatibilityContentSnapshot is required by the exact Candidate B surface.");
+        }
+        else if (!IsExactCandidateBContentSnapshot(snapshot))
+        {
+            violations.Add("ThemeCompatibilityContentSnapshot must remain the exact internal top-level sealed Candidate B package reader with controlled construction.");
+        }
+
+        string[] candidateBTypeNames =
+        [
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder",
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot",
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityManifestMaterializer",
+            PhaseFiveThemeCompatibilityContractAmendmentTests.ResolverTypeName,
+        ];
+        foreach (Type candidateBType in candidateBTypeNames
+                     .Select(name => assembly.GetType(name, false, false))
+                     .OfType<Type>())
+        {
+            foreach (FieldInfo field in candidateBType.GetFields(
+                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly))
+            {
+                if (!field.IsLiteral)
+                {
+                    violations.Add($"Candidate B forbids mutable or reference-backed static state: {candidateBType.FullName}.{field.Name}.");
+                }
+            }
+        }
+
         foreach (Type productionType in allTypes)
         {
             foreach (string forbiddenInterface in productionType.GetInterfaces()
@@ -1180,10 +1477,25 @@ public sealed class PhaseThreeScopeBoundaryTests
                 $"Production type '{productionType.FullName ?? productionType.Name}' must not implement Phase5A-forbidden interface '{ForbiddenCompatibilityResolverInterface}'.");
         }
 
+        List<Type> v2Resolvers = [];
         foreach (Type productionType in allTypes)
         {
             if (productionType.GetInterfaces().Any(contract => contract.FullName == "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2"))
-                violations.Add($"Candidate A forbids every V2 resolver implementation: {productionType.FullName}.");
+                v2Resolvers.Add(productionType);
+            violations.AddRange(PhaseFiveThemeCompatibilityContractAmendmentTests.ResolverShapeViolations(productionType));
+            if (string.Equals(productionType.FullName,
+                    PhaseFiveThemeCompatibilityContractAmendmentTests.ResolverTypeName,
+                    StringComparison.Ordinal))
+            {
+                foreach (Type dependency in GetMemberDependencyTypes(productionType))
+                {
+                    Type definition = dependency.IsGenericType ? dependency.GetGenericTypeDefinition() : dependency;
+                    if (!ApprovedCandidateBResolverDependencyTypes.Contains(definition))
+                    {
+                        violations.Add($"Candidate B resolver dependency outside exact allowlist: {productionType.FullName} -> {dependency.FullName}.");
+                    }
+                }
+            }
             violations.AddRange(PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeShapeViolations(productionType));
             if (PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeTypeNames.Contains(productionType.FullName, StringComparer.Ordinal))
             {
@@ -1191,6 +1503,12 @@ public sealed class PhaseThreeScopeBoundaryTests
                     if (!PhaseFiveThemeCompatibilityContractAmendmentTests.RuntimeDependencyAllowed(dependency, assembly))
                         violations.Add($"Candidate A dependency outside exact allowlist: {productionType.FullName} -> {dependency.FullName}.");
             }
+        }
+
+
+        if (v2Resolvers.Count != 1)
+        {
+            violations.Add($"Candidate B requires exactly one legal V2 resolver implementation; found {v2Resolvers.Count}.");
         }
 
         foreach (Type compatibilityType in allTypes.Where(type => string.Equals(
@@ -1691,6 +2009,85 @@ public sealed class PhaseThreeScopeBoundaryTests
             && type.Name == $"<VerifyAsync>d__{GetStateMachineOrdinal(type.Name)}";
     }
 
+    private static bool IsExactCandidateBStaticType(Type type, string fullName) =>
+        string.Equals(type.FullName, fullName, StringComparison.Ordinal)
+        && string.Equals(type.Assembly.GetName().Name, "Tcc.Themes", StringComparison.Ordinal)
+        && type.IsNotPublic && !type.IsVisible && type.IsClass && type.IsAbstract && type.IsSealed
+        && !type.IsNested && !type.IsGenericType && type.BaseType == typeof(object)
+        && type.GetInterfaces().Length == 0
+        && !type.IsDefined(typeof(CompilerGeneratedAttribute), false);
+
+    private static bool IsExactCandidateBContentSnapshot(Type type)
+    {
+        ConstructorInfo[] constructors = type.GetConstructors(
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        return string.Equals(type.FullName,
+                "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot",
+                StringComparison.Ordinal)
+            && type.IsNotPublic && !type.IsVisible && type.IsClass && type.IsSealed && !type.IsAbstract
+            && string.Equals(type.Assembly.GetName().Name, "Tcc.Themes", StringComparison.Ordinal)
+            && !type.IsNested && !type.IsGenericType && type.BaseType == typeof(object)
+            && !type.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            && type.GetInterfaces().Length == 1
+            && type.GetInterfaces()[0] == typeof(Tcc.Presentation.Contracts.Theme.IThemePackageContentReader)
+            && constructors.Length == 1 && constructors[0].IsPrivate && !constructors[0].IsStatic;
+    }
+
+    private static bool IsApprovedCandidateBAsyncStateMachine(Type type)
+        => HasNoMutableStaticFields(type) && HasApprovedCandidateBAsyncStateMachineIdentity(type);
+
+    private static bool HasCandidateBGeneratedArtifactShape(Type type)
+    {
+        string? owner = type.DeclaringType?.FullName;
+        return owner is "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot"
+                or "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder"
+            && type.IsNestedPrivate && type.IsValueType && !type.IsGenericType
+            && type.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            && typeof(IAsyncStateMachine).IsAssignableFrom(type);
+    }
+
+    private static bool HasApprovedCandidateBAsyncStateMachineIdentity(Type type)
+    {
+        Type? owner = type.DeclaringType;
+        if (owner is null || !type.IsNestedPrivate || !type.IsValueType || type.IsGenericType
+            || !type.IsDefined(typeof(CompilerGeneratedAttribute), false)
+            || !typeof(IAsyncStateMachine).IsAssignableFrom(type))
+        {
+            return false;
+        }
+
+        string? methodName = owner.FullName switch
+        {
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot" => "CaptureAsync",
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder" => "VerifyAndBindAsync",
+            _ => null,
+        };
+        if (methodName is null)
+        {
+            return false;
+        }
+
+        MethodInfo? method = owner.GetMethod(
+            methodName,
+            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+        return method is not null
+            && GetAsyncStateMachineType(method) == type
+            && string.Equals(type.Name, $"<{methodName}>d__{GetStateMachineOrdinal(type.Name)}", StringComparison.Ordinal);
+    }
+
+    private static bool HasNoMutableStaticFields(Type type) =>
+        type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)
+            .All(field => field.IsLiteral);
+
+    private static Type? GetAsyncStateMachineType(MethodInfo method)
+    {
+        CustomAttributeData? attribute = method.CustomAttributes.SingleOrDefault(value =>
+            value.AttributeType == typeof(AsyncStateMachineAttribute));
+        return attribute?.ConstructorArguments.Count == 1
+            ? attribute.ConstructorArguments[0].Value as Type
+            : null;
+    }
+
     private static bool IsApprovedEvaluatorAsyncStateMachine(Type type)
     {
         Type? evaluator = type.DeclaringType;
@@ -1981,6 +2378,63 @@ public sealed class PhaseThreeScopeBoundaryTests
         return stateMachine;
     }
 
+    private static AssemblyBuilder BuildCandidateBAsyncStateMachineWithMutableStaticState()
+    {
+        AssemblyName name = new($"Tcc.Themes.CandidateBAsyncStatic.{Guid.NewGuid():N}");
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
+        ModuleBuilder module = assembly.DefineDynamicModule(name.Name!);
+        TypeBuilder owner = module.DefineType(
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityEvidenceBinder",
+            TypeAttributes.NotPublic | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.Class);
+        TypeBuilder stateMachine = owner.DefineNestedType(
+            "<VerifyAndBindAsync>d__7",
+            TypeAttributes.NestedPrivate | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
+            typeof(ValueType));
+        stateMachine.SetCustomAttribute(CompilerGeneratedAttributeBuilder());
+        stateMachine.AddInterfaceImplementation(typeof(IAsyncStateMachine));
+        FieldBuilder hiddenCache = stateMachine.DefineField(
+            "HiddenCache", typeof(object), FieldAttributes.Private | FieldAttributes.Static);
+
+        MethodInfo moveNextContract = typeof(IAsyncStateMachine).GetMethod(nameof(IAsyncStateMachine.MoveNext))!;
+        MethodBuilder moveNext = stateMachine.DefineMethod(
+            nameof(IAsyncStateMachine.MoveNext),
+            MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.Virtual
+                | MethodAttributes.HideBySig | MethodAttributes.NewSlot,
+            typeof(void), Type.EmptyTypes);
+        ILGenerator moveNextIl = moveNext.GetILGenerator();
+        moveNextIl.Emit(OpCodes.Newobj, typeof(object).GetConstructor(Type.EmptyTypes)!);
+        moveNextIl.Emit(OpCodes.Stsfld, hiddenCache);
+        moveNextIl.Emit(OpCodes.Ret);
+        stateMachine.DefineMethodOverride(moveNext, moveNextContract);
+        DefineStateMachineMethod(
+            stateMachine,
+            nameof(IAsyncStateMachine.SetStateMachine),
+            [typeof(IAsyncStateMachine)]);
+
+        MethodBuilder method = owner.DefineMethod(
+            "VerifyAndBindAsync",
+            MethodAttributes.Assembly | MethodAttributes.Static | MethodAttributes.HideBySig,
+            typeof(ValueTask<Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2>),
+            [
+                typeof(Tcc.Presentation.Contracts.Theme.ThemeIntegrityVerificationRequestV2),
+                typeof(Tcc.Presentation.Contracts.Theme.IThemePackageContentReader),
+                typeof(CancellationToken),
+            ]);
+        LocalBuilder result = method.GetILGenerator().DeclareLocal(
+            typeof(ValueTask<Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2>));
+        ILGenerator methodIl = method.GetILGenerator();
+        methodIl.Emit(OpCodes.Ldloca_S, result);
+        methodIl.Emit(OpCodes.Initobj, typeof(ValueTask<Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2>));
+        methodIl.Emit(OpCodes.Ldloc_0);
+        methodIl.Emit(OpCodes.Ret);
+        method.SetCustomAttribute(new CustomAttributeBuilder(
+            typeof(AsyncStateMachineAttribute).GetConstructor([typeof(Type)])!, [stateMachine]));
+
+        stateMachine.CreateType();
+        owner.CreateType();
+        return assembly;
+    }
+
     private static void DefineStateMachineMethod(
         TypeBuilder stateMachine,
         string methodName,
@@ -2000,8 +2454,30 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static CustomAttributeBuilder CompilerGeneratedAttributeBuilder() =>
         new(typeof(CompilerGeneratedAttribute).GetConstructor(Type.EmptyTypes)!, []);
 
+    internal static Assembly BuildInstrumentedResolverFixtureAssembly()
+    {
+        string negotiationProbe =
+            "namespace Tcc.Themes.Compatibility { "
+            + "internal static class ThemeCompatibilityVersionNegotiator { "
+            + "internal static int Calls; "
+            + "internal static ThemeCompatibilityVersionNegotiation Negotiate(global::Tcc.Presentation.Contracts.Theme.ThemeCompatibilityRequest request) { "
+            + "Calls++; return new ThemeCompatibilityVersionNegotiation(true, \"1.0.0\", \"1.1.0\", global::System.Collections.Immutable.ImmutableArray<ThemeCompatibilityNegotiationFailureKind>.Empty); } } "
+            + "internal sealed record ThemeCompatibilityVersionNegotiation(bool CanContinue, string? SelectedThemeApiVersion, string? SelectedUxContractVersion, global::System.Collections.Immutable.ImmutableArray<ThemeCompatibilityNegotiationFailureKind> Failures); "
+            + "internal enum ThemeCompatibilityNegotiationFailureKind { InvalidVersionInput, UnsatisfiableVersionRange, UnsupportedManifestSchema, ConflictingVersionDeclaration, CoreVersionIncompatible, ThemeApiNoCompatibleVersion, UxContractNoCompatibleVersion } }";
+        return BuildFixtureAssembly(
+            markerAdditionalSource: null,
+            otherSource: negotiationProbe,
+            includeCandidateAContracts: true,
+            assemblyName: $"Tcc.Themes.ResolverExecution.{Guid.NewGuid():N}",
+            includeCandidateBSurface: false,
+            additionalSource: File.ReadAllText(Path.Combine(
+                RepositoryPaths.Root,
+                "src", "Tcc.Themes", "Compatibility", "V2", "ThemeCompatibilityResolverV2.cs")));
+    }
+
     internal static Assembly BuildFixtureAssembly(string? markerAdditionalSource, string? otherSource, string? externalSource = null,
-        bool includeCandidateAContracts = true)
+        bool includeCandidateAContracts = true, string assemblyName = "Tcc.Themes",
+        bool includeCandidateBSurface = true, string? additionalSource = null)
     {
         string fixtureRoot = Path.Combine(
             Path.GetTempPath(),
@@ -2018,7 +2494,7 @@ public sealed class PhaseThreeScopeBoundaryTests
                     new XElement(
                         "PropertyGroup",
                         new XElement("TargetFramework", "net10.0-windows"),
-                        new XElement("AssemblyName", "Tcc.Themes"),
+                        new XElement("AssemblyName", assemblyName),
                         new XElement("RootNamespace", "Tcc.Themes"),
                         new XElement("Nullable", "enable"),
                         new XElement("ImplicitUsings", "enable"),
@@ -2083,6 +2559,10 @@ public sealed class PhaseThreeScopeBoundaryTests
             {
                 File.WriteAllText(Path.Combine(fixtureRoot, "OtherProductionSource.cs"), otherSource);
             }
+            if (additionalSource is not null)
+            {
+                File.WriteAllText(Path.Combine(fixtureRoot, "AdditionalProductionSource.cs"), additionalSource);
+            }
 
             // Preserve the original Phase5A positive assertions: their fixtures now
             // include the independently guarded additive contract family as well.
@@ -2094,12 +2574,27 @@ public sealed class PhaseThreeScopeBoundaryTests
                     File.WriteAllText(Path.Combine(fixtureRoot, file), File.ReadAllText(Path.Combine(
                         RepositoryPaths.Root, "src", "Tcc.Themes", "Compatibility", "V2", file)));
                 }
+
+                if (includeCandidateBSurface)
+                {
+                    File.WriteAllText(
+                        Path.Combine(fixtureRoot, "CandidateBSurface.cs"),
+                        "namespace Tcc.Themes.Compatibility.Binding { "
+                        + "internal static class ThemeCompatibilityEvidenceBinder { } "
+                        + "internal static class ThemeCompatibilityManifestMaterializer { } "
+                        + "internal sealed class ThemeCompatibilityContentSnapshot : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { "
+                        + "private ThemeCompatibilityContentSnapshot() { } "
+                        + "public global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Tcc.Presentation.Contracts.Theme.ThemePackageContentEntryV1>> EnumerateEntriesAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, global::System.Threading.CancellationToken cancellationToken = default) => default; "
+                        + "public global::System.Threading.Tasks.ValueTask<global::System.ReadOnlyMemory<byte>> ReadContentAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, string canonicalPath, global::System.Threading.CancellationToken cancellationToken = default) => default; } } "
+                        + "namespace Tcc.Themes.Compatibility.V2 { public sealed class ThemeCompatibilityResolverV2 : IThemeCompatibilityResolverV2 { "
+                        + "public ThemeCompatibilityResolverV2() { } public global::Tcc.Presentation.Contracts.Theme.ThemeCompatibilityResultV2 Resolve(ThemeCompatibilityRequestV2 request) => null!; } }");
+                }
             }
 
             BuildFixtureProject(fixtureRoot);
 
             string assemblyPath = Directory
-                .EnumerateFiles(Path.Combine(fixtureRoot, "bin"), "Tcc.Themes.dll", SearchOption.AllDirectories)
+                .EnumerateFiles(Path.Combine(fixtureRoot, "bin"), $"{assemblyName}.dll", SearchOption.AllDirectories)
                 .Single();
             return Assembly.Load(File.ReadAllBytes(assemblyPath));
         }

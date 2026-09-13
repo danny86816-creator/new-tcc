@@ -19,5 +19,7 @@
                       LogicalName="Tcc.Themes.Schemas.ThemeIntegrity.v2.schema.json" />
     <EmbeddedResource Include="../../contracts/theme/schemas/ThemeSignatureEnvelope.v1.schema.json"
                       LogicalName="Tcc.Themes.Schemas.ThemeSignatureEnvelope.v1.schema.json" />
+    <EmbeddedResource Include="../../contracts/theme/schemas/ThemeCompatibility.schema.json"
+                      LogicalName="Tcc.Themes.Schemas.ThemeCompatibility.schema.json" />
   </ItemGroup>
 </Project>

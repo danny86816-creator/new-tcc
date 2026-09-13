@@ -121,6 +121,7 @@ public sealed class PhaseTwoContractCompletenessTests
 
         Assert.Empty(FindUnauthorizedImplementationViolations(productionAssemblies));
         PhaseThreeScopeBoundaryTests.AssertExactVerifierImplementations(productionAssemblies.SelectMany(assembly => assembly.GetTypes()));
+        AssertExactPackageReaderImplementation(productionAssemblies.SelectMany(assembly => assembly.GetTypes()));
     }
 
     [Fact]
@@ -152,6 +153,77 @@ public sealed class PhaseTwoContractCompletenessTests
             violations,
             violation => violation.Contains("IThemeIntegrityVerifier", StringComparison.Ordinal)
                 && violation.Contains("ThemeIntegrityVerifier", StringComparison.Ordinal));
+    }
+
+    [Theory]
+    [InlineData("internal abstract class Attack", "")]
+    [InlineData("internal sealed class Attack<T>", "")]
+    [InlineData("internal struct Attack", "")]
+    [InlineData("internal sealed class Outer { internal sealed class Attack", " }")]
+    [InlineData("public sealed class ThemeCompatibilityContentSnapshot", "")]
+    public void UnauthorizedPackageReaderShapesFailTheImplementationGuard(string declaration, string suffix)
+    {
+        string source =
+            "namespace Tcc.Themes.Compatibility.Binding { " + declaration
+            + " : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { "
+            + "public global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Tcc.Presentation.Contracts.Theme.ThemePackageContentEntryV1>> EnumerateEntriesAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, global::System.Threading.CancellationToken cancellationToken = default) => throw new global::System.NotSupportedException(); "
+            + "public global::System.Threading.Tasks.ValueTask<global::System.ReadOnlyMemory<byte>> ReadContentAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, string canonicalPath, global::System.Threading.CancellationToken cancellationToken = default) => throw new global::System.NotSupportedException(); }"
+            + suffix + " }";
+        Assembly fixture = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null, source, includeCandidateAContracts: false);
+
+        Assert.Contains(FindUnauthorizedImplementationViolations([fixture]), violation =>
+            violation.Contains("IThemePackageContentReader", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void WrongNameNamespaceAndSecondPackageReadersFailTheImplementationGuard()
+    {
+        const string methods = "public global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Tcc.Presentation.Contracts.Theme.ThemePackageContentEntryV1>> EnumerateEntriesAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, global::System.Threading.CancellationToken cancellationToken = default) => default; public global::System.Threading.Tasks.ValueTask<global::System.ReadOnlyMemory<byte>> ReadContentAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, string canonicalPath, global::System.Threading.CancellationToken cancellationToken = default) => default;";
+        Assembly wrongName = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null,
+            "namespace Tcc.Themes.Compatibility.Binding { internal sealed class AlternateReader : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { " + methods + " } }",
+            includeCandidateAContracts: false);
+        Assembly wrongNamespace = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null,
+            "namespace Tcc.Themes.Compatibility.Attack { internal sealed class ThemeCompatibilityContentSnapshot : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { " + methods + " } }",
+            includeCandidateAContracts: false);
+        Assembly second = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null,
+            "namespace Tcc.Themes.Compatibility.Binding { internal sealed class AlternateReader : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { " + methods + " } }");
+
+        foreach (Assembly fixture in new[] { wrongName, wrongNamespace, second })
+        {
+            Assert.Contains(FindUnauthorizedImplementationViolations([fixture]), violation =>
+                violation.Contains("IThemePackageContentReader", StringComparison.Ordinal));
+        }
+    }
+
+    [Fact]
+    public void WrongAssemblyPackageReaderFailsTheImplementationGuard()
+    {
+        Assembly fixture = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null,
+            null,
+            includeCandidateAContracts: true,
+            assemblyName: "Tcc.Themes.ReaderSubstitute");
+
+        Assert.Contains(FindUnauthorizedImplementationViolations([fixture]), violation =>
+            violation.Contains("IThemePackageContentReader", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void ExactPackageReaderFixtureIsAccepted()
+    {
+        Assembly fixture = PhaseThreeScopeBoundaryTests.BuildFixtureAssembly(
+            null,
+            "namespace Tcc.Themes.Compatibility.Binding { internal sealed class ThemeCompatibilityContentSnapshot : global::Tcc.Presentation.Contracts.Theme.IThemePackageContentReader { "
+            + "public global::System.Threading.Tasks.ValueTask<global::System.Collections.Generic.IReadOnlyList<global::Tcc.Presentation.Contracts.Theme.ThemePackageContentEntryV1>> EnumerateEntriesAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, global::System.Threading.CancellationToken cancellationToken = default) => throw new global::System.NotSupportedException(); "
+            + "public global::System.Threading.Tasks.ValueTask<global::System.ReadOnlyMemory<byte>> ReadContentAsync(global::Tcc.Presentation.Contracts.Theme.ThemePackageRef packageRef, string canonicalPath, global::System.Threading.CancellationToken cancellationToken = default) => throw new global::System.NotSupportedException(); } }",
+            includeCandidateAContracts: false);
+
+        Assert.DoesNotContain(FindUnauthorizedImplementationViolations([fixture]), violation =>
+            violation.Contains("IThemePackageContentReader", StringComparison.Ordinal));
     }
 
     [Fact]
@@ -192,9 +264,9 @@ public sealed class PhaseTwoContractCompletenessTests
 
         foreach (Type contractInterface in requiredInterfaces)
         {
-            Type[] implementations = productionTypes
-                .Where(type => type.IsClass && !type.IsAbstract && contractInterface.IsAssignableFrom(type))
-                .ToArray();
+            Type[] implementations = contractInterface == typeof(IThemePackageContentReader)
+                ? productionTypes.Where(type => !type.IsInterface && type.GetInterfaces().Contains(contractInterface)).ToArray()
+                : productionTypes.Where(type => type.IsClass && !type.IsAbstract && contractInterface.IsAssignableFrom(type)).ToArray();
 
             foreach (Type implementation in implementations)
             {
@@ -203,7 +275,9 @@ public sealed class PhaseTwoContractCompletenessTests
                 bool isApprovedVerifier = contractInterface == typeof(IThemeIntegrityVerifierV2)
                     && implementation == typeof(Tcc.Themes.Integrity.ThemeIntegrityVerifier)
                     && PhaseThreeScopeBoundaryTests.IsExactPublicVerifier(implementation);
-                if (!isApprovedManifestValidator && !isApprovedVerifier)
+                bool isApprovedPackageReader = contractInterface == typeof(IThemePackageContentReader)
+                    && IsExactPackageReader(implementation);
+                if (!isApprovedManifestValidator && !isApprovedVerifier && !isApprovedPackageReader)
                 {
                     violations.Add(
                         $"{implementation.FullName} is an unauthorized production implementation of {contractInterface.FullName}.");
@@ -213,4 +287,21 @@ public sealed class PhaseTwoContractCompletenessTests
 
         return violations.Order(StringComparer.Ordinal).ToArray();
     }
+
+    private static void AssertExactPackageReaderImplementation(IEnumerable<Type> productionTypes)
+    {
+        Type reader = Assert.Single(productionTypes, type => !type.IsInterface
+            && type.GetInterfaces().Contains(typeof(IThemePackageContentReader)));
+        Assert.True(IsExactPackageReader(reader));
+    }
+
+    private static bool IsExactPackageReader(Type type) =>
+        string.Equals(type.FullName,
+            "Tcc.Themes.Compatibility.Binding.ThemeCompatibilityContentSnapshot",
+            StringComparison.Ordinal)
+        && string.Equals(type.Assembly.GetName().Name, "Tcc.Themes", StringComparison.Ordinal)
+        && type.IsNotPublic && !type.IsVisible && type.IsClass && type.IsSealed && !type.IsAbstract
+        && !type.IsGenericType && !type.IsNested
+        && !type.IsDefined(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), false)
+        && type.GetInterfaces().SequenceEqual([typeof(IThemePackageContentReader)]);
 }
