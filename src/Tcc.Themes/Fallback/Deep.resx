@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="Tokens" xml:space="preserve"><value>{
+  "schema_version": "1.0",
+  "tokens": {
+    "color.background.base": { "type": "color", "value": "#111827" },
+    "color.background.surface": { "type": "color", "value": "#1F2937" },
+    "color.text.primary": { "type": "color", "value": "#F9FAFB" },
+    "color.text.secondary": { "type": "color", "value": "#D1D5DB" },
+    "color.state.tradable": { "type": "color", "value": "#86EFAC" },
+    "color.state.warning": { "type": "color", "value": "#FDE68A" },
+    "color.state.blocked": { "type": "color", "value": "#FCA5A5" },
+    "color.state.unknown": { "type": "color", "value": "#D1D5DB" },
+    "focus.ring.color": { "type": "color", "value": "#FDE047" },
+    "focus.ring.thickness": { "type": "dimension", "value": 2 },
+    "font.family.ui": { "type": "font", "value": "Segoe UI" },
+    "font.size.body": { "type": "dimension", "value": 16 },
+    "motion.duration.short": { "type": "duration", "value": "0ms" },
+    "surface.opacity": { "type": "opacity", "value": 1 }
+  },
+  "semantic_bindings": {
+    "trading_permission.tradable": { "token": "color.state.tradable", "requires_text_label": true, "requires_icon_or_structure": true },
+    "trading_permission.warning": { "token": "color.state.warning", "requires_text_label": true, "requires_icon_or_structure": true },
+    "trading_permission.blocked": { "token": "color.state.blocked", "requires_text_label": true, "requires_icon_or_structure": true },
+    "presentation.unknown": { "token": "color.state.unknown", "requires_text_label": true, "requires_icon_or_structure": true }
+  }
+}</value></data>
+</root>

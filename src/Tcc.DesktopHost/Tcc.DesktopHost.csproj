@@ -5,6 +5,7 @@
     <RootNamespace>Tcc.DesktopHost</RootNamespace>
     <UseWPF>true</UseWPF>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>

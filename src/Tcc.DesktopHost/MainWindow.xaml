@@ -4,16 +4,38 @@
         Title="Trading Command Center"
         Width="960"
         Height="600"
+        MinWidth="320"
+        MinHeight="240"
+        Style="{DynamicResource Tcc.BuiltIn.Window}"
         WindowStartupLocation="CenterScreen">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock FontSize="24"
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Center"
+                  Focusable="True"
+                  KeyboardNavigation.IsTabStop="True"
+                  AutomationProperties.Name="啟動診斷與顯示模式">
+        <StackPanel Margin="24"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    AutomationProperties.Name="Trading Command Center 啟動狀態">
+            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
+                       FontSize="24"
                        FontWeight="SemiBold"
-                       Text="Trading Command Center" />
-            <TextBlock Margin="0,12,0,0"
+                       Text="Trading Command Center"
+                       AutomationProperties.Name="Trading Command Center" />
+            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
+                       Margin="0,12,0,0"
+                       HorizontalAlignment="Stretch"
+                       TextAlignment="Center"
+                       Text="{Binding Status}"
+                       TextWrapping="Wrap"
+                       AutomationProperties.Name="{Binding Status, StringFormat='啟動狀態：{0}'}" />
+            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
+                       Margin="0,8,0,0"
                        HorizontalAlignment="Center"
-                       Text="{Binding Status}" />
+                       Text="{Binding Presentation.VariantId.Value, StringFormat=啟動顯示模式：{0}}"
+                       AutomationProperties.Name="{Binding Presentation.VariantId.Value, StringFormat='啟動顯示模式：{0}'}" />
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

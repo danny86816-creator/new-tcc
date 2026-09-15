@@ -12,6 +12,8 @@ public sealed class PhaseThreeScopeBoundaryTests
     private static readonly string[] ApprovedTopLevelTypes =
     [
         "Tcc.Themes.AssemblyMarker",
+        "Tcc.Themes.Fallback.BuiltInThemePresentationSource",
+        "Tcc.Themes.Fallback.BuiltInThemePresentationSnapshot",
         "Tcc.Themes.Compatibility.V2.IThemeCompatibilityResolverV2",
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityRequestV2",
         "Tcc.Themes.Compatibility.V2.ThemeCompatibilityContextV2",
@@ -2555,6 +2557,21 @@ public sealed class PhaseThreeScopeBoundaryTests
                         ThemeManifestValidationContext context) => new(true, [], []);
                 }
                 """);
+            foreach (string file in new[]
+            {
+                "BuiltInThemePresentationSource.cs",
+                "BuiltInThemePresentationSnapshot.cs",
+            })
+            {
+                File.WriteAllText(
+                    Path.Combine(fixtureRoot, file),
+                    File.ReadAllText(Path.Combine(
+                        RepositoryPaths.Root,
+                        "src",
+                        "Tcc.Themes",
+                        "Fallback",
+                        file)));
+            }
             if (otherSource is not null)
             {
                 File.WriteAllText(Path.Combine(fixtureRoot, "OtherProductionSource.cs"), otherSource);

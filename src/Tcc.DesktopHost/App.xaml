@@ -3,5 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
+        <Style x:Key="Tcc.BuiltIn.Window"
+               TargetType="Window">
+            <Setter Property="Background"
+                    Value="{DynamicResource color.background.base}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource color.text.primary}" />
+            <Setter Property="FontFamily"
+                    Value="{DynamicResource font.family.ui}" />
+            <Setter Property="FontSize"
+                    Value="{DynamicResource font.size.body}" />
+        </Style>
+        <Style x:Key="Tcc.BuiltIn.Text"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource color.text.primary}" />
+        </Style>
+        <Style x:Key="Tcc.BuiltIn.Focus"
+               TargetType="Control">
+            <Setter Property="FocusVisualStyle">
+                <Setter.Value>
+                    <Style>
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Border BorderBrush="{DynamicResource focus.ring.color}"
+                                            BorderThickness="{DynamicResource focus.ring.thickness}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
