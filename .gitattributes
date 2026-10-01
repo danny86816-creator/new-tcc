@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.npz binary
+*.png binary
+*.zip binary
+
+# Sealed schemas have byte-level hash contracts, including their mixed final newline.
+contracts/theme/schemas/*.json binary

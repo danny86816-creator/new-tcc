@@ -1,0 +1,58 @@
+{
+  "schema_version": "B3_1D_VISUAL_REVIEW_V1",
+  "status": "PASS",
+  "production_review": "B3.1 authority restored exactly; no B3.1D candidate is active",
+  "candidate_selection": "PENDING_SUPERVISOR_REVIEW",
+  "candidate_assessment": {
+    "A": "改動最小，但線性起始在放大檢查下較容易推測邊界。",
+    "B": "SmoothStep 過渡最均衡，邊界最不明顯；僅作推薦，不代表選定。",
+    "C": "融合最強但材料感衰減較廣，作為視覺上限。"
+  },
+  "recommended_for_review": "B",
+  "formally_selected": false,
+  "halo": "未見圓形 halo；距離來自實際 silhouette，且曲線連續。",
+  "plum": {
+    "B3SC014": "完整左側／左下枝系保留",
+    "B3SC016": "右下連續主枝候選成立",
+    "fragment_only": false
+  },
+  "critical_content_overlap_pixels": 0,
+  "sticker_feel": "未見硬切貼圖；C 的材料弱化較明顯。",
+  "paper_cut_feel": "人物核心沒有硬穿插，未見 B3.1R 剪紙感。",
+  "artificial_gradient": "未見 radial/circular 人工漸層；A 的線性邊界風險高於 B。",
+  "canonical_preview_dimensions": {
+    "B3_1D_CHARACTER_FADE_A.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_CHARACTER_FADE_B.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_CHARACTER_FADE_C.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_PLUM_STRONGER_PREVIEW.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_COMBINED_A.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_COMBINED_B.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_COMBINED_C.png": [
+      2142,
+      1196
+    ],
+    "B3_1D_FINAL_PRODUCT_PREVIEW.png": [
+      2142,
+      1196
+    ]
+  },
+  "canonical_preview_dimensions_passed": true
+}

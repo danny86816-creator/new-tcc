@@ -1,0 +1,41 @@
+{
+  "schema_version": "B3_1D_VALIDATION_V1",
+  "stage": "M1.4.6-B3.1D",
+  "status": "PASS",
+  "production_authority": "M1.4.6-B3.1",
+  "candidate_applied_to_production": false,
+  "candidate_selection": "PENDING_SUPERVISOR_REVIEW",
+  "image_generation_calls": 0,
+  "model_calls": 0,
+  "required_png": {
+    "passed": true,
+    "count": 17,
+    "files": [
+      "B3_1D_DEPTH_CLASS_MAP.png",
+      "B3_1D_DEPTH_CONFIDENCE_MAP.png",
+      "B3_1D_OCCLUSION_RELATIONSHIP_MAP.png",
+      "B3_1D_CHARACTER_DISTANCE_FIELD.png",
+      "B3_1D_UI_FUSION_POLICY_MAP.png",
+      "B3_1D_PLUM_FOREGROUND_AUTHORITY.png",
+      "B3_1D_CHARACTER_FADE_A.png",
+      "B3_1D_CHARACTER_FADE_B.png",
+      "B3_1D_CHARACTER_FADE_C.png",
+      "B3_1D_FADE_COMPARISON.png",
+      "B3_1D_PLUM_STRONGER_PREVIEW.png",
+      "B3_1D_COMBINED_A.png",
+      "B3_1D_COMBINED_B.png",
+      "B3_1D_COMBINED_C.png",
+      "B3_1D_BEFORE_AFTER.png",
+      "B3_1D_PRODUCTION_ROLLBACK_PROOF.png",
+      "B3_1D_FINAL_PRODUCT_PREVIEW.png"
+    ]
+  },
+  "required_json_count": 11,
+  "geometry": "PASS",
+  "runtime": "PASS",
+  "visual_review": "PASS",
+  "release_build": "PASS",
+  "focused_tests": "PASS 5/5",
+  "full_tests": "PASS 1716/1716",
+  "next_stage_authorized": false
+}

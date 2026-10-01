@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/Brand/Tcc.NocturneMeridian.AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,5 +18,12 @@
     <ProjectReference Include="../Tcc.Presentation.Contracts/Tcc.Presentation.Contracts.csproj" />
     <ProjectReference Include="../Tcc.Themes/Tcc.Themes.csproj" />
     <ProjectReference Include="../Tcc.Windows/Tcc.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets/Brand/Tcc.NocturneMeridian.AppIcon.ico" />
+    <Resource Include="Assets/Brand/Tcc.NocturneMeridian.AppIcon.Window.png" />
+    <Resource Include="Assets/MasterFidelity/StrataObservatory.MasterR1.Scene.R26.png" />
+    <Resource Include="Assets/StrataObservatory/StrataObservatory.MentalStateSuite.R1.png" />
   </ItemGroup>
 </Project>

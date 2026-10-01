@@ -1,0 +1,255 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Rebuild R2: geometry, opacity and hierarchy calibrated to the selected 1672x941 master. -->
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Background.Base" Color="#071522" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Background.Atmosphere" Color="#220A1B29" />
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.TopChrome" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#CE0A1C2B" Offset="0" /><GradientStop Color="#C20A1C2B" Offset="0.58" /><GradientStop Color="#B60A1C2B" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Navigation" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#D20A1C2A" Offset="0" /><GradientStop Color="#C40A1C2A" Offset="0.55" /><GradientStop Color="#B20A1C2A" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.HeaderScrim" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#760B1B29" Offset="0" /><GradientStop Color="#4A0B1B29" Offset="0.62" /><GradientStop Color="#160B1B29" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.Rebuild.Brush.Chrome.WorkspaceSelector" Color="#46173247" />
+    <SolidColorBrush x:Key="Tcc.Rebuild.Brush.Chrome.CommandSearch" Color="#55102536" />
+    <SolidColorBrush x:Key="Tcc.Rebuild.Brush.Navigation.Selected" Color="#5C164A61" />
+    <SolidColorBrush x:Key="Tcc.Rebuild.Brush.ChartInset" Color="#5A102232" />
+    <!-- R12: card-local depth planes inferred from the flattened master's internal edge and contrast changes. -->
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.HeaderBand" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#580A2030" Offset="0" /><GradientStop Color="#2E0A1C2A" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.ControlRail" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#6C0D283C" Offset="0" /><GradientStop Color="#3A091B29" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.DataWell" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#62081726" Offset="0" /><GradientStop Color="#35071320" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.FooterBand" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#68091B29" Offset="0" /><GradientStop Color="#40071320" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.SelectedTab" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#7618455E" Offset="0" /><GradientStop Color="#48102F42" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.AnalysisWell" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#720A2233" Offset="0" /><GradientStop Color="#38091928" Offset="1" />
+    </LinearGradientBrush>
+    <RadialGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.FocusWell" Center="0.5,0.46" GradientOrigin="0.5,0.46" RadiusX="0.7" RadiusY="0.7">
+        <GradientStop Color="#400D2A40" Offset="0" /><GradientStop Color="#18071320" Offset="1" />
+    </RadialGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Nested.SceneTransition" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#380A2030" Offset="0" /><GradientStop Color="#000A2030" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.Rebuild.Brush.Border.Inner" Color="#536E91AA" />
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Connector.Safety" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#620A2030" Offset="0" /><GradientStop Color="#360A2030" Offset="0.5" /><GradientStop Color="#620A2030" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Connector.Primary" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#580A2030" Offset="0" /><GradientStop Color="#2E0A2030" Offset="0.5" /><GradientStop Color="#580A2030" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Connector.Secondary" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#500A2030" Offset="0" /><GradientStop Color="#280A2030" Offset="0.5" /><GradientStop Color="#500A2030" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Connector.Row" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#540A2030" Offset="0" /><GradientStop Color="#2C0A2030" Offset="0.5" /><GradientStop Color="#540A2030" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Panel" Color="#C20A2030" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelElevated" Color="#B20B2233" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelDeep" Color="#C20A1B29" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelQuiet" Color="#8F0A1C2B" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.WorkspacePrimary" Color="#A90A2030" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.WorkspaceSecondary" Color="#9E091B29" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Safety" Color="#AA0B2131" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Auxiliary" Color="#A20A1E2D" />
+    <!-- R10: each flattened-master card is calibrated independently. Alpha is the effective WPF overlay strength. -->
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.TradingPermission" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#D40B2131" Offset="0" /><GradientStop Color="#B80A1B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.TotalRisk" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#D20B2131" Offset="0" /><GradientStop Color="#B60A1B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.CurrentPositions" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#CE0B2131" Offset="0" /><GradientStop Color="#B20A1B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.MajorAlerts" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#CA0B2131" Offset="0" /><GradientStop Color="#AE0A1B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.Observation" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#D80A2030" Offset="0" /><GradientStop Color="#B8091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.MarketAnchor" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#E00A2030" Offset="0" /><GradientStop Color="#C6091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.Positions" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#C80A2030" Offset="0" /><GradientStop Color="#A0091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.Priorities" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#C40A2030" Offset="0" /><GradientStop Color="#9C091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.MentalState" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#C00A2030" Offset="0" /><GradientStop Color="#98091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.AiSummary" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#CC0A1E2D" Offset="0" /><GradientStop Color="#AA091B29" Offset="1" /></LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Rebuild.Brush.Card.Activity" StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#D00A1E2D" Offset="0" /><GradientStop Color="#AE091B29" Offset="1" /></LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Action" Color="#D7DFF4FF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Action" Color="#F4D9F2FF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.ActionInner" Color="#AA7DC5ED" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Default" Color="#8A91B3C8" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Quiet" Color="#4F6C8CA1" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Elevated" Color="#A8B3D5E9" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Frost" Color="#BFD5EBF7" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Selected" Color="#D77CD4F5" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Primary" Color="#947FA7C0" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Secondary" Color="#5D6E91AA" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Safety" Color="#8CA5C1D3" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Auxiliary" Color="#657D9AAF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Primary" Color="#EEF7FF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Secondary" Color="#B8D0E4" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Tertiary" Color="#849FB5" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Disabled" Color="#70889C" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.OnAction" Color="#102536" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Accent.Cyan" Color="#78D7F4" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Accent.Ice" Color="#BFE8FF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Identity.Seal" Color="#B93241" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Warning" Color="#FFD279" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.WarningFill" Color="#39FFD279" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Permission" Color="#FF8AA7" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.PermissionFill" Color="#3AFF8AA7" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Critical" Color="#FF8297" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.CriticalFill" Color="#3AFF8297" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Information" Color="#A7D9F3" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.InformationFill" Color="#3AA7D9F3" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Unavailable" Color="#8FA7BA" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Success" Color="#63D9C1" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Reserved" Color="#77A9F2" />
+
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.Viewport.MinWidth">1672</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.Viewport.MinHeight">941</sys:Double>
+
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.AppBrand">18</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.WorkspaceSelector">14</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.PageTitle">34</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.PageSubtitle">22</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.PanelTitle">15</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.PrimaryStatus">18</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.SecondaryStatus">13</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.Body">13</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.TableHeader">11</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.TableCell">11</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.Caption">11</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.Microcopy">9</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.FontSize.DecorativeChinese">17</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.AppBrand">24</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.WorkspaceSelector">20</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.PageTitle">42</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.PageSubtitle">28</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.PanelTitle">21</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.PrimaryStatus">24</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.SecondaryStatus">18</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.Body">18</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.TableHeader">16</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.TableCell">17</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.Caption">16</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.Microcopy">13</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=System.Runtime" x:Key="Tcc.ReferenceMaster.LineHeight.DecorativeChinese">25</sys:Double>
+
+    <Style x:Key="Tcc.Rebuild.Text.Base" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.AppBrand" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontFamily" Value="Georgia" /><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.AppBrand}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.AppBrand}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.WorkspaceSelector" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.WorkspaceSelector}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.WorkspaceSelector}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontFamily" Value="Georgia" /><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageTitle}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageTitle}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PageSubtitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontFamily" Value="Georgia" /><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageSubtitle}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageSubtitle}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PanelTitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontFamily" Value="Georgia" /><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PanelTitle}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PanelTitle}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PrimaryStatus" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PrimaryStatus}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PrimaryStatus}" /><Setter Property="FontWeight" Value="SemiBold" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.SecondaryStatus" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.SecondaryStatus}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.SecondaryStatus}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Body" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.TableHeader" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.TableHeader}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.TableHeader}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.TableCell" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.TableCell}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.TableCell}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Caption" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Tertiary}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Microcopy" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Microcopy}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Microcopy}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Tertiary}" /></Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.DecorativeChinese" TargetType="TextBlock" BasedOn="{StaticResource Tcc.Rebuild.Text.Base}"><Setter Property="FontFamily" Value="Microsoft JhengHei UI" /><Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.DecorativeChinese}" /><Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.DecorativeChinese}" /></Style>
+
+    <Style x:Key="Tcc.Rebuild.CardShell" TargetType="Border">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Primary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.TradingPermission" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.TradingPermission}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Safety}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.TotalRisk" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.TotalRisk}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Safety}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.CurrentPositions" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.CurrentPositions}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Safety}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.MajorAlerts" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.MajorAlerts}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Safety}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.Observation" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.Observation}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.MarketAnchor" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.MarketAnchor}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.Positions" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.Positions}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Secondary}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.Priorities" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.Priorities}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Secondary}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.MentalState" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.MentalState}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Secondary}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.AiSummary" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.AiSummary}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Auxiliary}" /></Style>
+    <Style x:Key="Tcc.Rebuild.CardShell.Activity" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.CardShell}"><Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Card.Activity}" /><Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Auxiliary}" /></Style>
+    <Style x:Key="Tcc.Rebuild.ContentRegion" TargetType="Border">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Rebuild.Brush.Border.Inner}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer.Header" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.NestedLayer}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Nested.HeaderBand}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer.Control" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.NestedLayer}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Nested.ControlRail}" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer.Data" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.NestedLayer}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Nested.DataWell}" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer.Footer" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.NestedLayer}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Nested.FooterBand}" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NestedLayer.Selected" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.NestedLayer}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Rebuild.Brush.Nested.SelectedTab}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Selected}" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.NavButton" TargetType="Button">
+        <Setter Property="Height" Value="54" /><Setter Property="Margin" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" /><Setter Property="Padding" Value="16,0" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="Background" Value="Transparent" /><Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Tcc.Rebuild.IconButton" TargetType="Button">
+        <Setter Property="Width" Value="44" /><Setter Property="Height" Value="44" />
+        <Setter Property="Background" Value="Transparent" /><Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Tcc.Rebuild.WindowButton" TargetType="Button" BasedOn="{StaticResource Tcc.Rebuild.IconButton}">
+        <Setter Property="Width" Value="48" /><Setter Property="Height" Value="44" />
+    </Style>
+    <Style x:Key="Tcc.Rebuild.ChromeButton" TargetType="Button" BasedOn="{StaticResource Tcc.Rebuild.NavButton}">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="12,0" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.Observation" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.MarketAnchor" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.RiskTerrain" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.Positions" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.Priorities" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.MentalState" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.AiSummary" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+    <Style x:Key="Tcc.ReferenceMaster.Module.Activity" TargetType="Border" BasedOn="{StaticResource Tcc.Rebuild.ContentRegion}" />
+</ResourceDictionary>

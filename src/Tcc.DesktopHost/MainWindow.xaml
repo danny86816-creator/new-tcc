@@ -1,41 +1,604 @@
 <Window x:Class="Tcc.DesktopHost.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Trading Command Center"
-        Width="960"
-        Height="600"
-        MinWidth="320"
-        MinHeight="240"
-        Style="{DynamicResource Tcc.BuiltIn.Window}"
-        WindowStartupLocation="CenterScreen">
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                  VerticalScrollBarVisibility="Auto"
-                  HorizontalContentAlignment="Stretch"
-                  VerticalContentAlignment="Center"
-                  Focusable="True"
-                  KeyboardNavigation.IsTabStop="True"
-                  AutomationProperties.Name="啟動診斷與顯示模式">
-        <StackPanel Margin="24"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    AutomationProperties.Name="Trading Command Center 啟動狀態">
-            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
-                       FontSize="24"
-                       FontWeight="SemiBold"
-                       Text="Trading Command Center"
-                       AutomationProperties.Name="Trading Command Center" />
-            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
-                       Margin="0,12,0,0"
-                       HorizontalAlignment="Stretch"
-                       TextAlignment="Center"
-                       Text="{Binding Status}"
-                       TextWrapping="Wrap"
-                       AutomationProperties.Name="{Binding Status, StringFormat='啟動狀態：{0}'}" />
-            <TextBlock Style="{DynamicResource Tcc.BuiltIn.Text}"
-                       Margin="0,8,0,0"
-                       HorizontalAlignment="Center"
-                       Text="{Binding Presentation.VariantId.Value, StringFormat=啟動顯示模式：{0}}"
-                       AutomationProperties.Name="{Binding Presentation.VariantId.Value, StringFormat='啟動顯示模式：{0}'}" />
-        </StackPanel>
-    </ScrollViewer>
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="TCC — Strata Observatory"
+        Width="1672" Height="941"
+        MinWidth="1280" MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResize"
+        Background="{DynamicResource Tcc.Strata.Brush.Background}" Foreground="{DynamicResource Tcc.Strata.Brush.Text}"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="52" CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="8" UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/StrataObservatory.Design.xaml" />
+                <ResourceDictionary Source="Resources/StrataObservatory.Iconography.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Human-approved Mental State Suite R1: one presentation-only 4x2 atlas. -->
+            <BitmapImage x:Key="Tcc.Strata.MentalStateAtlas.R1"
+                         UriSource="Assets/StrataObservatory/StrataObservatory.MentalStateSuite.R1.png" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.NotSet"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="0,0,444,444" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Calm"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="444,0,443,444" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Focused"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="887,0,444,444" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Cautious"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="1331,0,443,444" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Stressed"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="0,444,444,443" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Fatigued"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="444,444,443,443" />
+            <CroppedBitmap x:Key="Tcc.Strata.MentalStateGlyph.Impulsive"
+                           Source="{StaticResource Tcc.Strata.MentalStateAtlas.R1}" SourceRect="887,444,444,443" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource Tcc.Strata.Brush.Background}">
+        <ScrollViewer x:Name="MainContentScroller"
+                      AutomationProperties.AutomationId="MainContentScroller"
+                      AutomationProperties.Name="Strata Observatory HOME"
+                      AutomationProperties.HelpText="At constrained window sizes or enlarged text, use the scroll bars or arrow keys to explore the full HOME composition."
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalContentAlignment="Left"
+                      VerticalContentAlignment="Top"
+                      CanContentScroll="False"
+                      PanningMode="Both"
+                      Focusable="True"
+                      IsTabStop="True">
+                    <Canvas x:Name="ReferenceCompositionCanvas"
+                            Width="1672" Height="941"
+                            ClipToBounds="True"
+                            Focusable="False">
+                        <Image x:Name="MasterFidelitySceneImage"
+                               Width="1672" Height="941"
+                               Source="Assets/MasterFidelity/StrataObservatory.MasterR1.Scene.R26.png"
+                               Stretch="UniformToFill"
+                               Opacity="{DynamicResource Tcc.Strata.SceneOpacity}"
+                               IsHitTestVisible="False" />
+
+                        <Rectangle Width="1672" Height="941" Fill="{DynamicResource Tcc.Strata.Brush.SceneVeil}" IsHitTestVisible="False" />
+                        <Rectangle Width="1320" Height="941" Fill="{DynamicResource Tcc.Strata.Brush.WorkspaceScrim}" IsHitTestVisible="False" />
+
+                        <!-- Top chrome -->
+                        <Border x:Name="TopChromeRegion" Canvas.Left="0" Canvas.Top="0" Width="1672" Height="52"
+                                Background="{DynamicResource Tcc.Strata.Brush.Chrome}"
+                                BorderBrush="{DynamicResource Tcc.Strata.Brush.Border}"
+                                BorderThickness="0,0,0,1"
+                                Panel.ZIndex="30">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="360" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="604" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="24,0,0,0" VerticalAlignment="Center">
+                                    <Border x:Name="TopChromeBrandMark" Width="36" Height="36" BorderBrush="{DynamicResource Tcc.Strata.Brush.Gold}" BorderThickness="1.1">
+                                        <Control Width="14" Height="18"
+                                                 Style="{StaticResource Strata.BrandMonogram}"
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <StackPanel Margin="15,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="TRADING COMMAND" Style="{StaticResource Strata.ChromeBrandName}" />
+                                        <TextBlock Margin="0,1,0,0" Text="STRATA OBSERVATORY" Style="{StaticResource Strata.ChromeBrandSubtitle}" />
+                                    </StackPanel>
+                                </StackPanel>
+                                <Border Grid.Column="0" Width="1" Height="24" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                        Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+
+                                <TextBlock x:Name="TopChromeMotto" Grid.Column="1" Margin="28,0"
+                                           Text="DISCIPLINE TRADES A LONGER TOMORROW"
+                                           Style="{StaticResource Strata.ChromeMotto}"
+                                           HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+
+                                <Grid Grid.Column="2">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="128" /><ColumnDefinition Width="304" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <Grid x:Name="TopChromeOfflineStatus" Grid.Column="0" VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="16" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Danger}" />
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="DATA OFFLINE" Style="{StaticResource Strata.ChromeStatusLabel}" />
+                                            <TextBlock Text="READ ONLY" Style="{StaticResource Strata.ChromeStatusDetail}" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <Border x:Name="SearchUnavailableSurface" Grid.Column="1" Height="32" Margin="0,0,12,0"
+                                            BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="1"
+                                            Background="{DynamicResource Tcc.Strata.Brush.SearchSurface}" VerticalAlignment="Center"
+                                            IsHitTestVisible="False" Focusable="False"
+                                            ToolTip="Search and command palette are unavailable in this offline presentation."
+                                            AutomationProperties.Name="Search unavailable while data is offline"
+                                            AutomationProperties.HelpText="Read-only presentation; search and command palette are unavailable.">
+                                        <Grid Margin="10,0">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="*" /><ColumnDefinition Width="56" /></Grid.ColumnDefinitions>
+                                            <Control Grid.Column="0" Width="13" Height="13" Style="{StaticResource Strata.CommandGlyph.Search}" />
+                                            <TextBlock x:Name="SearchPlaceholder" Grid.Column="1" Margin="7,0,0,0" Text="SEARCH UNAVAILABLE" Style="{StaticResource Strata.ChromeSearchLabel}" VerticalAlignment="Center" />
+                                            <Border Grid.Column="2" Padding="4,1" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <TextBlock x:Name="SearchKeyHint" Text="OFFLINE" Style="{StaticResource Strata.ChromeSearchState}" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                    <Border Grid.Column="2" Width="1" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                            Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button x:Name="WindowMinimizeButton" AutomationProperties.AutomationId="WindowMinimizeButton" AutomationProperties.Name="Minimize window" AutomationProperties.HelpText="Minimizes the application window." ToolTip="Minimize" Style="{StaticResource Strata.WindowButton}" Click="OnMinimizeWindowClick"><Control Width="14" Height="14" Style="{StaticResource Strata.WindowGlyph.Minimize}" /></Button>
+                                        <Button x:Name="WindowMaximizeRestoreWindowButton" AutomationProperties.AutomationId="WindowMaximizeRestoreButton" AutomationProperties.Name="Maximize or restore window" AutomationProperties.HelpText="Maximizes the window or restores its previous size." ToolTip="Maximize or restore" Style="{StaticResource Strata.WindowButton}" Click="OnMaximizeRestoreWindowClick"><Control Width="14" Height="14" Style="{StaticResource Strata.WindowGlyph.Maximize}" /></Button>
+                                        <Button x:Name="WindowCloseButton" AutomationProperties.AutomationId="WindowCloseButton" AutomationProperties.Name="Close window" AutomationProperties.HelpText="Closes the application window." ToolTip="Close" Style="{StaticResource Strata.WindowButton}" Click="OnCloseWindowClick"><Control Width="14" Height="14" Style="{StaticResource Strata.WindowGlyph.Close}" /></Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- Left rail -->
+                        <Border Canvas.Left="6" Canvas.Top="52" Width="98" Height="889"
+                                Background="{DynamicResource Tcc.Strata.Brush.Nav}"
+                                BorderBrush="{DynamicResource Tcc.Strata.Brush.Border}"
+                                BorderThickness="1,0,1,0"
+                                Panel.ZIndex="20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="116" /><RowDefinition Height="91" /><RowDefinition Height="91" />
+                                    <RowDefinition Height="91" /><RowDefinition Height="91" /><RowDefinition Height="91" />
+                                    <RowDefinition Height="*" /><RowDefinition Height="88" /><RowDefinition Height="62" />
+                                </Grid.RowDefinitions>
+
+                                <Button x:Name="NavHome" Grid.Row="0" Height="116" AutomationProperties.AutomationId="NavHome" AutomationProperties.Name="Home selected, current page" AutomationProperties.ItemStatus="Current page" AutomationProperties.HelpText="Current page; no navigation action is available." ToolTip="Current page" Style="{StaticResource Strata.NavButton.Selected}" IsEnabled="False" IsTabStop="False">
+                                    <StackPanel>
+                                        <Control Width="23" Height="23" Style="{StaticResource Strata.NavGlyph.Home}" />
+                                        <TextBlock Margin="0,7,0,0" Text="HOME" Style="{StaticResource Strata.NavLabel.Selected}" />
+                                        <TextBlock Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="NavMarkets" Grid.Row="1" AutomationProperties.AutomationId="NavMarkets" AutomationProperties.Name="Market unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Market}" /><TextBlock Margin="0,8,0,0" Text="MARKET" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <Button x:Name="NavPlanning" Grid.Row="2" AutomationProperties.AutomationId="NavPlanning" AutomationProperties.Name="Planning unavailable" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Not available in this presentation." ToolTip="Not available in this presentation" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Plan}" /><TextBlock Margin="0,8,0,0" Text="PLAN" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <Button x:Name="NavRisk" Grid.Row="3" AutomationProperties.AutomationId="NavRisk" AutomationProperties.Name="Risk unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Risk}" /><TextBlock Margin="0,8,0,0" Text="RISK" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <Button x:Name="NavPositions" Grid.Row="4" AutomationProperties.AutomationId="NavPositions" AutomationProperties.Name="Positions unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Positions}" /><TextBlock Margin="0,8,0,0" Text="POSITIONS" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <Button x:Name="NavReview" Grid.Row="5" AutomationProperties.AutomationId="NavReview" AutomationProperties.Name="Review unavailable" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Not available in this presentation." ToolTip="Not available in this presentation" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Review}" /><TextBlock Margin="0,8,0,0" Text="REVIEW" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <Border Grid.Row="6" Margin="20,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,0,1" />
+                                <Button x:Name="NavSettings" Grid.Row="7" AutomationProperties.AutomationId="NavSettings" AutomationProperties.Name="Settings unavailable" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Not available in this presentation." ToolTip="Not available in this presentation" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Settings}" /><TextBlock Margin="0,8,0,0" Text="SETTINGS" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                </Button>
+                                <StackPanel Grid.Row="8" Margin="17,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="v1.0" Style="{StaticResource Strata.RailFooter}" />
+                                    <TextBlock Margin="0,3,0,0" Text="STRATA&#x0a;OBSERVATORY" Style="{StaticResource Strata.RailFooter}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Header field -->
+                        <Border Canvas.Left="104" Canvas.Top="52" Width="1154" Height="186" Background="{DynamicResource Tcc.Strata.Brush.HeaderField}" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,0,1">
+                            <Grid>
+                                <Grid x:Name="HeaderIdentityRegion" Width="452" Height="101" Margin="44,70,0,0"
+                                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                                      IsHitTestVisible="False" Focusable="False">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="17" />
+                                        <RowDefinition Height="46" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Margin="16,0,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="18" Height="1" Background="{DynamicResource Tcc.Strata.Brush.Gold}" />
+                                        <TextBlock Margin="8,0,0,0" Text="HOME / OBSERVATORY" Style="{StaticResource Strata.HeaderEyebrow}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Margin="16,-1,0,0" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock x:Name="HeaderIdentityLabel" Text="Market Observatory"
+                                                   Style="{StaticResource Strata.HeaderTitle}"
+                                                   AutomationProperties.AutomationId="Region.HeaderIdentity"
+                                                   AutomationProperties.Name="Market Observatory"
+                                                   AutomationProperties.HelpText="Home workspace. Read the terrain, manage risk, and execute with discipline." />
+                                        <Control x:Name="HeaderIdentitySeal" Margin="12,1,0,0" Width="18" Height="28"
+                                                 Style="{StaticResource Strata.Seal.Vertical}"
+                                                 VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Margin="16,1,0,0" Orientation="Horizontal" VerticalAlignment="Top">
+                                        <TextBlock Text="READ THE TERRAIN" Style="{StaticResource Strata.HeaderPrinciple}" />
+                                        <Border Width="1" Height="10" Margin="11,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock Text="MANAGE RISK" Style="{StaticResource Strata.HeaderPrinciple}" />
+                                        <Border Width="1" Height="10" Margin="11,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock Text="EXECUTE WITH DISCIPLINE" Style="{StaticResource Strata.HeaderPrinciple}" />
+                                    </StackPanel>
+                                    <Border Grid.RowSpan="3" Width="1" Height="65" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                            Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                </Grid>
+
+                                <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,70,6,0" Width="640" Height="101"
+                                        Style="{StaticResource Strata.Panel.Safety}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="190" /><ColumnDefinition Width="150" /><ColumnDefinition Width="154" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <Border Grid.ColumnSpan="4" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                        <Border x:Name="TradingPermissionCell" Grid.Column="0" Margin="0,12" Padding="16,0,17,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.Border}" BorderThickness="0,0,1,0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="2" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                                <Border Width="2" Height="44" Background="{DynamicResource Tcc.Strata.Brush.Danger}" VerticalAlignment="Center" />
+                                                <Grid Grid.Column="1" Margin="12,0,0,0">
+                                                    <Grid.RowDefinitions><RowDefinition Height="18" /><RowDefinition Height="27" /><RowDefinition Height="18" /></Grid.RowDefinitions>
+                                                    <TextBlock x:Name="SafetyRegionLabel" Text="Trading Permission" Style="{StaticResource Strata.SafetyLabel.Primary}" AutomationProperties.AutomationId="Region.HomeSafetyCore" AutomationProperties.Name="Home safety core, offline and unknown" />
+                                                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <Ellipse x:Name="TradingPermissionMarker" Width="13" Height="13" Stroke="{DynamicResource Tcc.Strata.Brush.Danger}" StrokeThickness="2" />
+                                                        <TextBlock x:Name="TradingPermissionValue" Margin="8,-2,0,0" Text="OFFLINE" Style="{StaticResource Strata.StatusValue}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" />
+                                                    </StackPanel>
+                                                    <TextBlock x:Name="TradingPermissionHelper" Grid.Row="2" Text="Read only · Not tradable" Style="{StaticResource Strata.Caption}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                        <Border x:Name="TotalRiskCell" Grid.Column="1" Margin="0,12" Padding="18,0,13,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.Border}" BorderThickness="0,0,1,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions><RowDefinition Height="18" /><RowDefinition Height="27" /><RowDefinition Height="18" /></Grid.RowDefinitions>
+                                                <TextBlock Text="Total Risk" Style="{StaticResource Strata.SafetyLabel}" />
+                                                <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center"><Control x:Name="TotalRiskUnsetMarker" Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock x:Name="TotalRiskValue" Margin="7,-3,0,0" Text="UNKNOWN" Style="{StaticResource Strata.StatusUnknown}" /></StackPanel>
+                                                <TextBlock x:Name="TotalRiskHelper" Grid.Row="2" Text="No live data" Style="{StaticResource Strata.Caption}" />
+                                            </Grid>
+                                        </Border>
+                                        <Border x:Name="PositionsCell" Grid.Column="2" Margin="0,12" Padding="18,0,13,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.Border}" BorderThickness="0,0,1,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions><RowDefinition Height="18" /><RowDefinition Height="27" /><RowDefinition Height="18" /></Grid.RowDefinitions>
+                                                <TextBlock Text="Current Positions" Style="{StaticResource Strata.SafetyLabel}" />
+                                                <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center"><Control x:Name="PositionsUnsetMarker" Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock x:Name="PositionsValue" Margin="7,-3,0,0" Text="UNKNOWN" Style="{StaticResource Strata.StatusUnknown}" /></StackPanel>
+                                                <TextBlock x:Name="PositionsHelper" Grid.Row="2" Text="Awaiting sync" Style="{StaticResource Strata.Caption}" />
+                                            </Grid>
+                                        </Border>
+                                        <Border x:Name="AlertsCell" Grid.Column="3" Margin="0,12" Padding="18,0,13,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions><RowDefinition Height="18" /><RowDefinition Height="27" /><RowDefinition Height="18" /></Grid.RowDefinitions>
+                                                <TextBlock Text="Major Alerts" Style="{StaticResource Strata.SafetyLabel}" />
+                                                <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center"><Control x:Name="AlertsUnsetMarker" Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock x:Name="AlertsValue" Margin="7,-3,0,0" Text="UNKNOWN" Style="{StaticResource Strata.StatusUnknown}" /></StackPanel>
+                                                <TextBlock x:Name="AlertsHelper" Grid.Row="2" Text="Cannot evaluate" Style="{StaticResource Strata.Caption}" />
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Market overview -->
+                        <Border Canvas.Left="126" Canvas.Top="239" Width="870" Height="404"
+                                Style="{StaticResource Strata.Panel.Primary}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="54" /><RowDefinition Height="48" /><RowDefinition Height="*" /><RowDefinition Height="68" /></Grid.RowDefinitions>
+                                <Border Grid.RowSpan="4" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                <Control Grid.RowSpan="4" Margin="1" Style="{StaticResource Strata.CraftFrame}" Panel.ZIndex="3" />
+                                <Grid Margin="31,0,24,0" Panel.ZIndex="5">
+                                    <TextBlock Text="Market Overview" Style="{StaticResource Strata.SectionTitle}"
+                                               AutomationProperties.AutomationId="Region.MarketOverview" AutomationProperties.Name="Market overview, offline"
+                                               VerticalAlignment="Center" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Border Width="28" Height="1" Margin="0,0,10,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock Text="READ-ONLY ANALYSIS" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Row="1" Margin="31,0,24,4" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Width="48" Text="SYMBOL" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                        <Button AutomationProperties.AutomationId="TabBtcUsdt" AutomationProperties.Name="BTC USDT selected, unavailable offline" Content="BTC / USDT" Style="{StaticResource Strata.MarketTabButton.Selected}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="TabEthUsdt" AutomationProperties.Name="ETH USDT unavailable offline" Content="ETH / USDT" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="TabSolUsdt" AutomationProperties.Name="SOL USDT unavailable offline" Content="SOL / USDT" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="TabBnbUsdt" AutomationProperties.Name="BNB USDT unavailable offline" Content="BNB / USDT" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="TabXrpUsdt" AutomationProperties.Name="XRP USDT unavailable offline" Content="XRP / USDT" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="TabAddSymbol" AutomationProperties.Name="Add symbol unavailable offline" Width="36" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False"><Control Width="13" Height="13" Style="{StaticResource Strata.CommandGlyph.Add}" /></Button>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Width="43" Text="RANGE" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                        <Button AutomationProperties.AutomationId="Timeframe1H" AutomationProperties.Name="1 hour timeframe unavailable offline" Content="1H" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="Timeframe4H" AutomationProperties.Name="4 hour timeframe unavailable offline" Content="4H" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="Timeframe1D" AutomationProperties.Name="1 day timeframe selected, unavailable offline" Content="1D" Style="{StaticResource Strata.MarketTabButton.Selected}" IsEnabled="False" />
+                                        <Button AutomationProperties.AutomationId="Timeframe1W" AutomationProperties.Name="1 week timeframe unavailable offline" Content="1W" Style="{StaticResource Strata.MarketTabButton}" IsEnabled="False" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid x:Name="OfflineMarketBody" Grid.Row="2" Margin="31,0,24,0" Background="{DynamicResource Tcc.Strata.Brush.ChartInset}" Panel.ZIndex="5">
+                                    <Grid.RowDefinitions><RowDefinition Height="46" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                                    <Grid Margin="20,0,18,0">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Danger}" />
+                                            <TextBlock Margin="9,0,0,0" Text="OFFLINE" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                            <Border Width="1" Height="14" Margin="11,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                            <TextBlock Text="NO LIVE MARKET DATA" Style="{StaticResource Strata.DisplayCaption}" Foreground="{DynamicResource Tcc.Strata.Brush.TextSecondary}" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock Text="NO VALUES ARE INFERRED" Style="{StaticResource Strata.Overline}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Border Height="1" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" VerticalAlignment="Bottom" Opacity="0.72" />
+                                    <Canvas Grid.Row="1" ClipToBounds="True">
+                                        <Line X1="48" Y1="12" X2="809" Y2="12" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                        <Line X1="48" Y1="46" X2="809" Y2="46" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                        <Line X1="48" Y1="80" X2="809" Y2="80" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                        <Line X1="48" Y1="114" X2="809" Y2="114" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                        <Line X1="48" Y1="148" X2="809" Y2="148" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                        <Line X1="208" Y1="12" X2="208" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" StrokeThickness="1" Opacity="0.32" />
+                                        <Line X1="368" Y1="12" X2="368" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" StrokeThickness="1" Opacity="0.32" />
+                                        <Line X1="528" Y1="12" X2="528" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" StrokeThickness="1" Opacity="0.32" />
+                                        <Line X1="688" Y1="12" X2="688" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" StrokeThickness="1" Opacity="0.32" />
+                                        <Line X1="48" Y1="12" X2="48" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                        <Line X1="48" Y1="176" X2="809" Y2="176" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                        <Line X1="208" Y1="172" X2="208" Y2="180" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                        <Line X1="368" Y1="172" X2="368" Y2="180" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                        <Line X1="528" Y1="172" X2="528" Y2="180" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                        <Line X1="688" Y1="172" X2="688" Y2="180" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                    </Canvas>
+                                    <Grid Grid.Row="1" Width="360" Height="92" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,4" IsHitTestVisible="False">
+                                        <Border Width="72" Height="1" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <Border Width="72" Height="1" HorizontalAlignment="Right" VerticalAlignment="Center" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Control Width="24" Height="24" Style="{StaticResource Strata.ChartOfflineGlyph}" HorizontalAlignment="Center" />
+                                            <TextBlock Margin="0,7,0,0" Text="NO SERIES TO DISPLAY" Style="{StaticResource Strata.EmptyStateTitle}" HorizontalAlignment="Center" />
+                                            <TextBlock Margin="0,3,0,0" Text="PRICES · DATES · TRENDS REMAIN BLANK" Style="{StaticResource Strata.DisplayMicrocopy}" HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid x:Name="OfflineKpiBand" Grid.Row="3" Margin="31,0,24,0" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <Border Grid.ColumnSpan="4" Height="1" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" VerticalAlignment="Top" />
+                                    <Border Grid.Column="0" Padding="22,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,1,0"><StackPanel VerticalAlignment="Center"><TextBlock Text="24H HIGH" Style="{StaticResource Strata.Overline}" /><TextBlock Margin="0,5,0,0" Text="—" Style="{StaticResource Strata.Numeric}" /></StackPanel></Border>
+                                    <Border Grid.Column="1" Padding="22,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,1,0"><StackPanel VerticalAlignment="Center"><TextBlock Text="24H LOW" Style="{StaticResource Strata.Overline}" /><TextBlock Margin="0,5,0,0" Text="—" Style="{StaticResource Strata.Numeric}" /></StackPanel></Border>
+                                    <Border Grid.Column="2" Padding="22,0" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,1,0"><StackPanel VerticalAlignment="Center"><TextBlock Text="24H VOLUME" Style="{StaticResource Strata.Overline}" /><TextBlock Margin="0,5,0,0" Text="—" Style="{StaticResource Strata.Numeric}" /></StackPanel></Border>
+                                    <Border Grid.Column="3" Padding="22,0"><StackPanel VerticalAlignment="Center"><TextBlock Text="MARKET CAP" Style="{StaticResource Strata.Overline}" /><TextBlock Margin="0,5,0,0" Text="—" Style="{StaticResource Strata.Numeric}" /></StackPanel></Border>
+                                </Grid>
+
+                                <Canvas x:Name="FixtureMarketLayer" Grid.RowSpan="4" Visibility="Collapsed" Panel.ZIndex="6" IsHitTestVisible="False">
+                                    <TextBlock Canvas.Left="37" Canvas.Top="104" Text="43,287.62" Style="{StaticResource Strata.MarketValue}" />
+                                    <TextBlock Canvas.Left="39" Canvas.Top="145" Text="▼ 312.45   −0.72%" Style="{StaticResource Strata.StatusValue}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" />
+
+                                    <Line X1="80" Y1="190" X2="831" Y2="190" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                    <Line X1="80" Y1="220" X2="831" Y2="220" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                    <Line X1="80" Y1="250" X2="831" Y2="250" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                    <Line X1="80" Y1="280" X2="831" Y2="280" Stroke="{DynamicResource Tcc.Strata.Brush.ChartGrid}" StrokeThickness="1" />
+                                    <Line X1="80" Y1="310" X2="831" Y2="310" Stroke="{DynamicResource Tcc.Strata.Brush.ChartAxis}" StrokeThickness="1" />
+                                    <TextBlock Canvas.Left="35" Canvas.Top="180" Text="46,000" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="35" Canvas.Top="210" Text="44,000" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="35" Canvas.Top="240" Text="42,000" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="35" Canvas.Top="270" Text="40,000" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="35" Canvas.Top="300" Text="38,000" Style="{StaticResource Strata.Caption}" />
+                                    <Polygon Points="86,281 110,271 134,257 158,265 182,247 206,258 230,238 254,218 278,205 302,220 326,191 350,211 374,220 398,211 422,230 446,244 470,231 494,203 518,217 542,190 566,205 590,195 614,212 638,221 662,229 686,208 710,194 734,218 758,229 782,210 806,220 828,219 828,310 86,310"
+                                             Fill="{DynamicResource Tcc.Strata.Brush.Ice}" Opacity="0.07" />
+                                    <Polyline Points="86,281 110,271 134,257 158,265 182,247 206,258 230,238 254,218 278,205 302,220 326,191 350,211 374,220 398,211 422,230 446,244 470,231 494,203 518,217 542,190 566,205 590,195 614,212 638,221 662,229 686,208 710,194 734,218 758,229 782,210 806,220 828,219"
+                                              Stroke="{DynamicResource Tcc.Strata.Brush.Ice}" StrokeThickness="2" StrokeLineJoin="Round" />
+                                    <Line X1="566" Y1="190" X2="566" Y2="310" Stroke="{DynamicResource Tcc.Strata.Brush.Ice}" StrokeThickness="0.65" Opacity="0.22" />
+                                    <Ellipse Canvas.Left="560" Canvas.Top="184" Width="12" Height="12" Fill="{DynamicResource Tcc.Strata.Brush.PanelDeep}" Stroke="{DynamicResource Tcc.Strata.Brush.Ice}" StrokeThickness="2" />
+                                    <TextBlock Canvas.Left="128" Canvas.Top="317" Text="Jan 10" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="222" Canvas.Top="317" Text="Jan 11" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="316" Canvas.Top="317" Text="Jan 12" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="410" Canvas.Top="317" Text="Jan 13" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="504" Canvas.Top="317" Text="Jan 14" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="598" Canvas.Top="317" Text="Jan 15" Style="{StaticResource Strata.Caption}" />
+                                    <TextBlock Canvas.Left="692" Canvas.Top="317" Text="Jan 16" Style="{StaticResource Strata.Caption}" />
+
+                                    <TextBlock Canvas.Left="57" Canvas.Top="348" Text="24H HIGH" Style="{StaticResource Strata.Overline}" />
+                                    <TextBlock Canvas.Left="57" Canvas.Top="369" Text="44,392.18" Style="{StaticResource Strata.Numeric}" />
+                                    <TextBlock Canvas.Left="243" Canvas.Top="348" Text="24H LOW" Style="{StaticResource Strata.Overline}" />
+                                    <TextBlock Canvas.Left="243" Canvas.Top="369" Text="41,876.33" Style="{StaticResource Strata.Numeric}" />
+                                    <TextBlock Canvas.Left="444" Canvas.Top="348" Text="24H VOLUME" Style="{StaticResource Strata.Overline}" />
+                                    <TextBlock Canvas.Left="444" Canvas.Top="369" Text="28.4B" Style="{StaticResource Strata.Numeric}" />
+                                    <TextBlock Canvas.Left="648" Canvas.Top="348" Text="MARKET CAP" Style="{StaticResource Strata.Overline}" />
+                                    <TextBlock Canvas.Left="648" Canvas.Top="369" Text="847.6B" Style="{StaticResource Strata.Numeric}" />
+                                </Canvas>
+                            </Grid>
+                        </Border>
+
+                        <!-- Watchlist -->
+                        <Border Canvas.Left="1001" Canvas.Top="239" Width="251" Height="404"
+                                Style="{StaticResource Strata.Panel.Primary}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="61" /><RowDefinition Height="37" /><RowDefinition Height="*" /><RowDefinition Height="43" /></Grid.RowDefinitions>
+                                <Border Grid.RowSpan="4" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                <Control Grid.RowSpan="4" Margin="1" Style="{StaticResource Strata.CraftFrame}" Panel.ZIndex="3" />
+                                <Grid Margin="17,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Watchlist" Style="{StaticResource Strata.WatchlistTitle}" VerticalAlignment="Center" AutomationProperties.AutomationId="Region.Watchlist" AutomationProperties.Name="Watchlist, five symbols, prices and 24 hour changes unavailable offline" AutomationProperties.HelpText="Read-only symbol list; no market values are inferred." />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="16" Height="1" Margin="0,0,7,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock Text="READ ONLY" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="17,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="SYMBOL" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="PRICE" Style="{StaticResource Strata.Overline}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="24H" Style="{StaticResource Strata.Overline}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid x:Name="ProductionWatchlistRows" Grid.Row="2" Margin="17,0" Panel.ZIndex="5">
+                                    <Canvas IsHitTestVisible="False">
+                                        <Line X1="0" Y1="48" X2="217" Y2="48" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="96" X2="217" Y2="96" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="144" X2="217" Y2="144" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="192" X2="217" Y2="192" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                    </Canvas>
+                                    <StackPanel>
+                                    <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Control Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Margin="8,0,0,0" Text="BTCUSDT" Style="{StaticResource Strata.WatchlistSymbol}" /></StackPanel><TextBlock Grid.Column="1" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Control Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Margin="8,0,0,0" Text="ETHUSDT" Style="{StaticResource Strata.WatchlistSymbol}" /></StackPanel><TextBlock Grid.Column="1" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Control Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Margin="8,0,0,0" Text="SOLUSDT" Style="{StaticResource Strata.WatchlistSymbol}" /></StackPanel><TextBlock Grid.Column="1" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Control Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Margin="8,0,0,0" Text="BNBUSDT" Style="{StaticResource Strata.WatchlistSymbol}" /></StackPanel><TextBlock Grid.Column="1" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><Control Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Margin="8,0,0,0" Text="XRPUSDT" Style="{StaticResource Strata.WatchlistSymbol}" /></StackPanel><TextBlock Grid.Column="1" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.WatchlistPlaceholder}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid x:Name="FixtureWatchlistRows" Grid.Row="2" Grid.RowSpan="2" Margin="17,0,17,7" Visibility="Collapsed" Panel.ZIndex="6">
+                                    <Canvas IsHitTestVisible="False">
+                                        <Line X1="0" Y1="48" X2="217" Y2="48" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="96" X2="217" Y2="96" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="144" X2="217" Y2="144" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                        <Line X1="0" Y1="192" X2="217" Y2="192" Stroke="{DynamicResource Tcc.Strata.Brush.RowSeparator}" StrokeThickness="1" />
+                                    </Canvas>
+                                    <StackPanel>
+                                        <Grid Height="48" Background="{DynamicResource Tcc.Strata.Brush.SelectedSurface}"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="▼" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Gold}" /><TextBlock Margin="8,0,0,0" Text="BTCUSDT" Style="{StaticResource Strata.Body}" /></StackPanel><TextBlock Grid.Column="1" Text="43,287.62" Style="{StaticResource Strata.Body}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="−0.72%" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="▲" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Gold}" /><TextBlock Margin="8,0,0,0" Text="ETHUSDT" Style="{StaticResource Strata.Body}" /></StackPanel><TextBlock Grid.Column="1" Text="2,517.34" Style="{StaticResource Strata.Body}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="+1.26%" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Success}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="▲" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Success}" /><TextBlock Margin="8,0,0,0" Text="SOLUSDT" Style="{StaticResource Strata.Body}" /></StackPanel><TextBlock Grid.Column="1" Text="127.81" Style="{StaticResource Strata.Body}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="+0.48%" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Success}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="▼" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" /><TextBlock Margin="8,0,0,0" Text="BNBUSDT" Style="{StaticResource Strata.Body}" /></StackPanel><TextBlock Grid.Column="1" Text="311.06" Style="{StaticResource Strata.Body}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="−0.21%" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Danger}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="48"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="70" /><ColumnDefinition Width="50" /></Grid.ColumnDefinitions><StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="▲" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Success}" /><TextBlock Margin="8,0,0,0" Text="XRPUSDT" Style="{StaticResource Strata.Body}" /></StackPanel><TextBlock Grid.Column="1" Text="0.5823" Style="{StaticResource Strata.Body}" HorizontalAlignment="Right" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="+2.14%" Style="{StaticResource Strata.Caption}" Foreground="{DynamicResource Tcc.Strata.Brush.Success}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    </StackPanel>
+                                </Grid>
+                                <Border x:Name="ProductionWatchlistFooter" Grid.Row="3" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,1,0,0" Panel.ZIndex="5"><TextBlock Text="DATA UNAVAILABLE · READ ONLY" Style="{StaticResource Strata.Overline}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Bottom row -->
+                        <Border Canvas.Left="126" Canvas.Top="654" Width="363" Height="260"
+                                Style="{StaticResource Strata.Panel.Secondary}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="51" /><RowDefinition Height="*" /><RowDefinition Height="44" /></Grid.RowDefinitions>
+                                <Border Grid.RowSpan="3" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                <Rectangle Grid.RowSpan="3" Fill="{DynamicResource Tcc.Strata.Brush.LowerPanelScrim}" IsHitTestVisible="False" />
+                                <Control Grid.RowSpan="3" Margin="1" Style="{StaticResource Strata.CraftFrame}" Panel.ZIndex="3" />
+                                <Grid Margin="31,0,24,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Priorities" Style="{StaticResource Strata.PanelTitle}" VerticalAlignment="Center" AutomationProperties.AutomationId="Region.Priorities" AutomationProperties.Name="Priorities, no items loaded, not set" AutomationProperties.HelpText="Read-only priority slots; editing and completion are unavailable." />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="16" Height="1" Margin="0,0,7,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock Text="NOT SET" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel x:Name="ProductionPriorityRows" Grid.Row="1" Margin="31,0,24,0" Panel.ZIndex="5">
+                                    <Border x:Name="PriorityFirstRow" Height="41" BorderBrush="{DynamicResource Tcc.Strata.Brush.RowSeparator}" BorderThickness="0,0,0,1"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition Width="*" /><ColumnDefinition Width="24" /></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="01" Style="{StaticResource Strata.PriorityIndex}" HorizontalAlignment="Center" VerticalAlignment="Center" /><TextBlock x:Name="PriorityText1" Grid.Column="1" Text="No priorities loaded" Style="{StaticResource Strata.PriorityLabel}" VerticalAlignment="Center" /><Control Grid.Column="2" Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /></Grid></Border>
+                                    <Border Height="41" BorderBrush="{DynamicResource Tcc.Strata.Brush.RowSeparator}" BorderThickness="0,0,0,1"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition Width="*" /><ColumnDefinition Width="24" /></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="02" Style="{StaticResource Strata.PriorityIndex}" HorizontalAlignment="Center" VerticalAlignment="Center" /><TextBlock x:Name="PriorityText2" Grid.Column="1" Text="—" Style="{StaticResource Strata.PriorityPlaceholder}" VerticalAlignment="Center" /><Control Grid.Column="2" Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /></Grid></Border>
+                                    <Border Height="41" BorderBrush="{DynamicResource Tcc.Strata.Brush.RowSeparator}" BorderThickness="0,0,0,1"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition Width="*" /><ColumnDefinition Width="24" /></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="03" Style="{StaticResource Strata.PriorityIndex}" HorizontalAlignment="Center" VerticalAlignment="Center" /><TextBlock x:Name="PriorityText3" Grid.Column="1" Text="—" Style="{StaticResource Strata.PriorityPlaceholder}" VerticalAlignment="Center" /><Control Grid.Column="2" Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /></Grid></Border>
+                                    <Border Height="41"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition Width="*" /><ColumnDefinition Width="24" /></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="04" Style="{StaticResource Strata.PriorityIndex}" HorizontalAlignment="Center" VerticalAlignment="Center" /><TextBlock x:Name="PriorityText4" Grid.Column="1" Text="—" Style="{StaticResource Strata.PriorityPlaceholder}" VerticalAlignment="Center" /><Control Grid.Column="2" Width="8" Height="8" Style="{StaticResource Strata.UnsetStatusMarker}" /></Grid></Border>
+                                </StackPanel>
+                                <Grid Grid.Row="2" Margin="31,-6,24,6" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Panel.ZIndex="5"><Border Height="1" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" VerticalAlignment="Center" /><TextBlock Text="SMALL STEPS · COMPOUNDED" Padding="10,0" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Style="{StaticResource Strata.FooterMotto}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Grid>
+                            </Grid>
+                        </Border>
+
+                        <Border Canvas.Left="492" Canvas.Top="654" Width="382" Height="260"
+                                Style="{StaticResource Strata.Panel.Secondary}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="51" /><RowDefinition Height="*" /><RowDefinition Height="44" /></Grid.RowDefinitions>
+                                <Border Grid.RowSpan="3" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                <Rectangle Grid.RowSpan="3" Fill="{DynamicResource Tcc.Strata.Brush.LowerPanelScrim}" IsHitTestVisible="False" />
+                                <Control Grid.RowSpan="3" Margin="1" Style="{StaticResource Strata.CraftFrame}" Panel.ZIndex="3" />
+                                <Grid Margin="27,0,20,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="MentalStateRegionLabel" Text="Mental State" Style="{StaticResource Strata.PanelTitle}" VerticalAlignment="Center" AutomationProperties.AutomationId="Region.MentalState" AutomationProperties.Name="Mental state, not set, no self-check recorded" AutomationProperties.HelpText="Read-only self-check summary; no mental-state input is available." />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="16" Height="1" Margin="0,0,7,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock x:Name="MentalStateValue" Text="NOT SET" Style="{StaticResource Strata.MentalStateValue}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="25,0,20,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="154" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <Grid Width="145" Height="145" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False">
+                                        <Image x:Name="MentalStateGlyph"
+                                               Width="145" Height="145"
+                                               Source="{DynamicResource Tcc.Strata.MentalStateGlyph.NotSet}"
+                                               Stretch="Uniform"
+                                               Opacity="{DynamicResource Tcc.Strata.MentalStateGlyphOpacity}"
+                                               RenderOptions.BitmapScalingMode="HighQuality"
+                                               Focusable="False"
+                                               IsHitTestVisible="False" />
+                                        <TextBlock x:Name="MentalStateHelper" Margin="10,0,10,13" Text="NO SELF-CHECK" Style="{StaticResource Strata.MentalStateHelper}" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                                    </Grid>
+                                    <StackPanel x:Name="ProductionMentalRows" Grid.Column="1" Margin="4,0,0,0" VerticalAlignment="Center">
+                                        <Grid Height="31"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="82" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Control Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Grid.Column="1" Text="Emotion" Style="{StaticResource Strata.MentalStateFieldLabel}" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.MentalStateFieldValue}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="31"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="82" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Control Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Grid.Column="1" Text="Plan" Style="{StaticResource Strata.MentalStateFieldLabel}" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.MentalStateFieldValue}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="31"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="82" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Control Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Grid.Column="1" Text="Patience" Style="{StaticResource Strata.MentalStateFieldLabel}" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.MentalStateFieldValue}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                        <Grid Height="31"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="82" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Control Width="7" Height="7" Style="{StaticResource Strata.UnsetStatusMarker}" /><TextBlock Grid.Column="1" Text="Readiness" Style="{StaticResource Strata.MentalStateFieldLabel}" VerticalAlignment="Center" /><TextBlock Grid.Column="2" Text="—" Style="{StaticResource Strata.MentalStateFieldValue}" HorizontalAlignment="Right" VerticalAlignment="Center" /></Grid>
+                                    </StackPanel>
+                                    <StackPanel x:Name="FixtureMentalRows" Grid.Column="1" VerticalAlignment="Center" Visibility="Collapsed">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Ice}" /><TextBlock Margin="11,-3,0,0" Text="Emotions in check" Style="{StaticResource Strata.Body}" /></StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Ice}" /><TextBlock Margin="11,-3,0,0" Text="Following plan" Style="{StaticResource Strata.Body}" /></StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Ice}" /><TextBlock Margin="11,-3,0,0" Text="Patient" Style="{StaticResource Strata.Body}" /></StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,9"><Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Ice}" /><TextBlock Margin="11,-3,0,0" Text="No revenge trading" Style="{StaticResource Strata.Body}" /></StackPanel>
+                                        <StackPanel Orientation="Horizontal"><Ellipse Width="7" Height="7" Fill="{DynamicResource Tcc.Strata.Brush.Ice}" /><TextBlock Margin="11,-3,0,0" Text="Ready to execute" Style="{StaticResource Strata.Body}" /></StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="25,-6,20,6" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Panel.ZIndex="5"><Border Height="1" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" VerticalAlignment="Center" /><TextBlock Text="A CLEAR MIND · SEES FURTHER" Padding="10,0" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Style="{StaticResource Strata.FooterMotto}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Grid>
+                            </Grid>
+                        </Border>
+
+                        <Border Canvas.Left="879" Canvas.Top="654" Width="373" Height="260"
+                                Style="{StaticResource Strata.Panel.Secondary}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition Height="51" /><RowDefinition Height="*" /><RowDefinition Height="44" /></Grid.RowDefinitions>
+                                <Border Grid.RowSpan="3" Height="1" Margin="1,1,1,0" Background="{DynamicResource Tcc.Strata.Brush.EdgeGlint}" VerticalAlignment="Top" Panel.ZIndex="2" IsHitTestVisible="False" />
+                                <Rectangle Grid.RowSpan="3" Fill="{DynamicResource Tcc.Strata.Brush.LowerPanelScrim}" IsHitTestVisible="False" />
+                                <Control Grid.RowSpan="3" Margin="1" Style="{StaticResource Strata.CraftFrame}" Panel.ZIndex="3" />
+                                <Grid Margin="26,0,22,0" Panel.ZIndex="5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="RecentActivityRegionLabel" Text="Recent Activity" Style="{StaticResource Strata.PanelTitle}" VerticalAlignment="Center" AutomationProperties.AutomationId="Region.RecentActivity" AutomationProperties.Name="Recent activity, four local session facts, timestamps unavailable" AutomationProperties.HelpText="Read-only local session facts; timestamps are unavailable and no historical activity is inferred." />
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Border Width="16" Height="1" Margin="0,0,7,0" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                                        <TextBlock x:Name="RecentActivityMode" Text="LOCAL EVENTS" Style="{StaticResource Strata.Overline}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="26,0,22,0" Panel.ZIndex="5">
+                                    <Grid.RowDefinitions><RowDefinition Height="20" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="1" Text="TIME" Style="{StaticResource Strata.ActivityColumnLabel}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2" Text="EVENT" Style="{StaticResource Strata.ActivityColumnLabel}" VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Line X1="9" Y1="14" X2="9" Y2="98" Stroke="{DynamicResource Tcc.Strata.Brush.Border}" StrokeThickness="1" />
+                                        <Line x:Name="RecentTimelineFixtureExtension" X1="9" Y1="98" X2="9" Y2="126" Stroke="{DynamicResource Tcc.Strata.Brush.Border}" StrokeThickness="1" Visibility="Collapsed" />
+                                        <StackPanel>
+                                            <Grid Height="28"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Grid.Column="0" Width="8" Height="8" Style="{StaticResource Strata.ActivityMarker.Current}" HorizontalAlignment="Center" /><TextBlock x:Name="RecentTime1" Grid.Column="1" Text="—" Style="{StaticResource Strata.ActivityTime}" VerticalAlignment="Center" /><TextBlock x:Name="RecentText1" Grid.Column="2" Text="Workspace opened" Style="{StaticResource Strata.ActivityEvent}" VerticalAlignment="Center" /></Grid>
+                                            <Grid Height="28"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Grid.Column="0" Width="8" Height="8" Style="{StaticResource Strata.ActivityMarker.Alert}" HorizontalAlignment="Center" /><TextBlock x:Name="RecentTime2" Grid.Column="1" Text="—" Style="{StaticResource Strata.ActivityTime}" VerticalAlignment="Center" /><TextBlock x:Name="RecentText2" Grid.Column="2" Text="Market data offline" Style="{StaticResource Strata.ActivityEvent}" VerticalAlignment="Center" /></Grid>
+                                            <Grid Height="28"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Grid.Column="0" Width="8" Height="8" Style="{StaticResource Strata.ActivityMarker.Neutral}" HorizontalAlignment="Center" /><TextBlock x:Name="RecentTime3" Grid.Column="1" Text="—" Style="{StaticResource Strata.ActivityTime}" VerticalAlignment="Center" /><TextBlock x:Name="RecentText3" Grid.Column="2" Text="Read-only mode active" Style="{StaticResource Strata.ActivityEvent}" VerticalAlignment="Center" /></Grid>
+                                            <Grid Height="28"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Grid.Column="0" Width="8" Height="8" Style="{StaticResource Strata.ActivityMarker.Neutral}" HorizontalAlignment="Center" /><TextBlock x:Name="RecentTime4" Grid.Column="1" Text="—" Style="{StaticResource Strata.ActivityTime}" VerticalAlignment="Center" /><TextBlock x:Name="RecentText4" Grid.Column="2" Text="No execution API" Style="{StaticResource Strata.ActivityEvent}" VerticalAlignment="Center" /></Grid>
+                                            <Grid x:Name="RecentRow5" Height="28" Visibility="Collapsed"><Grid.ColumnDefinitions><ColumnDefinition Width="18" /><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Ellipse Grid.Column="0" Width="8" Height="8" Style="{StaticResource Strata.ActivityMarker.Neutral}" HorizontalAlignment="Center" /><TextBlock x:Name="RecentTime5" Grid.Column="1" Text="—" Style="{StaticResource Strata.ActivityTime}" VerticalAlignment="Center" /><TextBlock x:Name="RecentText5" Grid.Column="2" Text="—" Style="{StaticResource Strata.ActivityEvent}" VerticalAlignment="Center" /></Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="26,-6,22,6" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Panel.ZIndex="5"><Border Height="1" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" VerticalAlignment="Center" /><TextBlock Text="JOURNAL TODAY · A BETTER TOMORROW" Padding="10,0" Background="{DynamicResource Tcc.Strata.Brush.FooterBand}" Style="{StaticResource Strata.FooterMotto}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- Right-side editorial marks -->
+                        <Grid x:Name="RightEditorialMarksRegion" Canvas.Left="1538" Canvas.Top="102" Width="130" Height="190"
+                              IsHitTestVisible="False" Focusable="False">
+                            <Rectangle Fill="{DynamicResource Tcc.Strata.Brush.EditorialScrim}" />
+                            <Border x:Name="RightEditorialCadenceLine" Width="1" Height="140" Margin="19,24,0,0"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                                    Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" Opacity="0.68" />
+                            <Grid Width="96" Height="154" Margin="20,20,14,16" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="13" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border x:Name="RightEditorialCapRule" Grid.Row="0" Width="22" Height="1"
+                                        Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock x:Name="RightEditorialRegionLabel" Grid.Row="1" Text="M A R K E T S"
+                                           Style="{StaticResource Strata.EditorialCaption}" Opacity="0.72" TextAlignment="Center" VerticalAlignment="Center"
+                                           AutomationProperties.AutomationId="Editorial.RightMaxim"
+                                           AutomationProperties.Name="Markets change. Discipline endures."
+                                           AutomationProperties.HelpText="Decorative editorial maxim in the right scenic margin." />
+                                <TextBlock Grid.Row="2" Text="C H A N G E" Style="{StaticResource Strata.EditorialCaption}" Opacity="0.72"
+                                           TextAlignment="Center" VerticalAlignment="Center" AutomationProperties.Name="" />
+                                <Border x:Name="RightEditorialPairRule" Grid.Row="3" Width="36" Height="1"
+                                        Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="4" Text="D I S C I P L I N E" Style="{StaticResource Strata.EditorialEmphasis}"
+                                           TextAlignment="Center" VerticalAlignment="Center" AutomationProperties.Name="" />
+                                <TextBlock Grid.Row="5" Text="E N D U R E S" Style="{StaticResource Strata.EditorialEmphasis}"
+                                           TextAlignment="Center" VerticalAlignment="Center" AutomationProperties.Name="" />
+                                <Control x:Name="RightEditorialSeal" Grid.Row="6" Width="24" Height="24"
+                                         Style="{StaticResource Strata.Seal.Square}"
+                                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                                         AutomationProperties.Name="" />
+                            </Grid>
+                        </Grid>
+
+                        <TextBlock Visibility="Collapsed" Text="{Binding StartupVariant}" />
+                        <TextBlock Visibility="Collapsed" Text="{Binding StartupStatus}" />
+                    </Canvas>
+        </ScrollViewer>
+    </Grid>
 </Window>

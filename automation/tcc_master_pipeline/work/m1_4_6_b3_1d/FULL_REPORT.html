@@ -1,0 +1,120 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><title>M1.4.6-B3.1D 完整報告</title>
+<style>body{margin:0;background:#07111d;color:#d9e8f2;font:16px/1.6 "Microsoft JhengHei",sans-serif}main{max-width:1480px;margin:auto;padding:28px}h1{color:#eefaff}button{position:sticky;top:12px;padding:12px 20px;background:#9eeaff;border:0;border-radius:8px;font-weight:700;cursor:pointer}pre{white-space:pre-wrap;background:#0e1c2b;border:1px solid #365166;border-radius:12px;padding:22px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{color:#d9e8f2;text-decoration:none;background:#0e1c2b;border:1px solid #365166;border-radius:10px;overflow:hidden}.card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.card span{display:block;padding:9px;word-break:break-all}</style></head>
+<body><main><h1>M1.4.6-B3.1D 完整報告</h1><button onclick="navigator.clipboard.writeText(document.getElementById('report').innerText).then(()=>this.textContent='已複製完整報告')">一鍵複製完整報告</button><pre id="report">M1.4.6-B3.1D — 場景深度權威建置 + B3.1R 實驗回退
+========================================================================
+階段狀態：PASS
+實際模型識別：ACTUAL_MODEL_IDENTIFIER_UNAVAILABLE
+模型呼叫：0｜圖像生成呼叫：0
+Production：精確回復 M1.4.6-B3.1；B3.1D 候選未套用、未選定
+Geometry：21/21，ΔX/Y/W/H=0
+像素回退：changed_pixels=0，MAE=0.000000，max_delta=0
+HitTest：14/14｜DPI：PASS｜Release Build：PASS
+Focused Tests：PASS 5/5｜Full Tests：PASS 1716/1716
+
+策略
+先精確撤回 B3.1R 的人物硬穿插 Runtime，再將場景空間深度、證據信心與 UI 融合政策拆成三個可稽核層。人物核心不硬穿 UI；人物附近卡片以 silhouette distance 控制同步材質衰減；只有來源連續、HIGH confidence 的真前景梅枝可作完整枝系穿插。
+
+策略邏輯
+空間上靠前不等於設計上應前置。Depth Authority 只回答前後位置，Confidence 回答證據品質，Fusion Policy 才回答能否穿 UI。這能避免把人物臉等最近物件錯當成硬前景，同時讓第二張底圖沿用同一決策流程。
+
+驗收結論
+Production 回退證據為逐像素 0 差異；B3.1D 的 A/B/C 與梅枝強化均留在隔離工作目錄。B 為目前最自然的審查建議，但 Supervisor 尚未選定，正式產品仍是 B3.1。
+
+30 項必答
+1. B3.1R 哪些正式視覺施工被撤回？
+   Major Alerts 的整臉／頭／主髮硬穿插、Today&#x27;s Priorities 的大量髮絲硬穿插、Activity 的 B3.1R 梅枝候選切換與三個 Runtime 候選資源。
+2. B3.1 哪些正式能力完整保留？
+   B3 主底圖、21/21 幾何、玻璃與霜邊材質、月光／雪光／暖窗次光、字體／Icon／Chart／按鈕、正式前景架構、HitTest、DPI 與 Material Token。
+3. Production 是否重新回到 B3.1 Authority？
+   是。Runtime 逐像素比較 changed_pixels=0、MAE=0.000000、max_delta=0。
+4. 21/21 Geometry 是否仍為 0 差異？
+   是，21/21；ΔX/Y/W/H 全部為 0。
+5. 人物 RGB 是否 0 差異？
+   是；回退畫面與 B3.1 Authority 的人物區域及全畫布像素差異均為 0。
+6. B3 底圖是否 0 修改？
+   是；source SHA-256=DC1255360ECCEBE3E3E8BE25289B9A3D6D9AF3195947837C557E5F7BEFE5EDED，符合既定 custody hash。
+7. B3.1R 研究成果是否完整保留？
+   是；隔離研究目錄保留 60 個檔案，未刪除報告、圖片、遮罩、JSON 或腳本。
+8. 新深度模型如何表示前／中／後景？
+   使用 D0 遠景、D1 中遠景、D2 中景、D3 近景、D4 真前景、D5 人物實體核心、D6 人物柔性外緣。
+9. 如何表示深度信心？
+   每一深度證據另標 HIGH／MEDIUM／LOW／UNKNOWN；LOW／UNKNOWN 不允許自動硬穿插。
+10. 哪些區域 HIGH？
+   來源連續的 B3SC014、B3SC016，以及人物核心的空間深度判讀；空間 HIGH 不會自動轉成硬前景。
+11. 哪些區域 MEDIUM？
+   B3SC015、B3SC018、近雪與近岩等部分邊界有遮擋或半透明性的區域。
+12. 哪些區域 LOW／UNKNOWN？
+   左側暗部天空與枝條交界、被遮蔽的腳部／接地處、無可靠來源連續性的半透明外緣。
+13. 哪些元素允許硬前景？
+   只有 HIGH 且來源連續的真前景，例如完整 B3SC014、B3SC016；Critical Content 永遠在其上。
+14. 哪些元素只能柔性融合？
+   中信心環境前景與人物柔性外緣只能低強度 SOFT，人物附近卡片使用 GLASS_FADE_ONLY。
+15. 哪些人物區域禁止硬穿插？
+   臉、五官、頭、主髮量、軀幹、手、武器與實體衣袖全部禁止。
+16. Character Distance Field 是否成立？
+   成立；由 439602 個 silhouette 像素建立 L2 distance transform。
+17. 是否沿 silhouette 而不是圓形半徑？
+   是；輸入是人物可見輪廓遮罩，未使用 radial 或 circular primitive。
+18. 是否存在 halo／光圈？
+   未見圓形 halo；所有候選以 silhouette 距離連續衰減。
+19. Glass 漸進透明是否自然？
+   B 最自然；A 改動小但線性起始較易被察覺，C 範圍較廣、可能削弱卡片材質。
+20. Border／Frost 是否同步衰減？
+   是；隔離候選以同一距離權重同步處理 glass、border、frost、reflection、inner highlight，Critical Content 不變。
+21. A／B／C 哪個最自然？
+   視覺審查推薦 B，但未正式選定，仍等待 Supervisor。
+22. 左下梅枝是否形成完整枝條穿插？
+   是；B3SC014 保留主枝、次枝、花朵與來源方向，未只取散花。
+23. 右下梅枝是否形成完整枝條穿插？
+   隔離候選中是；B3SC016 使用連續來源座標與主枝結構，尚未寫入 Production。
+24. 是否再次出現碎花貼片？
+   否；政策禁止 fragment-only，來源不連續時回退為 0%。
+25. Critical Content overlap 是否為 0？
+   是；關鍵內容像素在候選合成後原樣覆回，記錄為 0 overlap。
+26. 是否有貼圖感？
+   未見人物硬貼圖；梅枝採來源連續結構。C 因效果較強，材料弱化風險高於 A/B。
+27. 是否有剪紙感？
+   未見 B3.1R 的人物核心硬切剪紙感；人物核心保持背景層，只調整鄰近 UI 材質。
+28. 是否有人工漸層？
+   未見圓形或 radial 人工漸層；B 的 SmoothStep 起迄最不明顯。
+29. 是否具備第二張底圖泛化能力？
+   具備資料結構與決策順序的泛化能力；第二張底圖仍須建立自己的 segmentation、confidence 與 evidence。
+30. 下一階段是否值得正式施工？
+   有條件值得：先由 Supervisor 選定 A/B/C 與梅枝政策，再另行授權；本階段不會自行施工。
+
+交付物
+- B3_1D_DEPTH_CLASS_MAP.png
+- B3_1D_DEPTH_CONFIDENCE_MAP.png
+- B3_1D_OCCLUSION_RELATIONSHIP_MAP.png
+- B3_1D_CHARACTER_DISTANCE_FIELD.png
+- B3_1D_UI_FUSION_POLICY_MAP.png
+- B3_1D_PLUM_FOREGROUND_AUTHORITY.png
+- B3_1D_CHARACTER_FADE_A.png
+- B3_1D_CHARACTER_FADE_B.png
+- B3_1D_CHARACTER_FADE_C.png
+- B3_1D_FADE_COMPARISON.png
+- B3_1D_PLUM_STRONGER_PREVIEW.png
+- B3_1D_COMBINED_A.png
+- B3_1D_COMBINED_B.png
+- B3_1D_COMBINED_C.png
+- B3_1D_BEFORE_AFTER.png
+- B3_1D_PRODUCTION_ROLLBACK_PROOF.png
+- B3_1D_FINAL_PRODUCT_PREVIEW.png
+- b3_1d_scene_depth_authority.json
+- b3_1d_depth_confidence.json
+- b3_1d_occlusion_relationships.json
+- b3_1d_character_distance_field.json
+- b3_1d_ui_fusion_policy.json
+- b3_1d_glass_fade_policy.json
+- b3_1d_plum_foreground_policy.json
+- b3_1d_geometry_validation.json
+- b3_1d_runtime_validation.json
+- b3_1d_visual_review.json
+- b3_1d_validation.json
+
+下一步建議
+Supervisor 檢閱 A/B/C、梅枝 3× 放大證據與 JSON；如接受，再明確選定融合政策並另行授權正式施工。
+
+尚未執行
+未 commit、未 push、未 deploy、未進入下一階段。
+</pre><h2>產出圖</h2><div class="grid"><a class="card" href="B3_1D_DEPTH_CLASS_MAP.png"><img src="B3_1D_DEPTH_CLASS_MAP.png" alt="B3_1D_DEPTH_CLASS_MAP.png"><span>B3_1D_DEPTH_CLASS_MAP.png</span></a><a class="card" href="B3_1D_DEPTH_CONFIDENCE_MAP.png"><img src="B3_1D_DEPTH_CONFIDENCE_MAP.png" alt="B3_1D_DEPTH_CONFIDENCE_MAP.png"><span>B3_1D_DEPTH_CONFIDENCE_MAP.png</span></a><a class="card" href="B3_1D_OCCLUSION_RELATIONSHIP_MAP.png"><img src="B3_1D_OCCLUSION_RELATIONSHIP_MAP.png" alt="B3_1D_OCCLUSION_RELATIONSHIP_MAP.png"><span>B3_1D_OCCLUSION_RELATIONSHIP_MAP.png</span></a><a class="card" href="B3_1D_CHARACTER_DISTANCE_FIELD.png"><img src="B3_1D_CHARACTER_DISTANCE_FIELD.png" alt="B3_1D_CHARACTER_DISTANCE_FIELD.png"><span>B3_1D_CHARACTER_DISTANCE_FIELD.png</span></a><a class="card" href="B3_1D_UI_FUSION_POLICY_MAP.png"><img src="B3_1D_UI_FUSION_POLICY_MAP.png" alt="B3_1D_UI_FUSION_POLICY_MAP.png"><span>B3_1D_UI_FUSION_POLICY_MAP.png</span></a><a class="card" href="B3_1D_PLUM_FOREGROUND_AUTHORITY.png"><img src="B3_1D_PLUM_FOREGROUND_AUTHORITY.png" alt="B3_1D_PLUM_FOREGROUND_AUTHORITY.png"><span>B3_1D_PLUM_FOREGROUND_AUTHORITY.png</span></a><a class="card" href="B3_1D_CHARACTER_FADE_A.png"><img src="B3_1D_CHARACTER_FADE_A.png" alt="B3_1D_CHARACTER_FADE_A.png"><span>B3_1D_CHARACTER_FADE_A.png</span></a><a class="card" href="B3_1D_CHARACTER_FADE_B.png"><img src="B3_1D_CHARACTER_FADE_B.png" alt="B3_1D_CHARACTER_FADE_B.png"><span>B3_1D_CHARACTER_FADE_B.png</span></a><a class="card" href="B3_1D_CHARACTER_FADE_C.png"><img src="B3_1D_CHARACTER_FADE_C.png" alt="B3_1D_CHARACTER_FADE_C.png"><span>B3_1D_CHARACTER_FADE_C.png</span></a><a class="card" href="B3_1D_FADE_COMPARISON.png"><img src="B3_1D_FADE_COMPARISON.png" alt="B3_1D_FADE_COMPARISON.png"><span>B3_1D_FADE_COMPARISON.png</span></a><a class="card" href="B3_1D_PLUM_STRONGER_PREVIEW.png"><img src="B3_1D_PLUM_STRONGER_PREVIEW.png" alt="B3_1D_PLUM_STRONGER_PREVIEW.png"><span>B3_1D_PLUM_STRONGER_PREVIEW.png</span></a><a class="card" href="B3_1D_COMBINED_A.png"><img src="B3_1D_COMBINED_A.png" alt="B3_1D_COMBINED_A.png"><span>B3_1D_COMBINED_A.png</span></a><a class="card" href="B3_1D_COMBINED_B.png"><img src="B3_1D_COMBINED_B.png" alt="B3_1D_COMBINED_B.png"><span>B3_1D_COMBINED_B.png</span></a><a class="card" href="B3_1D_COMBINED_C.png"><img src="B3_1D_COMBINED_C.png" alt="B3_1D_COMBINED_C.png"><span>B3_1D_COMBINED_C.png</span></a><a class="card" href="B3_1D_BEFORE_AFTER.png"><img src="B3_1D_BEFORE_AFTER.png" alt="B3_1D_BEFORE_AFTER.png"><span>B3_1D_BEFORE_AFTER.png</span></a><a class="card" href="B3_1D_PRODUCTION_ROLLBACK_PROOF.png"><img src="B3_1D_PRODUCTION_ROLLBACK_PROOF.png" alt="B3_1D_PRODUCTION_ROLLBACK_PROOF.png"><span>B3_1D_PRODUCTION_ROLLBACK_PROOF.png</span></a><a class="card" href="B3_1D_FINAL_PRODUCT_PREVIEW.png"><img src="B3_1D_FINAL_PRODUCT_PREVIEW.png" alt="B3_1D_FINAL_PRODUCT_PREVIEW.png"><span>B3_1D_FINAL_PRODUCT_PREVIEW.png</span></a></div></main></body></html>

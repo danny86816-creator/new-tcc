@@ -1,0 +1,119 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Self-contained because WPF parses merged dictionaries before joining the parent resource graph. -->
+    <Style x:Key="Tcc.ReferenceMaster.Module.Standard" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Panel}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.Observation" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DensePrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Primary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.MarketAnchor" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DensePrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Default}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.RiskTerrain" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.LowDensity}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Elevated}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.Positions" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseSecondary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Secondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.Priorities" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseSecondary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Secondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.MentalState" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseQuiet}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.AiSummary" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseQuiet}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Auxiliary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Module.Activity" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseDeep}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="1" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.SafetyTile" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.LowDensity}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Safety}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.TableHeaderBand" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseInterior}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="0,1,0,1" />
+        <Setter Property="Padding" Value="6,3" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.TableRow" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseRow}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="6,2" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Content.LowerDense" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.LowerDenseInterior}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Content.Priorities" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.PrioritiesInterior}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Content.Mental" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.MentalInterior}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Separator" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="Height" Value="1" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+</ResourceDictionary>

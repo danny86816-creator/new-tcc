@@ -1,0 +1,100 @@
+{
+  "schema_version": "B3_1D_UI_FUSION_POLICY_V1",
+  "allowed_values": [
+    "HARD_FOREGROUND_ALLOWED",
+    "SOFT_FOREGROUND_ALLOWED",
+    "GLASS_FADE_ONLY",
+    "BACKGROUND_ONLY",
+    "FORBIDDEN",
+    "UNKNOWN"
+  ],
+  "critical_content_policy": "FORBIDDEN / ALWAYS ABOVE",
+  "regions": [
+    {
+      "region_id": "Major Alerts",
+      "rect": [
+        1401,
+        251,
+        428,
+        145
+      ],
+      "policy": "GLASS_FADE_ONLY",
+      "scene_sources": [
+        "B3SC011",
+        "B3SC018"
+      ]
+    },
+    {
+      "region_id": "Today's Priorities",
+      "rect": [
+        1284,
+        424,
+        497,
+        226
+      ],
+      "policy": "GLASS_FADE_ONLY",
+      "scene_sources": [
+        "B3SC011",
+        "B3SC018"
+      ]
+    },
+    {
+      "region_id": "Activity",
+      "rect": [
+        1557,
+        672,
+        224,
+        471
+      ],
+      "policy": "HARD_FOREGROUND_ALLOWED",
+      "scene_sources": [
+        "B3SC016"
+      ]
+    },
+    {
+      "region_id": "Left Navigation Rail",
+      "rect": [
+        0,
+        54,
+        170,
+        1142
+      ],
+      "policy": "HARD_FOREGROUND_ALLOWED",
+      "scene_sources": [
+        "B3SC014"
+      ]
+    },
+    {
+      "region_id": "Market Overview",
+      "rect": [
+        205,
+        424,
+        763,
+        719
+      ],
+      "policy": "SOFT_FOREGROUND_ALLOWED",
+      "scene_sources": [
+        "B3SC014"
+      ]
+    },
+    {
+      "region_id": "Critical Content",
+      "rect": [
+        0,
+        0,
+        2142,
+        1196
+      ],
+      "policy": "FORBIDDEN",
+      "scene_sources": []
+    }
+  ],
+  "generic_decision_order": [
+    "high-confidence true foreground",
+    "medium-confidence flexible foreground",
+    "character flexible edge",
+    "character core",
+    "near-character UI",
+    "low/unknown depth"
+  ]
+}

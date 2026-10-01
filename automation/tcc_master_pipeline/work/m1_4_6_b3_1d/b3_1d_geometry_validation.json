@@ -1,0 +1,184 @@
+{
+  "schema_version": "B3_1D_GEOMETRY_VALIDATION_V1",
+  "status": "PASS",
+  "authority": "automation/tcc_master_pipeline/work/m1_4_6_b3_0r/b3_home_geometry_authority.json",
+  "component_count": 21,
+  "passed": 21,
+  "failed": 0,
+  "max_absolute_delta": {
+    "dx": 0.0,
+    "dy": 0.0,
+    "dw": 0.0,
+    "dh": 0.0
+  },
+  "components": [
+    {
+      "component_id": "Viewport",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Safety Core",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Main Workspace",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Global Top Bar",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Left Navigation Rail",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Command Center Header",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Workspace Selector",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "New Trade Plan",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Review Checklist",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Trading Permission",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Total Risk",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Current Positions",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Major Alerts",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Market Overview",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Mental State",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Today's Priorities",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Risk Allocation",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Open Positions",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Activity",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Character Zone",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    },
+    {
+      "component_id": "Application Chrome",
+      "dx": 0.0,
+      "dy": 0.0,
+      "dw": 0.0,
+      "dh": 0.0,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,437 @@
+{
+  "schema_version": "M1.4.6B2R2_ARTWORK_COVERAGE_V1",
+  "status": "PASS",
+  "coordinate_system": [
+    2142,
+    1196
+  ],
+  "policy": "Coverage counts pixels with non-zero alpha inside each effective S101-S108 geometry. Values are at or below the conservative authorized maximum; lower density is permitted.",
+  "source_registry": "automation/tcc_master_pipeline/work/m1_4_6_b2r1b/m1_4_6_b2r1b_selection_registry.json",
+  "source_registry_sha256": "506CF7BCE26966EF9812AE093B6DCCFF6C0B675D1E82ABD450424FAF701B8F2E",
+  "critical_ui_overlap_px": 0,
+  "readability_violations": 0,
+  "selection_rows": [
+    {
+      "selection_id": "S101",
+      "name": "Top Bar 有限穿插",
+      "effective_area_px": 11380,
+      "artwork_pixels": 341,
+      "artwork_coverage_ratio": 0.029965,
+      "target_ratio": 0.03,
+      "maximum_ratio": 0.05,
+      "within_limit": true,
+      "opacity_limit": 0.28,
+      "actual_alpha": 71,
+      "actual_opacity": 0.278431,
+      "max_intrusion_px": 8,
+      "effective_rectangles": [
+        {
+          "left": 1666,
+          "top": 0,
+          "right": 1669,
+          "bottom": 54
+        },
+        {
+          "left": 1752,
+          "top": 0,
+          "right": 1754,
+          "bottom": 54
+        },
+        {
+          "left": 1838,
+          "top": 0,
+          "right": 1928,
+          "bottom": 44
+        },
+        {
+          "left": 375,
+          "top": 44,
+          "right": 377,
+          "bottom": 54
+        },
+        {
+          "left": 643,
+          "top": 44,
+          "right": 1050,
+          "bottom": 54
+        },
+        {
+          "left": 1360,
+          "top": 44,
+          "right": 1362,
+          "bottom": 54
+        },
+        {
+          "left": 1838,
+          "top": 44,
+          "right": 2142,
+          "bottom": 54
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S102",
+      "name": "Left Navigation 有限穿插",
+      "effective_area_px": 9378,
+      "artwork_pixels": 375,
+      "artwork_coverage_ratio": 0.039987,
+      "target_ratio": 0.04,
+      "maximum_ratio": 0.06,
+      "within_limit": true,
+      "opacity_limit": 0.32,
+      "actual_alpha": 81,
+      "actual_opacity": 0.317647,
+      "max_intrusion_px": 18,
+      "effective_rectangles": [
+        {
+          "left": 153,
+          "top": 147,
+          "right": 170,
+          "bottom": 585
+        },
+        {
+          "left": 150,
+          "top": 585,
+          "right": 170,
+          "bottom": 588
+        },
+        {
+          "left": 146,
+          "top": 588,
+          "right": 170,
+          "bottom": 666
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S103",
+      "name": "Command Center 標題區有限穿插",
+      "effective_area_px": 15768,
+      "artwork_pixels": 1261,
+      "artwork_coverage_ratio": 0.079972,
+      "target_ratio": 0.08,
+      "maximum_ratio": 0.12,
+      "within_limit": true,
+      "opacity_limit": 0.3,
+      "actual_alpha": 76,
+      "actual_opacity": 0.298039,
+      "max_intrusion_px": 14,
+      "effective_rectangles": [
+        {
+          "left": 184,
+          "top": 102,
+          "right": 207,
+          "bottom": 194
+        },
+        {
+          "left": 538,
+          "top": 102,
+          "right": 704,
+          "bottom": 113
+        },
+        {
+          "left": 558,
+          "top": 113,
+          "right": 704,
+          "bottom": 194
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S104",
+      "name": "Review Checklist 有限穿插",
+      "effective_area_px": 5970,
+      "artwork_pixels": 179,
+      "artwork_coverage_ratio": 0.029983,
+      "target_ratio": 0.03,
+      "maximum_ratio": 0.05,
+      "within_limit": true,
+      "opacity_limit": 0.24,
+      "actual_alpha": 61,
+      "actual_opacity": 0.239216,
+      "max_intrusion_px": 8,
+      "effective_rectangles": [
+        {
+          "left": 1560,
+          "top": 146,
+          "right": 1842,
+          "bottom": 151
+        },
+        {
+          "left": 1560,
+          "top": 151,
+          "right": 1577,
+          "bottom": 216
+        },
+        {
+          "left": 1797,
+          "top": 151,
+          "right": 1842,
+          "bottom": 152
+        },
+        {
+          "left": 1819,
+          "top": 152,
+          "right": 1842,
+          "bottom": 163
+        },
+        {
+          "left": 1825,
+          "top": 163,
+          "right": 1842,
+          "bottom": 216
+        },
+        {
+          "left": 1560,
+          "top": 216,
+          "right": 1842,
+          "bottom": 224
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S105",
+      "name": "Market Overview 有限穿插",
+      "effective_area_px": 94747,
+      "artwork_pixels": 9474,
+      "artwork_coverage_ratio": 0.099993,
+      "target_ratio": 0.1,
+      "maximum_ratio": 0.15,
+      "within_limit": true,
+      "opacity_limit": 0.42,
+      "actual_alpha": 96,
+      "actual_opacity": 0.376471,
+      "max_intrusion_px": 28,
+      "effective_rectangles": [
+        {
+          "left": 205,
+          "top": 424,
+          "right": 968,
+          "bottom": 435
+        },
+        {
+          "left": 205,
+          "top": 435,
+          "right": 216,
+          "bottom": 622
+        },
+        {
+          "left": 602,
+          "top": 435,
+          "right": 968,
+          "bottom": 449
+        },
+        {
+          "left": 648,
+          "top": 449,
+          "right": 968,
+          "bottom": 568
+        },
+        {
+          "left": 941,
+          "top": 568,
+          "right": 968,
+          "bottom": 622
+        },
+        {
+          "left": 205,
+          "top": 622,
+          "right": 228,
+          "bottom": 1024
+        },
+        {
+          "left": 945,
+          "top": 622,
+          "right": 968,
+          "bottom": 1024
+        },
+        {
+          "left": 205,
+          "top": 1024,
+          "right": 216,
+          "bottom": 1118
+        },
+        {
+          "left": 957,
+          "top": 1024,
+          "right": 968,
+          "bottom": 1118
+        },
+        {
+          "left": 205,
+          "top": 1118,
+          "right": 968,
+          "bottom": 1143
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S106",
+      "name": "Risk Allocation 有限穿插",
+      "effective_area_px": 21964,
+      "artwork_pixels": 1757,
+      "artwork_coverage_ratio": 0.079995,
+      "target_ratio": 0.08,
+      "maximum_ratio": 0.12,
+      "within_limit": true,
+      "opacity_limit": 0.32,
+      "actual_alpha": 81,
+      "actual_opacity": 0.317647,
+      "max_intrusion_px": 20,
+      "effective_rectangles": [
+        {
+          "left": 1206,
+          "top": 671,
+          "right": 1220,
+          "bottom": 1096
+        },
+        {
+          "left": 986,
+          "top": 1020,
+          "right": 1052,
+          "bottom": 1096
+        },
+        {
+          "left": 986,
+          "top": 1096,
+          "right": 1220,
+          "bottom": 1143
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S107",
+      "name": "Open Positions 有限穿插",
+      "effective_area_px": 17781,
+      "artwork_pixels": 1422,
+      "artwork_coverage_ratio": 0.079973,
+      "target_ratio": 0.08,
+      "maximum_ratio": 0.1,
+      "within_limit": true,
+      "opacity_limit": 0.3,
+      "actual_alpha": 76,
+      "actual_opacity": 0.298039,
+      "max_intrusion_px": 20,
+      "effective_rectangles": [
+        {
+          "left": 1235,
+          "top": 671,
+          "right": 1286,
+          "bottom": 678
+        },
+        {
+          "left": 1235,
+          "top": 678,
+          "right": 1242,
+          "bottom": 737
+        },
+        {
+          "left": 1235,
+          "top": 737,
+          "right": 1255,
+          "bottom": 742
+        },
+        {
+          "left": 1452,
+          "top": 1030,
+          "right": 1521,
+          "bottom": 1101
+        },
+        {
+          "left": 1235,
+          "top": 1101,
+          "right": 1521,
+          "bottom": 1143
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    },
+    {
+      "selection_id": "S108",
+      "name": "Activity 有限穿插",
+      "effective_area_px": 18644,
+      "artwork_pixels": 932,
+      "artwork_coverage_ratio": 0.049989,
+      "target_ratio": 0.05,
+      "maximum_ratio": 0.08,
+      "within_limit": true,
+      "opacity_limit": 0.28,
+      "actual_alpha": 71,
+      "actual_opacity": 0.278431,
+      "max_intrusion_px": 18,
+      "effective_rectangles": [
+        {
+          "left": 1762,
+          "top": 671,
+          "right": 1776,
+          "bottom": 822
+        },
+        {
+          "left": 1764,
+          "top": 822,
+          "right": 1776,
+          "bottom": 935
+        },
+        {
+          "left": 1762,
+          "top": 935,
+          "right": 1776,
+          "bottom": 1039
+        },
+        {
+          "left": 1718,
+          "top": 1039,
+          "right": 1776,
+          "bottom": 1101
+        },
+        {
+          "left": 1535,
+          "top": 1101,
+          "right": 1776,
+          "bottom": 1143
+        }
+      ],
+      "hard_protection_overlap_px": 0,
+      "critical_ui_overlap_px": 0,
+      "readability_violations": 0,
+      "artwork_role": "scene-native static thin mist / cold light extracted from frozen scene",
+      "hit_test_visible": false
+    }
+  ],
+  "s108_lower_than_s106_s107": true,
+  "market_overview_core_artwork_px": 0
+}

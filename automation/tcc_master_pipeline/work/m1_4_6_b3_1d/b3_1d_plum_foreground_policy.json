@@ -1,0 +1,30 @@
+{
+  "schema_version": "B3_1D_PLUM_FOREGROUND_POLICY_V1",
+  "status": "PASS",
+  "production_applied": false,
+  "elements": [
+    {
+      "element_id": "B3SC014",
+      "side": "left/lower-left",
+      "confidence": "HIGH",
+      "main_branch": true,
+      "secondary_branches": true,
+      "blossoms": true,
+      "source_coordinate": true,
+      "policy": "HARD_FOREGROUND_ALLOWED"
+    },
+    {
+      "element_id": "B3SC016",
+      "side": "right/lower-right",
+      "confidence": "HIGH",
+      "main_branch": true,
+      "secondary_branches": true,
+      "blossoms": true,
+      "source_coordinate": true,
+      "policy": "HARD_FOREGROUND_ALLOWED"
+    }
+  ],
+  "fragment_only_allowed": false,
+  "zero_percent_fallback": true,
+  "critical_content_overlap_pixels": 0
+}

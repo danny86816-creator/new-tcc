@@ -1,0 +1,121 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <FontFamily x:Key="Tcc.ReferenceMaster.FontFamily.Ui">Segoe UI Variable, Segoe UI, Microsoft JhengHei UI</FontFamily>
+    <FontFamily x:Key="Tcc.ReferenceMaster.FontFamily.Title">Georgia, Microsoft JhengHei UI, Segoe UI</FontFamily>
+    <FontFamily x:Key="Tcc.ReferenceMaster.FontFamily.DecorativeCjk">DFKai-SB, KaiTi, Microsoft JhengHei</FontFamily>
+
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.AppBrand">19</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.WorkspaceSelector">15</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.PageTitle">36</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.PageSubtitle">27</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.PanelTitle">14</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.PrimaryStatus">18</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.SecondaryStatus">11.5</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.Body">13</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.TableHeader">11</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.TableCell">12</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.Caption">10.5</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.Microcopy">9</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.FontSize.DecorativeChinese">24</sys:Double>
+
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.AppBrand">26</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.WorkspaceSelector">22</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.PageTitle">42</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.PageSubtitle">34</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.PanelTitle">19</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.PrimaryStatus">24</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.SecondaryStatus">17</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.Body">20</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.TableHeader">17</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.TableCell">18</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.Caption">16</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.Microcopy">14</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.LineHeight.DecorativeChinese">34</sys:Double>
+
+    <Style x:Key="Tcc.ReferenceMaster.Text.Base" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.Ui}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.AppBrand" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.Title}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.AppBrand}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.AppBrand}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.WorkspaceSelector" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.WorkspaceSelector}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.WorkspaceSelector}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.Title}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageTitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageTitle}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PageSubtitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.Title}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageSubtitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageSubtitle}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PanelTitle" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.Title}" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PanelTitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PanelTitle}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.PrimaryStatus" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PrimaryStatus}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PrimaryStatus}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Primary}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.SecondaryStatus" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.SecondaryStatus}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.SecondaryStatus}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Body" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.TableHeader" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.TableHeader}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.TableHeader}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Tertiary}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.TableCell" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.TableCell}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.TableCell}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Caption" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Tertiary}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.Microcopy" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Microcopy}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Microcopy}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Tertiary}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Text.DecorativeChinese" TargetType="TextBlock" BasedOn="{StaticResource Tcc.ReferenceMaster.Text.Base}">
+        <Setter Property="FontFamily" Value="{DynamicResource Tcc.ReferenceMaster.FontFamily.DecorativeCjk}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.DecorativeChinese}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.DecorativeChinese}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,43 @@
+{
+  "schema_version": "B3_1D_RUNTIME_VALIDATION_V1",
+  "status": "PASS",
+  "rollback_against_b3_1": {
+    "changed_pixels": 0,
+    "mae": 0.0,
+    "max_channel_delta": 0
+  },
+  "character_rgb_pixel_delta": 0,
+  "b3_source": {
+    "sha256": "DC1255360ECCEBE3E3E8BE25289B9A3D6D9AF3195947837C557E5F7BEFE5EDED",
+    "expected_sha256": "DC1255360ECCEBE3E3E8BE25289B9A3D6D9AF3195947837C557E5F7BEFE5EDED",
+    "unchanged": true
+  },
+  "hit_test": {
+    "passed": 14,
+    "total": 14
+  },
+  "art_layers_noninteractive": true,
+  "dpi": {
+    "sizes": {
+      "100": [
+        2142,
+        1196
+      ],
+      "125": [
+        2678,
+        1495
+      ],
+      "150": [
+        3213,
+        1794
+      ]
+    },
+    "passed": true
+  },
+  "b3_1r_runtime_references_removed": true,
+  "b3_1r_research_preserved": true,
+  "b3_1r_research_file_count": 60,
+  "release_build": "PASS",
+  "focused_tests": "PASS 5/5",
+  "full_tests": "PASS 1716/1716"
+}

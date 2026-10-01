@@ -1,0 +1,663 @@
+<!-- Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · macrostructure: observatory workbench continuation · tone: disciplined atmospheric luxury · foreground refinement: moonlit luminance and lower-right plum depth · eighth graphics refinement R1: optical nav glyphs, explicit kebab geometry, organic mental-state brush ring and stronger vermilion seals · background, character, foreground and edge-material assets locked · component: vector identity and micro-glyph fidelity · genre: atmospheric · anchor hue: icy cyan · theme: studied-DNA (source: image) · paper: #071017 · accent: #94E5EE · display: Georgia · body: Segoe UI Variable Text · studied: yes · contrast: pass (existing audited pairs retained) · tokens: pass -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <FontFamily x:Key="Tcc.Strata.Font.Display">Georgia</FontFamily>
+    <FontFamily x:Key="Tcc.Strata.Font.Interface">Segoe UI Variable Text</FontFamily>
+    <FontFamily x:Key="Tcc.Strata.Font.Numeric">Cascadia Mono</FontFamily>
+    <FontFamily x:Key="Tcc.Strata.Font.Cjk">Microsoft JhengHei UI</FontFamily>
+
+    <system:Double x:Key="Tcc.ReferenceMaster.Viewport.MinWidth">1672</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.Viewport.MinHeight">941</system:Double>
+    <system:Double x:Key="Tcc.Strata.SceneOpacity">1</system:Double>
+    <system:Double x:Key="Tcc.Strata.ForegroundSceneryOpacity">0.9</system:Double>
+    <system:Double x:Key="Tcc.Strata.MentalStateGlyphOpacity">0.62</system:Double>
+    <CornerRadius x:Key="Tcc.Strata.CardCornerRadius">2</CornerRadius>
+
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.AppBrand">8</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.BrandMark">17</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.WorkspaceSelector">10</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.PageTitle">27</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.PageSubtitle">7.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.SectionTitle">21.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.PanelTitle">14.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.PrimaryStatus">14</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.SecondaryStatus">10</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.Body">9</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.TableHeader">8</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.TableCell">9</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.Caption">8</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.Microcopy">6.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.Editorial">6.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.DecorativeChinese">12</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.UtilityGlyph">18</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.MarketValue">28</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.StatusValue">12</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.FontSize.RailFooter">6</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.AppBrand">10.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.BrandMark">22</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.WorkspaceSelector">15</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.PageTitle">36</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.PageSubtitle">12</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.SectionTitle">30</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.PanelTitle">21</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.PrimaryStatus">20</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.SecondaryStatus">16</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.Body">15</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.TableHeader">13</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.TableCell">15</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.Caption">13</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.Microcopy">10</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.Editorial">9.5</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.DecorativeChinese">18</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.UtilityGlyph">22</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.MarketValue">34</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.StatusValue">18</system:Double>
+    <system:Double x:Key="Tcc.ReferenceMaster.LineHeight.RailFooter">9.5</system:Double>
+
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Background" Color="#FF071017" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.SceneVeil" Color="#2102090E" />
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.WorkspaceScrim" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#86040D13" Offset="0" />
+        <GradientStop Color="#74040D13" Offset="0.72" />
+        <GradientStop Color="#36040D13" Offset="0.92" />
+        <GradientStop Color="#00040D13" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.EditorialScrim" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#00030B11" Offset="0" />
+        <GradientStop Color="#74030B11" Offset="0.46" />
+        <GradientStop Color="#8A030B11" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.LowerPanelScrim" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#00071118" Offset="0" />
+        <GradientStop Color="#1E071118" Offset="0.62" />
+        <GradientStop Color="#3B071118" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.Chrome" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#ED07131B" Offset="0" />
+        <GradientStop Color="#E309151D" Offset="0.64" />
+        <GradientStop Color="#D7071118" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.Nav" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#E207141D" Offset="0" />
+        <GradientStop Color="#D70A1821" Offset="0.56" />
+        <GradientStop Color="#C708141C" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.Panel" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E6071219" Offset="0" />
+        <GradientStop Color="#D807141B" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.Panel.Secondary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E1071219" Offset="0" />
+        <GradientStop Color="#D207141B" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.Panel.Safety" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#CE09151E" Offset="0" />
+        <GradientStop Color="#A70A161F" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.HeaderField" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#70061118" Offset="0" />
+        <GradientStop Color="#4A08131A" Offset="0.7" />
+        <GradientStop Color="#1408131A" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.ChartInset" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#40102029" Offset="0" />
+        <GradientStop Color="#29101C24" Offset="0.55" />
+        <GradientStop Color="#17101A21" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.PanelDeep" Color="#D90A151D" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.PanelQuiet" Color="#870D1D27" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.SearchSurface" Color="#60101C24" />
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.SelectedSurface" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#7A18323D" Offset="0" />
+        <GradientStop Color="#35101E27" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.PressedSurface" Color="#9F1A2F39" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.TabSurface" Color="#52102029" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.TabSelectedSurface" Color="#72142933" />
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.FooterBand" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#3A09161E" Offset="0" />
+        <GradientStop Color="#1C071118" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.Strata.Brush.EdgeGlint" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#00D7B46C" Offset="0" />
+        <GradientStop Color="#6ED7B46C" Offset="0.08" />
+        <GradientStop Color="#488FAFBA" Offset="0.52" />
+        <GradientStop Color="#008FAFBA" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.ChartGrid" Color="#345D7481" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.ChartAxis" Color="#526F8B98" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.RowSeparator" Color="#245D7481" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Border" Color="#687F97A3" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.BorderQuiet" Color="#325D7481" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.BorderBright" Color="#8FAFC2CC" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Text" Color="#FFE2EBEF" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.TextSecondary" Color="#FFADC1CC" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Muted" Color="#FF7B96A3" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Ice" Color="#FF94E5EE" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Gold" Color="#FFD7B46C" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Seal" Color="#FFC24F59" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Danger" Color="#FFFF6076" />
+    <SolidColorBrush x:Key="Tcc.Strata.Brush.Success" Color="#FF70E0C8" />
+    <Style x:Key="Tcc.Strata.FocusVisual" TargetType="{x:Type Control}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Control}">
+                    <Border Margin="-3" BorderBrush="{DynamicResource Tcc.Strata.Brush.Ice}" BorderThickness="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Strata.Overline" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.BrandMonogram" TargetType="{x:Type Control}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Control}">
+                    <Viewbox Stretch="Uniform">
+                        <Canvas Width="14" Height="18">
+                            <Path Data="M1.5,2.2 L12.5,2.2 M2.1,2.2 L2.1,5.1 M11.9,2.2 L11.9,5.1 M7,2.2 L7,15.5 M4.6,15.5 L9.4,15.5"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Text}"
+                                  StrokeThickness="1.35"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                        </Canvas>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Strata.BrandName" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.AppBrand}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.AppBrand}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.DisplayCaption" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.NavLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Strata.NavLabel.Selected" TargetType="TextBlock" BasedOn="{StaticResource Strata.NavLabel}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.NavState.Current" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Microcopy}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Microcopy}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Gold}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Strata.SafetyLabel" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayCaption}">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style x:Key="Strata.SafetyLabel.Primary" TargetType="TextBlock" BasedOn="{StaticResource Strata.SafetyLabel}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.DisplayMicrocopy" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Microcopy}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Microcopy}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.ChromeBrandName" TargetType="TextBlock" BasedOn="{StaticResource Strata.BrandName}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.ChromeBrandSubtitle" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.ChromeMotto" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}">
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.ChromeStatusLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Danger}" />
+    </Style>
+    <Style x:Key="Strata.ChromeStatusDetail" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}" />
+    <Style x:Key="Strata.ChromeSearchLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.ChromeSearchState" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.EditorialCaption" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Editorial}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Editorial}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.EditorialEmphasis" TargetType="TextBlock" BasedOn="{StaticResource Strata.EditorialCaption}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+        <Setter Property="Opacity" Value="0.90" />
+    </Style>
+    <Style x:Key="Strata.DisplayBody" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.PageTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageTitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageTitle}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.PageSubtitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PageSubtitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PageSubtitle}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.HeaderEyebrow" TargetType="TextBlock" BasedOn="{StaticResource Strata.Overline}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.HeaderTitle" TargetType="TextBlock" BasedOn="{StaticResource Strata.PageTitle}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.HeaderPrinciple" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.RailFooter" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.RailFooter}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.RailFooter}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Strata.StatusValue" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.StatusValue}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.StatusValue}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.StatusUnknown" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.SecondaryStatus}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.SecondaryStatus}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.EmptyStateTitle" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayCaption}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.WatchlistTitle" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayBody}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.WatchlistSymbol" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.WatchlistPlaceholder" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.PriorityIndex" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.PriorityLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.PriorityPlaceholder" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.MentalStateValue" TargetType="TextBlock" BasedOn="{StaticResource Strata.StatusUnknown}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.MentalStateFieldLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.MentalStateFieldValue" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.MentalStateHelper" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Strata.ActivityColumnLabel" TargetType="TextBlock" BasedOn="{StaticResource Strata.Overline}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.ActivityTime" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.ActivityEvent" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.ActivityMarker.Current" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{DynamicResource Tcc.Strata.Brush.Ice}" />
+    </Style>
+    <Style x:Key="Strata.ActivityMarker.Alert" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{DynamicResource Tcc.Strata.Brush.Danger}" />
+    </Style>
+    <Style x:Key="Strata.ActivityMarker.Neutral" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{DynamicResource Tcc.Strata.Brush.PanelDeep}" />
+        <Setter Property="Stroke" Value="{DynamicResource Tcc.Strata.Brush.Ice}" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+    </Style>
+    <Style x:Key="Strata.MarketValue" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.MarketValue}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.MarketValue}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.UtilityGlyph" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.UtilityGlyph}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.UtilityGlyph}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.Seal.Vertical" TargetType="{x:Type Control}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Opacity" Value="0.96" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Control}">
+                    <Viewbox Stretch="Fill">
+                        <Canvas Width="18" Height="28">
+                            <Path Data="M1.8,1.6 L7.5,1.3 M9.4,1.4 L16.2,1.8 L16.5,9.9 M16.4,12.1 L16.1,26.1 L10.4,26.5 M8.2,26.4 L1.6,26.1 L1.4,18.8 M1.5,16.5 L1.8,1.6"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="2.65"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter"
+                                  Opacity="0.30">
+                                <Path.RenderTransform><TranslateTransform X="0.28" Y="-0.18" /></Path.RenderTransform>
+                            </Path>
+                            <Path Data="M4.1,4.2 L8.1,3.8 M9.7,3.9 L13.8,4.4 M4.6,6.8 L13.2,6.5 M6.2,4.1 L6.1,10.5 M11.9,4.4 L11.6,10.1 M4.2,10.3 L8.2,10.5 M9.7,10.4 L13.6,10.1 M4.2,14.3 L8,13.9 M9.6,14 L13.7,14.4 M4.4,14.2 L4.2,19.1 L7.9,18.7 M9.6,18.6 L13.5,18.2 L13.5,14.5 M8.8,14 L8.5,23.7 M4.1,22.9 L7.2,20.1 M9.6,20.4 L13.8,23.2 M4.3,24 L7.3,24.2 M9.8,24.1 L13.5,23.8"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="2.2"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter"
+                                  Opacity="0.24">
+                                <Path.RenderTransform><TranslateTransform X="-0.22" Y="0.3" /></Path.RenderTransform>
+                            </Path>
+                            <Path Data="M1.8,1.6 L7.5,1.3 M9.4,1.4 L16.2,1.8 L16.5,9.9 M16.4,12.1 L16.1,26.1 L10.4,26.5 M8.2,26.4 L1.6,26.1 L1.4,18.8 M1.5,16.5 L1.8,1.6"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="1.32"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                            <Path Data="M4.1,4.2 L8.1,3.8 M9.7,3.9 L13.8,4.4 M4.6,6.8 L13.2,6.5 M6.2,4.1 L6.1,10.5 M11.9,4.4 L11.6,10.1 M4.2,10.3 L8.2,10.5 M9.7,10.4 L13.6,10.1"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="1.16"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                            <Path Data="M4.2,14.3 L8,13.9 M9.6,14 L13.7,14.4 M4.4,14.2 L4.2,19.1 L7.9,18.7 M9.6,18.6 L13.5,18.2 L13.5,14.5 M8.8,14 L8.5,23.7 M4.1,22.9 L7.2,20.1 M9.6,20.4 L13.8,23.2 M4.3,24 L7.3,24.2 M9.8,24.1 L13.5,23.8"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="1.18"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                        </Canvas>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Strata.Seal.Square" TargetType="{x:Type Control}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Opacity" Value="0.92" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Control}">
+                    <Viewbox Stretch="Fill">
+                        <Canvas Width="22" Height="22">
+                            <Path Data="M1.7,1.8 L8.8,1.4 M11.2,1.5 L20.1,1.9 L20.5,8.9 M20.4,11.1 L20.1,20 L12.1,20.5 M9.8,20.4 L1.8,20.1 L1.4,12.2 M1.5,9.8 L1.7,1.8"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="2.7"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter"
+                                  Opacity="0.30">
+                                <Path.RenderTransform><TranslateTransform X="0.3" Y="-0.2" /></Path.RenderTransform>
+                            </Path>
+                            <Path Data="M4.1,4.4 L9.7,4 L9.5,8.2 L5.2,8.5 L5,12.1 L9.6,11.8 M7.1,4.2 L6.9,17.8 M4,15.2 L9.7,15 M12.5,4.2 L17.8,4.5 L15.2,8.1 L18,10.4 M12.8,10.7 L17.6,10.9 M13,13.6 L17.9,13.9 L15.6,17.8 M11.8,18.1 L17.9,5.3"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="2.25"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter"
+                                  Opacity="0.24">
+                                <Path.RenderTransform><TranslateTransform X="-0.2" Y="0.28" /></Path.RenderTransform>
+                            </Path>
+                            <Path Data="M1.7,1.8 L8.8,1.4 M11.2,1.5 L20.1,1.9 L20.5,8.9 M20.4,11.1 L20.1,20 L12.1,20.5 M9.8,20.4 L1.8,20.1 L1.4,12.2 M1.5,9.8 L1.7,1.8"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="1.32"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                            <Path Data="M4.1,4.4 L9.7,4 L9.5,8.2 L5.2,8.5 L5,12.1 L9.6,11.8 M7.1,4.2 L6.9,17.8 M4,15.2 L9.7,15 M12.5,4.2 L17.8,4.5 L15.2,8.1 L18,10.4 M12.8,10.7 L17.6,10.9 M13,13.6 L17.9,13.9 L15.6,17.8 M11.8,18.1 L17.9,5.3"
+                                  Stroke="{DynamicResource Tcc.Strata.Brush.Seal}"
+                                  StrokeThickness="1.18"
+                                  StrokeStartLineCap="Square"
+                                  StrokeEndLineCap="Square"
+                                  StrokeLineJoin="Miter" />
+                        </Canvas>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Strata.CraftFrame" TargetType="{x:Type Control}">
+        <Setter Property="Focusable" Value="False" /><Setter Property="IsHitTestVisible" Value="False" /><Setter Property="Opacity" Value="0.58" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Control}">
+                    <Grid>
+                        <Border Width="56" Height="15" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderBright}" BorderThickness="1,1,0,0" />
+                        <Border Width="18" Height="1" Margin="11,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{DynamicResource Tcc.Strata.Brush.Gold}" Opacity="0.72" />
+                        <Border Width="23" Height="1" Margin="0,2,15,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+                        <Border Width="13" Height="9" HorizontalAlignment="Left" VerticalAlignment="Bottom" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="1,0,0,1" Opacity="0.62" />
+                        <Border Width="34" Height="13" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,1,1" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Strata.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Body}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+    </Style>
+    <Style x:Key="Strata.Caption" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.Caption}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+    </Style>
+    <Style x:Key="Strata.FooterMotto" TargetType="TextBlock" BasedOn="{StaticResource Strata.DisplayMicrocopy}">
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Muted}" />
+        <Setter Property="Opacity" Value="0.78" />
+    </Style>
+    <Style x:Key="Strata.PanelTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Display}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PanelTitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.PanelTitle}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.SectionTitle" TargetType="TextBlock" BasedOn="{StaticResource Strata.PanelTitle}">
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.SectionTitle}" />
+        <Setter Property="LineHeight" Value="{DynamicResource Tcc.ReferenceMaster.LineHeight.SectionTitle}" />
+    </Style>
+    <Style x:Key="Strata.Numeric" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Numeric}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.PrimaryStatus}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+    </Style>
+    <Style x:Key="Strata.Panel" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.Panel}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource Tcc.Strata.CardCornerRadius}" />
+    </Style>
+    <Style x:Key="Strata.Panel.Primary" TargetType="Border" BasedOn="{StaticResource Strata.Panel}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.Panel}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.Border}" />
+    </Style>
+    <Style x:Key="Strata.Panel.Secondary" TargetType="Border" BasedOn="{StaticResource Strata.Panel}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.Panel.Secondary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+    </Style>
+    <Style x:Key="Strata.Panel.Safety" TargetType="Border" BasedOn="{StaticResource Strata.Panel}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.Panel.Safety}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.Border}" />
+    </Style>
+    <Style x:Key="Strata.Button" TargetType="Button">
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="Padding" Value="10,7" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.TextSecondary}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontFamily" Value="{StaticResource Tcc.Strata.Font.Interface}" />
+        <Setter Property="FontSize" Value="{DynamicResource Tcc.ReferenceMaster.FontSize.Caption}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Tcc.Strata.FocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.Ice}" /><Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" /></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource Tcc.Strata.Brush.PressedSurface}" /></Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.68" /></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Strata.NavButton" TargetType="Button" BasedOn="{StaticResource Strata.Button}">
+        <Setter Property="Width" Value="94" />
+        <Setter Property="Height" Value="82" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+    </Style>
+    <Style x:Key="Strata.NavButton.Selected" TargetType="Button" BasedOn="{StaticResource Strata.NavButton}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.SelectedSurface}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.Gold}" />
+        <Setter Property="BorderThickness" Value="2,0,0,0" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="1" /></Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="Strata.WindowButton" TargetType="Button" BasedOn="{StaticResource Strata.Button}">
+        <Setter Property="Width" Value="54" />
+        <Setter Property="Height" Value="44" />
+        <Setter Property="MinHeight" Value="44" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style x:Key="Strata.TabButton" TargetType="Button" BasedOn="{StaticResource Strata.Button}">
+        <Setter Property="Height" Value="36" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="Padding" Value="14,4" />
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.TabSurface}" />
+    </Style>
+    <Style x:Key="Strata.TabButton.Selected" TargetType="Button" BasedOn="{StaticResource Strata.TabButton}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.Strata.Brush.TabSelectedSurface}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" />
+        <Setter Property="Foreground" Value="{DynamicResource Tcc.Strata.Brush.Text}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <Border x:Name="SelectionLine" Height="2" Margin="7,0" Background="{DynamicResource Tcc.Strata.Brush.Ice}" VerticalAlignment="Bottom" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="Strata.MarketTabButton" TargetType="Button" BasedOn="{StaticResource Strata.TabButton}">
+        <Setter Property="Height" Value="34" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="Margin" Value="0,0,4,0" />
+    </Style>
+    <Style x:Key="Strata.MarketTabButton.Selected" TargetType="Button" BasedOn="{StaticResource Strata.TabButton.Selected}">
+        <Setter Property="Height" Value="34" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="10,4" />
+        <Setter Property="Margin" Value="0,0,4,0" />
+    </Style>
+</ResourceDictionary>

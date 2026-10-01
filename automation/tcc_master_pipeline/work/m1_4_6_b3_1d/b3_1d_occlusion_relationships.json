@@ -1,0 +1,36 @@
+{
+  "schema_version": "B3_1D_OCCLUSION_RELATIONSHIPS_V1",
+  "relationships": [
+    {
+      "element_id": "B3SC014",
+      "spatial_depth": "D4",
+      "confidence": "HIGH",
+      "source_continuity": true,
+      "design_policy": "HARD_FOREGROUND_ALLOWED",
+      "critical_content": "ALWAYS_ABOVE"
+    },
+    {
+      "element_id": "B3SC016",
+      "spatial_depth": "D4",
+      "confidence": "HIGH",
+      "source_continuity": true,
+      "design_policy": "HARD_FOREGROUND_ALLOWED",
+      "critical_content": "ALWAYS_ABOVE"
+    },
+    {
+      "element_id": "B3SC011",
+      "spatial_depth": "D5",
+      "confidence": "HIGH",
+      "source_continuity": true,
+      "design_policy": "GLASS_FADE_ONLY",
+      "reason": "nearest object but identity/core must not be hard-cut through UI"
+    },
+    {
+      "element_id": "B3SC018",
+      "spatial_depth": "D6",
+      "confidence": "MEDIUM",
+      "source_continuity": "PARTIAL",
+      "design_policy": "SOFT_FOREGROUND_ALLOWED_OR_ZERO"
+    }
+  ]
+}

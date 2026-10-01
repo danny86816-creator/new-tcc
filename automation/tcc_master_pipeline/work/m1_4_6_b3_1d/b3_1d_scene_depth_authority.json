@@ -1,0 +1,93 @@
+{
+  "schema_version": "B3_1D_SCENE_DEPTH_AUTHORITY_V1",
+  "coordinate_system": [
+    2142,
+    1196
+  ],
+  "source_sha256": "DC1255360ECCEBE3E3E8BE25289B9A3D6D9AF3195947837C557E5F7BEFE5EDED",
+  "principle": "spatial depth is independent from UI fusion policy",
+  "reusable_for_second_scene": true,
+  "classes": [
+    {
+      "depth_class": "D0",
+      "meaning": "遠景",
+      "elements": [
+        "sky",
+        "moon",
+        "far mountains"
+      ],
+      "default_confidence": "HIGH",
+      "fusion_policy": "BACKGROUND_ONLY"
+    },
+    {
+      "depth_class": "D1",
+      "meaning": "中遠景",
+      "elements": [
+        "forest",
+        "valley",
+        "far buildings",
+        "waterfall"
+      ],
+      "default_confidence": "HIGH",
+      "fusion_policy": "BACKGROUND_ONLY"
+    },
+    {
+      "depth_class": "D2",
+      "meaning": "中景",
+      "elements": [
+        "near buildings",
+        "cliff",
+        "mid trees"
+      ],
+      "default_confidence": "MEDIUM",
+      "fusion_policy": "BACKGROUND_ONLY"
+    },
+    {
+      "depth_class": "D3",
+      "meaning": "近景",
+      "elements": [
+        "near rocks",
+        "near snow"
+      ],
+      "default_confidence": "MEDIUM",
+      "fusion_policy": "SOFT_FOREGROUND_ALLOWED"
+    },
+    {
+      "depth_class": "D4",
+      "meaning": "真前景",
+      "elements": [
+        "B3SC014",
+        "B3SC015",
+        "B3SC016"
+      ],
+      "default_confidence": "HIGH",
+      "fusion_policy": "HARD_FOREGROUND_ALLOWED when source-continuous"
+    },
+    {
+      "depth_class": "D5",
+      "meaning": "人物實體核心",
+      "elements": [
+        "face",
+        "head",
+        "torso",
+        "hand",
+        "weapon",
+        "solid clothing"
+      ],
+      "default_confidence": "HIGH",
+      "fusion_policy": "GLASS_FADE_ONLY"
+    },
+    {
+      "depth_class": "D6",
+      "meaning": "人物柔性外緣",
+      "elements": [
+        "hair strands",
+        "gauze",
+        "cape edge",
+        "semi-transparent hem"
+      ],
+      "default_confidence": "MEDIUM",
+      "fusion_policy": "SOFT_FOREGROUND_ALLOWED or 0%"
+    }
+  ]
+}

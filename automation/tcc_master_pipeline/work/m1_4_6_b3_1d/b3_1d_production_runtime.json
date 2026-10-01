@@ -1,0 +1,309 @@
+{
+  "runtime": "compiled production MainWindow WPF visual tree",
+  "product_assembly": "C:\\Users\\danny\\AppData\\Local\\Temp\\tcc_b3_1d_runtime_w1swrze3\\bin\\Release\\net10.0-windows\\Tcc.DesktopHost.dll",
+  "viewport": {
+    "width": 2142,
+    "height": 1196
+  },
+  "geometry": [
+    {
+      "component_id": "Viewport",
+      "automation_id": "Region.Viewport",
+      "x": 0,
+      "y": 0,
+      "width": 2142,
+      "height": 1196
+    },
+    {
+      "component_id": "Safety Core",
+      "automation_id": "Region.SafetyCore",
+      "x": 204,
+      "y": 251,
+      "width": 1625,
+      "height": 145
+    },
+    {
+      "component_id": "Main Workspace",
+      "automation_id": "Region.MainWorkspace",
+      "x": 205,
+      "y": 424,
+      "width": 1576,
+      "height": 719
+    },
+    {
+      "component_id": "Global Top Bar",
+      "automation_id": "Region.GlobalTopBar",
+      "x": 0,
+      "y": 0,
+      "width": 2142,
+      "height": 54
+    },
+    {
+      "component_id": "Left Navigation Rail",
+      "automation_id": "Region.LeftNavigationRail",
+      "x": 0,
+      "y": 54,
+      "width": 170,
+      "height": 1142
+    },
+    {
+      "component_id": "Command Center Header",
+      "automation_id": "Region.CommandCenterHeader",
+      "x": 0,
+      "y": 0,
+      "width": 2142,
+      "height": 250
+    },
+    {
+      "component_id": "Workspace Selector",
+      "automation_id": "Region.WorkspaceSelector",
+      "x": 396,
+      "y": 0,
+      "width": 263,
+      "height": 38
+    },
+    {
+      "component_id": "New Trade Plan",
+      "automation_id": "Region.NewTradePlan",
+      "x": 1279,
+      "y": 148,
+      "width": 271,
+      "height": 75
+    },
+    {
+      "component_id": "Review Checklist",
+      "automation_id": "Region.ReviewChecklist",
+      "x": 1567,
+      "y": 154,
+      "width": 267,
+      "height": 64
+    },
+    {
+      "component_id": "Trading Permission",
+      "automation_id": "Region.TradingPermission",
+      "x": 204,
+      "y": 251,
+      "width": 387,
+      "height": 145
+    },
+    {
+      "component_id": "Total Risk",
+      "automation_id": "Region.TotalRisk",
+      "x": 609,
+      "y": 251,
+      "width": 379,
+      "height": 145
+    },
+    {
+      "component_id": "Current Positions",
+      "automation_id": "Region.CurrentPositions",
+      "x": 1005,
+      "y": 251,
+      "width": 378,
+      "height": 145
+    },
+    {
+      "component_id": "Major Alerts",
+      "automation_id": "Region.MajorAlerts",
+      "x": 1401,
+      "y": 251,
+      "width": 428,
+      "height": 145
+    },
+    {
+      "component_id": "Market Overview",
+      "automation_id": "Region.MarketOverview",
+      "x": 205,
+      "y": 424,
+      "width": 763,
+      "height": 719
+    },
+    {
+      "component_id": "Mental State",
+      "automation_id": "Region.MentalState",
+      "x": 990,
+      "y": 424,
+      "width": 280,
+      "height": 226
+    },
+    {
+      "component_id": "Today\u0027s Priorities",
+      "automation_id": "Region.TodaysPriorities",
+      "x": 1284,
+      "y": 424,
+      "width": 497,
+      "height": 226
+    },
+    {
+      "component_id": "Risk Allocation",
+      "automation_id": "Region.RiskAllocation",
+      "x": 990,
+      "y": 672,
+      "width": 244,
+      "height": 471
+    },
+    {
+      "component_id": "Open Positions",
+      "automation_id": "Region.OpenPositions",
+      "x": 1249,
+      "y": 672,
+      "width": 293,
+      "height": 471
+    },
+    {
+      "component_id": "Activity",
+      "automation_id": "Region.Activity",
+      "x": 1557,
+      "y": 672,
+      "width": 224,
+      "height": 471
+    },
+    {
+      "component_id": "Character Zone",
+      "automation_id": "Region.CharacterZone",
+      "x": 1710,
+      "y": 140,
+      "width": 432,
+      "height": 1056
+    },
+    {
+      "component_id": "Application Chrome",
+      "automation_id": "Region.ApplicationChrome",
+      "x": 0,
+      "y": 0,
+      "width": 2142,
+      "height": 1196
+    }
+  ],
+  "art_layers": [
+    {
+      "id": "Artwork.Home.B3.CharacterEdge",
+      "is_hit_test_visible": false,
+      "z_index": 70
+    },
+    {
+      "id": "Artwork.Home.B3.PlumForeground",
+      "is_hit_test_visible": false,
+      "z_index": 80
+    },
+    {
+      "id": "Artwork.Home.B3.NearestStaticSnow",
+      "is_hit_test_visible": false,
+      "z_index": 90
+    }
+  ],
+  "hit_test": [
+    {
+      "automation_id": "Region.NewTradePlan",
+      "passed": true,
+      "point": [
+        1414.5000000000002,
+        185.50000000000003
+      ]
+    },
+    {
+      "automation_id": "Region.ReviewChecklist",
+      "passed": true,
+      "point": [
+        1700.5,
+        186
+      ]
+    },
+    {
+      "automation_id": "Region.GlobalTopBar",
+      "passed": true,
+      "point": [
+        1071,
+        27
+      ]
+    },
+    {
+      "automation_id": "Region.Search",
+      "passed": true,
+      "point": [
+        1580.0000000000002,
+        27
+      ]
+    },
+    {
+      "automation_id": "NavHome",
+      "passed": true,
+      "point": [
+        84.5,
+        120.5
+      ]
+    },
+    {
+      "automation_id": "Region.TradingPermission",
+      "passed": true,
+      "point": [
+        397.5,
+        323.5
+      ]
+    },
+    {
+      "automation_id": "Region.TotalRisk",
+      "passed": true,
+      "point": [
+        798.4999999999999,
+        323.5
+      ]
+    },
+    {
+      "automation_id": "Region.CurrentPositions",
+      "passed": true,
+      "point": [
+        1194.0000000000002,
+        323.5
+      ]
+    },
+    {
+      "automation_id": "Region.MajorAlerts",
+      "passed": true,
+      "point": [
+        1615,
+        323.5
+      ]
+    },
+    {
+      "automation_id": "Region.MarketOverview",
+      "passed": true,
+      "point": [
+        586.5,
+        783.5
+      ]
+    },
+    {
+      "automation_id": "Region.MentalState",
+      "passed": true,
+      "point": [
+        1130,
+        537.0000000000001
+      ]
+    },
+    {
+      "automation_id": "Region.TodaysPriorities",
+      "passed": true,
+      "point": [
+        1532.5,
+        537.0000000000001
+      ]
+    },
+    {
+      "automation_id": "Region.OpenPositions",
+      "passed": true,
+      "point": [
+        1395.5000000000002,
+        907.5000000000001
+      ]
+    },
+    {
+      "automation_id": "Region.Activity",
+      "passed": true,
+      "point": [
+        1669,
+        907.5000000000001
+      ]
+    }
+  ]
+}

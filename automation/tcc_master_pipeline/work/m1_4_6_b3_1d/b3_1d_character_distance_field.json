@@ -1,0 +1,16 @@
+{
+  "schema_version": "B3_1D_CHARACTER_DISTANCE_FIELD_V1",
+  "status": "PASS",
+  "source": "B3 authority silhouette segmented with semantic-seeded GrabCut",
+  "radial_gradient_used": false,
+  "distance_metric": "L2 distanceTransform from actual silhouette boundary",
+  "character_pixels": 439602,
+  "max_distance_capped_px": 255,
+  "uses": [
+    "glass alpha",
+    "border/frost alpha",
+    "reflection",
+    "inner highlight"
+  ],
+  "character_mask_sha256": "196731127F33562B01CCC5C95E834ACF91C31F8A671A3A440DDFE922209258A6"
+}

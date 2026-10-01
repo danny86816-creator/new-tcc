@@ -1,0 +1,156 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- All exact values are IMPLEMENTATION_CANDIDATE and remain centrally calibratable. -->
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Background.Base" Color="#FF0D141E" />
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Background.Atmosphere" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#FF08111A" />
+        <GradientStop Offset="0.42" Color="#FF142331" />
+        <GradientStop Offset="0.76" Color="#FF0C1823" />
+        <GradientStop Offset="1" Color="#FF070E16" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.TopChrome" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#E9162330" />
+        <GradientStop Offset="1" Color="#D70A121C" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Navigation" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="#D10A131E" />
+        <GradientStop Offset="1" Color="#A9142230" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.HeaderScrim" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="#431C2C3C" />
+        <GradientStop Offset="0.58" Color="#24172431" />
+        <GradientStop Offset="1" Color="#10111B25" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Panel" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#A91B2B3A" />
+        <GradientStop Offset="0.55" Color="#8014212E" />
+        <GradientStop Offset="1" Color="#66101A25" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelElevated" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#C225394A" />
+        <GradientStop Offset="0.52" Color="#941A2A38" />
+        <GradientStop Offset="1" Color="#78111D28" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelDeep" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#A60E1B27" />
+        <GradientStop Offset="1" Color="#D008121C" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.PanelQuiet" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#74172430" />
+        <GradientStop Offset="1" Color="#4B0C151F" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.WorkspacePrimary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#B01B2D3D" />
+        <GradientStop Offset="0.48" Color="#83152230" />
+        <GradientStop Offset="1" Color="#5E0C1722" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.WorkspaceSecondary" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#8F172633" />
+        <GradientStop Offset="1" Color="#5C0B151F" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Safety" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#B9233748" />
+        <GradientStop Offset="0.6" Color="#8A172735" />
+        <GradientStop Offset="1" Color="#67101C27" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Auxiliary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#761A2936" />
+        <GradientStop Offset="1" Color="#420A141D" />
+    </LinearGradientBrush>
+    <!-- P3-A R1 scene-compatible attenuation tiers. Open scenic regions intentionally have no fill. -->
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.LowDensity" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#C0213445" />
+        <GradientStop Offset="0.58" Color="#A2162534" />
+        <GradientStop Offset="1" Color="#86101B27" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DensePrimary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#E3132230" />
+        <GradientStop Offset="0.52" Color="#D00E1B28" />
+        <GradientStop Offset="1" Color="#C20A151F" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DenseSecondary" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#DB11202D" />
+        <GradientStop Offset="0.55" Color="#CA0C1823" />
+        <GradientStop Offset="1" Color="#B80A141D" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DenseQuiet" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#D20F1D29" />
+        <GradientStop Offset="1" Color="#BC091620" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DenseDeep" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#E607141F" />
+        <GradientStop Offset="1" Color="#DA060F18" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DenseInterior" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#C20A1722" />
+        <GradientStop Offset="1" Color="#B008121C" />
+    </LinearGradientBrush>
+    <!-- P3-A R2 local content-zone suppression. These remain translucent blue-black and are never module-wide masks. -->
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.DenseRow" Color="#C8081722" />
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.LowerDenseInterior" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#B4081722" />
+        <GradientStop Offset="1" Color="#9E06121B" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.PrioritiesInterior" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#C207141F" />
+        <GradientStop Offset="1" Color="#AD050F17" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Scene.MentalInterior" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#8A0B1823" />
+        <GradientStop Offset="1" Color="#7407131C" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Action" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#F2DCECF1" />
+        <GradientStop Offset="0.22" Color="#D7B9D4DC" />
+        <GradientStop Offset="0.68" Color="#B5789AA7" />
+        <GradientStop Offset="1" Color="#98516F7D" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Hover" Color="#247FA7B5" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Pressed" Color="#38101824" />
+    <LinearGradientBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Selected" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="#3F557786" />
+        <GradientStop Offset="0.55" Color="#241E3442" />
+        <GradientStop Offset="1" Color="#10131D27" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Surface.Disabled" Color="#66101822" />
+
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Default" Color="#7189A0B4" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Quiet" Color="#3F60768B" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Elevated" Color="#91A9BAC9" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Frost" Color="#A6C5D2DC" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Action" Color="#F2D8EFF4" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.ActionInner" Color="#B8F2FAFC" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Selected" Color="#E895C9D7" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Primary" Color="#7D9AAEBF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Secondary" Color="#546D8498" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Safety" Color="#8EB0C0CC" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Border.Auxiliary" Color="#49667B8C" />
+
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Primary" Color="#FFE7ECF2" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Secondary" Color="#FFB6C2CE" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Tertiary" Color="#FF8E9CAA" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.Disabled" Color="#E28E9CAA" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Text.OnAction" Color="#FF102532" />
+
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Accent.Cyan" Color="#FF86C7D8" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Accent.Ice" Color="#FFC2D9E2" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Identity.Seal" Color="#FFC95C50" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Warning" Color="#FFD0AD66" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.WarningFill" Color="#B8D0AD66" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Permission" Color="#FFC9828F" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.PermissionFill" Color="#A6C9828F" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Critical" Color="#FFD17A88" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.CriticalFill" Color="#B8D17A88" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Information" Color="#FFA8C8D8" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.InformationFill" Color="#A8A8C8D8" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Unavailable" Color="#FF7D8997" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Success" Color="#FF76AA96" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Status.Reserved" Color="#FF77A4CF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Environment.Warm" Color="#FFC8965B" />
+
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.Transparent" Color="#00FFFFFF" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.System.Window" Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.System.WindowText" Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+    <SolidColorBrush x:Key="Tcc.ReferenceMaster.Brush.System.Highlight" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+</ResourceDictionary>

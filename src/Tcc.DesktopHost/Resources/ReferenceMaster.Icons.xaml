@@ -1,0 +1,72 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- A single restrained 16x16 line-geometry family for structural UI icons. -->
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Brand">M8,1 L3,9 H7 L5,15 L13,6 H9 L11,1 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Home">M2,8 L8,2 L14,8 M4,7 V14 H12 V7</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Market">M2,13 V8 M6,13 V4 M10,13 V9 M14,13 V2</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Planning">M2,12 L6,7 L9,10 L14,3 M11,3 H14 V6</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Risk">M8,1 L14,4 V8 C14,11.5 11.5,14 8,15 C4.5,14 2,11.5 2,8 V4 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Positions">M3,2 H13 V14 H3 Z M5,5 H11 M5,8 H11 M5,11 H9</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Review">M4,2 H12 V14 H4 Z M6,1 H10 V4 H6 Z M6,7 H10 M6,10 H10</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Calendar">M2,4 H14 V14 H2 Z M5,1 V6 M11,1 V6 M2,7 H14</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Settings">M8,3 A5,5 0 1 1 7.99,3 M8,6 A2,2 0 1 1 7.99,6 M8,1 V3 M8,13 V15 M1,8 H3 M13,8 H15 M3,3 L4.5,4.5 M11.5,11.5 L13,13 M13,3 L11.5,4.5 M4.5,11.5 L3,13</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Search">M7,2 A5,5 0 1 1 6.99,2 M11,11 L15,15</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Bell">M3,11 H13 L11.5,9 V6 A3.5,3.5 0 0 0 4.5,6 V9 Z M6.5,13 A1.5,1.5 0 0 0 9.5,13</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Lock">M4,7 H12 V14 H4 Z M6,7 V5 A2,2 0 0 1 10,5 V7</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Info">M8,1 A7,7 0 1 1 7.99,1 M8,7 V12 M8,4 V5</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.ChevronRight">M6,3 L11,8 L6,13</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Shield">M8,1 L14,4 V8 C14,11.5 11.5,14 8,15 C4.5,14 2,11.5 2,8 V4 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Warning">M8,1 L15,14 H1 Z M8,5 V9 M8,11 V12</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Pie">M8,1 V8 H15 A7,7 0 0 0 8,1 M6,3 A6,6 0 1 0 13,10 H6 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Alert">M3,11 H13 L11.5,9 V6 A3.5,3.5 0 0 0 4.5,6 V9 Z M6.5,13 A1.5,1.5 0 0 0 9.5,13</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Observation">M3,3 H13 V13 H3 Z M1,6 H5 M11,6 H15 M6,1 V5 M6,11 V15 M6,8 H10 M10,8 L8,6 M10,8 L8,10</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Bitcoin">M6,2 V14 M10,2 V14 M4,4 H10 A2,2 0 0 1 10,8 H4 M10,8 A2,2 0 0 1 10,12 H4</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Chart">M2,14 V2 M2,14 H15 M4,11 L7,8 L10,10 L14,4 M11,4 H14 V7</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Document">M4,1 H10 L13,4 V15 H4 Z M10,1 V4 H13 M6,7 H11 M6,10 H11</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Checklist">M3,3 H6 V6 H3 Z M8,4 H14 M3,9 H6 V12 H3 Z M8,10 H14</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Person">M8,2 A3,3 0 1 1 7.99,2 M2,15 C2.5,10.5 5,9 8,9 C11,9 13.5,10.5 14,15</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Meditation">M8,1.2 A2.1,2.1 0 1 1 7.99,1.2 Z M6.4,5.1 C6.8,4.8 7.4,4.6 8,4.6 C8.6,4.6 9.2,4.8 9.6,5.1 L10.5,9.3 C9.8,10 9,10.4 8,10.4 C7,10.4 6.2,10 5.5,9.3 Z M5.7,6.2 C4.7,6.9 3.8,8 2.7,9.3 L4.1,10.4 C5,9.4 5.8,8.8 6.8,8.3 Z M10.3,6.2 C11.3,6.9 12.2,8 13.3,9.3 L11.9,10.4 C11,9.4 10.2,8.8 9.2,8.3 Z M7.1,9.2 C6,10.5 4.7,11.4 2.4,12.2 C1.4,12.6 1.7,14.2 3.1,14.2 H6.4 C7.1,14.2 7.7,13.6 8,12.9 C8.3,13.6 8.9,14.2 9.6,14.2 H12.9 C14.3,14.2 14.6,12.6 13.6,12.2 C11.3,11.4 10,10.5 8.9,9.2 L8,10.4 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.IdentitySeal">F0 M1.3,1.7 L14.5,1.2 L14.9,14.3 L1.2,14.8 L0.9,5.4 Z M4,3.9 H12 V5.3 H8.7 V7 H11.6 V8.4 H8.7 V12.1 H7.2 V8.4 H4.1 V7 H7.2 V5.3 H4 Z M4.1,9.6 H5.5 V12.1 H4.1 Z M10.1,9.6 H11.7 V12.1 H10.1 Z</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Sparkle">M8,1 C8.5,5 11,7.5 15,8 C11,8.5 8.5,11 8,15 C7.5,11 5,8.5 1,8 C5,7.5 7.5,5 8,1 M13,1 V5 M11,3 H15</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Clock">M8,1 A7,7 0 1 1 7.99,1 M8,4 V8 L11,10</Geometry>
+    <Geometry x:Key="Tcc.ReferenceMaster.IconGeometry.Star">M8,1 L10,6 L15,6 L11,9 L13,14 L8,11 L3,14 L5,9 L1,6 L6,6 Z</Geometry>
+
+    <Style x:Key="Tcc.ReferenceMaster.Icon.Base" TargetType="Path">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Stroke" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="StrokeThickness" Value="1.4" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Icon.Utility" TargetType="Path" BasedOn="{StaticResource Tcc.ReferenceMaster.Icon.Base}">
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Icon.Module" TargetType="Path" BasedOn="{StaticResource Tcc.ReferenceMaster.Icon.Base}">
+        <Setter Property="Width" Value="17" />
+        <Setter Property="Height" Value="17" />
+        <Setter Property="Stroke" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Accent.Ice}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Icon.Safety" TargetType="Path" BasedOn="{StaticResource Tcc.ReferenceMaster.Icon.Base}">
+        <Setter Property="Width" Value="42" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="StrokeThickness" Value="2.2" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Icon.Meditation" TargetType="Path" BasedOn="{StaticResource Tcc.ReferenceMaster.Icon.Base}">
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="46" />
+        <Setter Property="Fill" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Accent.Ice}" />
+        <Setter Property="Stroke" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Text.Secondary}" />
+        <Setter Property="StrokeThickness" Value="0.65" />
+        <Setter Property="Opacity" Value="0.82" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Icon.EmptyState" TargetType="Path" BasedOn="{StaticResource Tcc.ReferenceMaster.Icon.Base}">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Stroke" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Status.Unavailable}" />
+    </Style>
+</ResourceDictionary>

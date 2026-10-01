@@ -1,0 +1,50 @@
+{
+  "schema_version": "B3_1D_GLASS_FADE_POLICY_V1",
+  "status": "PASS",
+  "production_applied": false,
+  "silhouette_based": true,
+  "radial_gradient_used": false,
+  "synchronized_channels": [
+    "glass",
+    "border",
+    "frost",
+    "reflection",
+    "inner_highlight"
+  ],
+  "critical_content_unchanged": true,
+  "curves": [
+    {
+      "candidate": "A",
+      "curve": "LINEAR",
+      "radius_px": 72.0,
+      "max_fade": 0.16,
+      "affected_pixels": 27829,
+      "max_horizontal_alpha_step": 0.16,
+      "radial_gradient_used": false
+    },
+    {
+      "candidate": "B",
+      "curve": "SMOOTHSTEP",
+      "radius_px": 126.0,
+      "max_fade": 0.3,
+      "affected_pixels": 33485,
+      "max_horizontal_alpha_step": 0.3,
+      "radial_gradient_used": false
+    },
+    {
+      "candidate": "C",
+      "curve": "EASE_OUT_CUBIC",
+      "radius_px": 184.0,
+      "max_fade": 0.43,
+      "affected_pixels": 36319,
+      "max_horizontal_alpha_step": 0.43,
+      "radial_gradient_used": false
+    }
+  ],
+  "qualitative_naturality": {
+    "A": "subtle but linear onset is easiest to infer under zoom",
+    "B": "smoothest balanced transition and lowest visible boundary",
+    "C": "useful upper bound; broader transparency can weaken card material"
+  },
+  "supervisor_selection": "PENDING"
+}

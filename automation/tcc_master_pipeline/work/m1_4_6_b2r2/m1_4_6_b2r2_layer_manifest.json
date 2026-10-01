@@ -1,0 +1,80 @@
+{
+  "schema_version": "M1.4.6B2R2_FORMAL_LAYER_MANIFEST_V1",
+  "status": "PASS",
+  "physical_runtime_layer_count": 3,
+  "physical_layers": [
+    "B2R.1 frozen scene bitmap",
+    "existing WPF UI vector tree",
+    "B2R.2 clipped static intrusion bitmap"
+  ],
+  "logical_layers": {
+    "L0": "sky, moon and distant mountains in frozen base",
+    "L1": "ice lake, valley, buildings and forest in frozen base",
+    "L2": "rear rocks and distant/mid plum in frozen base",
+    "L3": "rear coexistence depth in frozen base",
+    "L4": "existing formal WPF UI plane",
+    "L5": "person rear portions frozen in base",
+    "L6": "person body frozen in base",
+    "L7": "no independent heavy foreground artwork; physically merged into the sparse static intrusion layer",
+    "L8": "scene-native static thin mist/cold-light samples clipped to S101-S108",
+    "L9": "hard-protection geometry and input routing; validation-only logical protection"
+  },
+  "z_order_contract": [
+    "L0",
+    "L1",
+    "L2",
+    "L3",
+    "L5",
+    "L6",
+    "L4",
+    "L7",
+    "L8",
+    "L9"
+  ],
+  "visual_order_changed": false,
+  "images": [
+    {
+      "path": "src/Tcc.DesktopHost/Assets/Home/home-scene-b2r1-locked.png",
+      "sha256": "DDEB846F17EA696072B5715F01B4524C5B2B5214F526B75EAF69432B66586A03",
+      "dimensions": [
+        2142,
+        1196
+      ],
+      "format": "PNG",
+      "file_bytes": 3590016,
+      "decoded_bytes_bgra32": 10247328,
+      "decoded_mib": 9.773,
+      "has_alpha": false,
+      "runtime_loaded": true,
+      "logical_layers": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L5",
+        "L6"
+      ]
+    },
+    {
+      "path": "src/Tcc.DesktopHost/Assets/Home/home-b2r2-static-intrusion.png",
+      "sha256": "2AF17017D7054126DA13672A2865F5C9B00A6F68FE02D0E6E27E1A676653880E",
+      "dimensions": [
+        2142,
+        1196
+      ],
+      "format": "PNG",
+      "file_bytes": 28663,
+      "decoded_bytes_bgra32": 10247328,
+      "decoded_mib": 9.773,
+      "has_alpha": true,
+      "runtime_loaded": true,
+      "logical_layers": [
+        "L7",
+        "L8"
+      ]
+    }
+  ],
+  "is_hit_test_visible": false,
+  "animation": false,
+  "coordinate_binding": "2142x1196 proportional Viewbox; no hand-drag offsets"
+}

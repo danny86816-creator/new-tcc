@@ -1,0 +1,25 @@
+{
+  "schema_version": "B3_1D_DEPTH_CONFIDENCE_V1",
+  "levels": {
+    "HIGH": "direct source-continuous evidence",
+    "MEDIUM": "credible depth with partial boundary ambiguity",
+    "LOW": "ambiguous boundary; no hard interleave",
+    "UNKNOWN": "insufficient evidence; 0%"
+  },
+  "high": [
+    "B3SC014",
+    "B3SC016",
+    "D5 character core spatial depth"
+  ],
+  "medium": [
+    "B3SC015",
+    "B3SC018",
+    "near snow/rock"
+  ],
+  "low_or_unknown": [
+    "dark left sky/branch overlap",
+    "occluded foot/contact",
+    "unresolved translucent edges"
+  ],
+  "hard_foreground_for_low_unknown": false
+}

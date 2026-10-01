@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-labelledby="title description">
+  <title id="title">TCC Nocturne Meridian micro application icon</title>
+  <desc id="description">A crisp 16 pixel T monogram with brass frame and teal index.</desc>
+  <rect width="16" height="16" fill="#08141c" />
+  <path d="M1.5 4V1.5H4 M12 1.5H14.5V4 M14.5 12V14.5H12 M4 14.5H1.5V12"
+        fill="none" stroke="#d2b473" stroke-width="0.8" />
+  <circle cx="8" cy="8.4" r="4.75" fill="none" stroke="#6f5734" stroke-width="0.75" />
+  <path d="M4.3 4.6H11.7L11.3 6L9 5.75V11.1L10 11.8V12.5H6V11.8L7 11.1V5.75L4.7 6Z"
+        fill="#eff4f3" />
+  <path d="M8 1.5L9 2.7L8 3.9L7 2.7Z" fill="#60d5cf" />
+</svg>

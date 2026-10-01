@@ -1,0 +1,68 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <Thickness x:Key="Tcc.ReferenceMaster.Thickness.None">0</Thickness>
+    <Thickness x:Key="Tcc.ReferenceMaster.Thickness.Panel">1</Thickness>
+    <Thickness x:Key="Tcc.ReferenceMaster.Thickness.TopChrome">0,0,0,1</Thickness>
+    <Thickness x:Key="Tcc.ReferenceMaster.Thickness.Navigation">0,0,1,0</Thickness>
+    <Thickness x:Key="Tcc.ReferenceMaster.Thickness.SelectedEdge">2,0,0,0</Thickness>
+    <CornerRadius x:Key="Tcc.ReferenceMaster.Radius.None">0</CornerRadius>
+    <CornerRadius x:Key="Tcc.ReferenceMaster.Radius.Panel">2</CornerRadius>
+    <CornerRadius x:Key="Tcc.ReferenceMaster.Radius.Deep">1</CornerRadius>
+    <sys:Double x:Key="Tcc.ReferenceMaster.Space.PanelInset">12</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.Viewport.MinWidth">1280</sys:Double>
+    <sys:Double x:Key="Tcc.ReferenceMaster.Viewport.MinHeight">720</sys:Double>
+
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Base" TargetType="Border">
+        <Setter Property="BorderThickness" Value="{StaticResource Tcc.ReferenceMaster.Thickness.Panel}" />
+        <Setter Property="CornerRadius" Value="{StaticResource Tcc.ReferenceMaster.Radius.Panel}" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Standard" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Base}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Panel}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Default}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Elevated" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Base}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.PanelElevated}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Elevated}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Deep" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Base}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.PanelDeep}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="CornerRadius" Value="{StaticResource Tcc.ReferenceMaster.Radius.Deep}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Quiet" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Base}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.PanelQuiet}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Panel.Disabled" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Base}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Disabled}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Header.Open" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.HeaderScrim}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="{StaticResource Tcc.ReferenceMaster.Radius.None}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.Navigation" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Navigation}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="{StaticResource Tcc.ReferenceMaster.Thickness.Navigation}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.TopChrome" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.TopChrome}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="{StaticResource Tcc.ReferenceMaster.Thickness.TopChrome}" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.ChartPane" TargetType="Border" BasedOn="{StaticResource Tcc.ReferenceMaster.Material.Panel.Deep}">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseInterior}" />
+        <Setter Property="Padding" Value="8" />
+    </Style>
+    <Style x:Key="Tcc.ReferenceMaster.Material.StatusBand" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Surface.Scene.DenseInterior}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Tcc.ReferenceMaster.Brush.Border.Quiet}" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+        <Setter Property="Padding" Value="6,4" />
+    </Style>
+</ResourceDictionary>

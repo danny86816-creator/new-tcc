@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title description">
+  <title id="title">TCC Nocturne Meridian application icon</title>
+  <desc id="description">An ivory T monogram set inside a precision meridian instrument, with aged brass calibration marks and a teal enamel index on a midnight field.</desc>
+  <defs>
+    <radialGradient id="field" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#20323c" />
+      <stop offset="0.52" stop-color="#101f29" />
+      <stop offset="1" stop-color="#050c12" />
+    </radialGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ead6a1" />
+      <stop offset="0.4" stop-color="#b89455" />
+      <stop offset="0.72" stop-color="#755a32" />
+      <stop offset="1" stop-color="#d8bd7e" />
+    </linearGradient>
+    <linearGradient id="ivory" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.48" stop-color="#e9eff0" />
+      <stop offset="1" stop-color="#aebdc2" />
+    </linearGradient>
+    <radialGradient id="enamel" cx="42%" cy="35%" r="68%">
+      <stop offset="0" stop-color="#bdffff" />
+      <stop offset="0.42" stop-color="#4bc9c5" />
+      <stop offset="1" stop-color="#0c615f" />
+    </radialGradient>
+  </defs>
+
+  <rect width="256" height="256" fill="url(#field)" />
+  <path d="M18 45V18H45 M211 18H238V45 M238 211V238H211 M45 238H18V211"
+        fill="none" stroke="#f4e1ab" stroke-width="3" stroke-linecap="square" opacity="0.88" />
+  <rect x="25" y="25" width="206" height="206" rx="30" fill="none" stroke="#6f8590" stroke-width="1.5" opacity="0.42" />
+  <rect x="30" y="30" width="196" height="196" rx="26" fill="none" stroke="url(#brass)" stroke-width="3" opacity="0.82" />
+
+  <circle cx="128" cy="128" r="78" fill="none" stroke="#02070b" stroke-width="11" opacity="0.72" />
+  <circle cx="128" cy="128" r="78" fill="none" stroke="url(#brass)" stroke-width="4" />
+  <ellipse cx="128" cy="128" rx="37" ry="78" fill="none" stroke="#d9e5e7" stroke-width="2" opacity="0.62" />
+  <path d="M50 128H206 M128 50V206" fill="none" stroke="#9eb0b7" stroke-width="1.5" opacity="0.35" />
+  <path d="M70 83A78 78 0 0 1 186 83 M70 173A78 78 0 0 0 186 173"
+        fill="none" stroke="#dce7e8" stroke-width="1.5" opacity="0.34" />
+
+  <g fill="none" stroke="#dbc386" stroke-width="3" stroke-linecap="square" opacity="0.9">
+    <path d="M128 42V52 M128 204V214 M42 128H52 M204 128H214" />
+    <path d="M67 67L75 75 M181 181L189 189 M189 67L181 75 M75 181L67 189" stroke-width="2" />
+  </g>
+  <g fill="none" stroke="#a8bbc1" stroke-width="1.5" opacity="0.55">
+    <path d="M100 47L103 56 M153 200L156 209 M47 156L56 153 M200 103L209 100" />
+    <path d="M77 56L82 64 M174 192L179 200 M56 179L64 174 M192 82L200 77" />
+  </g>
+
+  <path d="M67 66L189 66L184 86L142 81L142 174L157 185L157 194L99 194L99 185L114 174L114 81L72 86Z"
+        fill="#02070b" opacity="0.72" transform="translate(0 5)" />
+  <path d="M67 62L189 62L184 82L142 77L142 174L157 185L157 194L99 194L99 185L114 174L114 77L72 82Z"
+        fill="url(#ivory)" />
+  <path d="M79 70H177 M128 77V177" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.72" />
+  <path d="M99 194H157" fill="none" stroke="url(#brass)" stroke-width="4" />
+
+  <path d="M128 28L136 40L128 52L120 40Z" fill="#02070b" stroke="#02070b" stroke-width="5" />
+  <path d="M128 28L136 40L128 52L120 40Z" fill="url(#enamel)" stroke="#d7f7f3" stroke-width="1.4" />
+  <circle cx="128" cy="40" r="3" fill="#e9ffff" />
+  <path d="M128 204L134 216L128 228L122 216Z" fill="url(#brass)" opacity="0.92" />
+
+  <circle cx="54" cy="54" r="2" fill="#d9c183" />
+  <circle cx="202" cy="54" r="2" fill="#d9c183" />
+  <circle cx="54" cy="202" r="2" fill="#d9c183" />
+  <circle cx="202" cy="202" r="2" fill="#d9c183" />
+</svg>

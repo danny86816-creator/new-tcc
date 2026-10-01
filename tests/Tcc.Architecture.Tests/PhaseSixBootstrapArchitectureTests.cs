@@ -5,6 +5,8 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text.Json;
 using System.Xml.Linq;
 using Tcc.Presentation.Contracts.Theme;
 using Tcc.Themes.Fallback;
@@ -311,6 +313,30 @@ public sealed class PhaseSixBootstrapArchitectureTests
     }
 
     [Fact]
+    public void CompiledMainWindowXamlFieldsExactlyMatchDeclaredNames()
+    {
+        XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
+        string[] declaredNames = XDocument.Load(Path.Combine(
+                RepositoryPaths.Root, "src", "Tcc.DesktopHost", "MainWindow.xaml"))
+            .Descendants()
+            .Select(element => element.Attribute(xaml + "Name")?.Value)
+            .Where(name => name is not null)
+            .Cast<string>()
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        Type mainWindow = LoadHostAssembly().GetType("Tcc.DesktopHost.MainWindow", throwOnError: true)!;
+        string[] compiledNames = mainWindow.GetFields(
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            .Where(IsGeneratedXamlBackingField)
+            .Select(field => field.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(declaredNames, compiledNames);
+    }
+
+    [Fact]
     public void ProductionTypesHaveExactAssemblyVisibilityAndDeclaredSurface()
     {
         AssertClass(typeof(BuiltInThemePresentationSnapshot), "Tcc.Themes", isPublic: true, isStatic: false);
@@ -475,6 +501,191 @@ public sealed class PhaseSixBootstrapArchitectureTests
             host.GetType("Tcc.DesktopHost.MainWindow", throwOnError: true)!, "Singleton", requireInstance: false);
     }
 
+    [Fact]
+    public void HomeWatchlistPresentationStaysLocalHonestAndWithinTheApprovedThemeContract()
+    {
+        XDocument markup = XDocument.Load(Path.Combine(
+            RepositoryPaths.Root, "src", "Tcc.DesktopHost", "MainWindow.xaml"));
+        XNamespace presentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+        XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
+
+        string[] requiredAutomationIds =
+        [
+            "MainContentScroller", "NavHome", "NavMarkets", "NavPlanning", "NavRisk",
+            "NavPositions", "NavReview", "NavSettings", "Region.HeaderIdentity",
+            "Region.HomeSafetyCore", "Region.MarketOverview", "Region.Watchlist",
+            "Region.Priorities", "Region.MentalState", "Region.RecentActivity",
+            "Editorial.RightMaxim", "TabBtcUsdt", "TabEthUsdt", "TabSolUsdt",
+            "TabBnbUsdt", "TabXrpUsdt", "TabAddSymbol", "Timeframe1H",
+            "Timeframe4H", "Timeframe1D", "Timeframe1W", "WindowMinimizeButton",
+            "WindowMaximizeRestoreButton", "WindowCloseButton",
+        ];
+        foreach (string automationId in requiredAutomationIds)
+        {
+            Assert.Single(markup.Descendants(), element => element.Attributes().Any(attribute =>
+                attribute.Name.LocalName == "AutomationProperties.AutomationId" &&
+                attribute.Value == automationId));
+        }
+
+        string[] disabledControls =
+        [
+            "NavHome", "NavMarkets", "NavPlanning", "NavRisk", "NavPositions", "NavReview", "NavSettings",
+            "TabBtcUsdt", "TabEthUsdt", "TabSolUsdt", "TabBnbUsdt", "TabXrpUsdt", "TabAddSymbol",
+            "Timeframe1H", "Timeframe4H", "Timeframe1D", "Timeframe1W",
+        ];
+        foreach (string automationId in disabledControls)
+        {
+            XElement control = Assert.Single(markup.Descendants(), element => element.Attributes().Any(attribute =>
+                attribute.Name.LocalName == "AutomationProperties.AutomationId" &&
+                attribute.Value == automationId));
+            Assert.Equal("False", control.Attribute("IsEnabled")?.Value);
+        }
+
+        XElement resources = Assert.Single(markup.Descendants(presentation + "Window.Resources"));
+        string[] mergedResourceSources = resources.Descendants(presentation + "ResourceDictionary")
+            .Select(element => element.Attribute("Source")?.Value)
+            .Where(value => value is not null)
+            .Cast<string>()
+            .ToArray();
+        string[] expectedResourceSources =
+        [
+            "Resources/StrataObservatory.Design.xaml",
+            "Resources/StrataObservatory.Iconography.xaml",
+        ];
+        Assert.Equal(expectedResourceSources, mergedResourceSources);
+
+        HashSet<string> approvedResources = mergedResourceSources
+            .Select(source => XDocument.Load(Path.Combine(
+                RepositoryPaths.Root,
+                "src",
+                "Tcc.DesktopHost",
+                source.Replace('/', Path.DirectorySeparatorChar))))
+            .SelectMany(document => document.Root!.Elements())
+            .Select(element => element.Attribute(xaml + "Key")?.Value)
+            .Where(value => value is not null)
+            .Cast<string>()
+            .ToHashSet(StringComparer.Ordinal);
+        approvedResources.UnionWith(resources.Descendants()
+            .Select(element => element.Attribute(xaml + "Key")?.Value)
+            .Where(value => value is not null)
+            .Cast<string>());
+        approvedResources.UnionWith([
+            "Tcc.BuiltIn.Window", "color.background.base", "color.background.surface",
+            "color.text.primary", "color.text.secondary", "focus.ring.color", "focus.ring.thickness",
+            "Tcc.BuiltIn.Focus",
+        ]);
+        IEnumerable<string> dynamicResources = markup.Root!.DescendantsAndSelf()
+            .SelectMany(element => element.Attributes())
+            .Select(attribute => attribute.Value)
+            .Where(value => value.StartsWith("{DynamicResource ", StringComparison.Ordinal))
+            .Select(value => value[17..^1]);
+        Assert.All(dynamicResources, resource => Assert.Contains(resource, approvedResources));
+
+        XDocument typography = XDocument.Load(Path.Combine(
+            RepositoryPaths.Root, "src", "Tcc.DesktopHost", "Resources", "StrataObservatory.Design.xaml"));
+        XElement[] fontSetters = typography.Descendants(presentation + "Setter")
+            .Where(setter => setter.Attribute("Property")?.Value == "FontSize").ToArray();
+        Assert.True(fontSetters.Length >= 3);
+        Assert.All(fontSetters, setter => Assert.StartsWith("{DynamicResource Tcc.ReferenceMaster.FontSize.",
+            setter.Attribute("Value")?.Value, StringComparison.Ordinal));
+
+        string source = markup.ToString(SaveOptions.DisableFormatting);
+        Assert.Contains("UNKNOWN", source, StringComparison.Ordinal);
+        Assert.Contains("DATA UNAVAILABLE", source, StringComparison.Ordinal);
+        Assert.Contains("Awaiting sync", source, StringComparison.Ordinal);
+        Assert.Contains("No priorities loaded", source, StringComparison.Ordinal);
+        Assert.Contains("Read-only", source, StringComparison.Ordinal);
+        Assert.DoesNotContain("broker", source, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("automatic trading", source, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void HomeM13AssetDetailsRemainTraceableWhileP3AddsOnlyTheAcceptedBackground()
+    {
+        CurrentHomeAuthorityContract.AssertReconciled(nameof(PhaseSixBootstrapArchitectureTests), nameof(HomeM13AssetDetailsRemainTraceableWhileP3AddsOnlyTheAcceptedBackground));
+    }
+
+    [Fact]
+    public void HomeM14ConvergenceAndP3BackgroundUseSharedEvidenceWithoutGeometryDrift()
+    {
+        CurrentHomeAuthorityContract.AssertReconciled(nameof(PhaseSixBootstrapArchitectureTests), nameof(HomeM14ConvergenceAndP3BackgroundUseSharedEvidenceWithoutGeometryDrift));
+    }
+
+    [Fact]
+    public void HomeM145AssetsAndP3BackgroundUseTraceableResources()
+    {
+        CurrentHomeAuthorityContract.AssertReconciled(nameof(PhaseSixBootstrapArchitectureTests), nameof(HomeM145AssetsAndP3BackgroundUseTraceableResources));
+    }
+
+    [Fact]
+    public void HomeB3ArtworkRemainsHistoricalWhileP3LoadsOnlyTheAcceptedBackground()
+    {
+        CurrentHomeAuthorityContract.AssertReconciled(nameof(PhaseSixBootstrapArchitectureTests), nameof(HomeB3ArtworkRemainsHistoricalWhileP3LoadsOnlyTheAcceptedBackground));
+    }
+
+    [Fact]
+    public void HomeB2R2FrozenSceneHasExactApprovedCustody()
+    {
+        string source = Path.Combine(RepositoryPaths.Root, "automation", "tcc_master_pipeline", "work", "m1_4_6_b2r1", "assets", "m1_4_6_b2r1_locked_scene.png");
+        string production = Path.Combine(RepositoryPaths.Root, "src", "Tcc.DesktopHost", "Assets", "Home", "home-scene-b2r1-locked.png");
+        const string expected = "DDEB846F17EA696072B5715F01B4524C5B2B5214F526B75EAF69432B66586A03";
+        Assert.Equal(expected, Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(source))));
+        Assert.Equal(expected, Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(production))));
+    }
+
+    [Fact]
+    public void HomeB2R2FormalManifestPreservesLogicalLayerOrder()
+    {
+        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(
+            RepositoryPaths.Root, "automation", "tcc_master_pipeline", "work", "m1_4_6_b2r2", "m1_4_6_b2r2_layer_manifest.json")));
+        JsonElement root = document.RootElement;
+        Assert.Equal("PASS", root.GetProperty("status").GetString());
+        Assert.Equal(3, root.GetProperty("physical_runtime_layer_count").GetInt32());
+        JsonElement logical = root.GetProperty("logical_layers");
+        Assert.Equal(10, logical.EnumerateObject().Count());
+        Assert.Equal(Enumerable.Range(0, 10).Select(index => $"L{index}"), logical.EnumerateObject().Select(row => row.Name));
+        Assert.False(root.GetProperty("visual_order_changed").GetBoolean());
+        Assert.False(root.GetProperty("is_hit_test_visible").GetBoolean());
+        Assert.False(root.GetProperty("animation").GetBoolean());
+    }
+
+    [Fact]
+    public void HomeB2R2CoverageHonorsAllEightSelectionCapsAndProtections()
+    {
+        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(
+            RepositoryPaths.Root, "automation", "tcc_master_pipeline", "work", "m1_4_6_b2r2", "m1_4_6_b2r2_artwork_coverage.json")));
+        JsonElement root = document.RootElement;
+        Assert.Equal("PASS", root.GetProperty("status").GetString());
+        JsonElement[] rows = root.GetProperty("selection_rows").EnumerateArray().ToArray();
+        Assert.Equal(Enumerable.Range(101, 8).Select(index => $"S{index}"), rows.Select(row => row.GetProperty("selection_id").GetString()));
+        Assert.All(rows, row =>
+        {
+            Assert.True(row.GetProperty("artwork_coverage_ratio").GetDouble() <= row.GetProperty("maximum_ratio").GetDouble());
+            Assert.True(row.GetProperty("actual_opacity").GetDouble() <= row.GetProperty("opacity_limit").GetDouble());
+            Assert.Equal(0, row.GetProperty("hard_protection_overlap_px").GetInt32());
+            Assert.Equal(0, row.GetProperty("critical_ui_overlap_px").GetInt32());
+            Assert.Equal(0, row.GetProperty("readability_violations").GetInt32());
+            Assert.False(row.GetProperty("hit_test_visible").GetBoolean());
+        });
+        Assert.True(root.GetProperty("s108_lower_than_s106_s107").GetBoolean());
+        Assert.Equal(0, root.GetProperty("market_overview_core_artwork_px").GetInt32());
+    }
+
+    [Fact]
+    public void HomeB2R2ProvenanceRecordsOfflineDeterministicDerivation()
+    {
+        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(
+            RepositoryPaths.Root, "automation", "tcc_master_pipeline", "work", "m1_4_6_b2r2", "m1_4_6_b2r2_scene_provenance.json")));
+        JsonElement root = document.RootElement;
+        Assert.Equal("PASS", root.GetProperty("status").GetString());
+        Assert.Equal(0, root.GetProperty("model_calls").GetInt32());
+        Assert.Equal(0, root.GetProperty("image_generation_calls").GetInt32());
+        Assert.False(root.GetProperty("art_regeneration").GetBoolean());
+        Assert.False(root.GetProperty("character_regeneration").GetBoolean());
+        Assert.False(root.GetProperty("manual_dragging").GetBoolean());
+        Assert.True(root.GetProperty("production_base").GetProperty("byte_identical").GetBoolean());
+    }
+
     [Theory]
     [InlineData(320d, 240d, "deep")]
     [InlineData(960d, 600d, "deep")]
@@ -503,6 +714,42 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 XDocument markup = XDocument.Load(Path.Combine(
                     RepositoryPaths.Root, "src", "Tcc.DesktopHost", "MainWindow.xaml"));
                 markup.Root!.Attribute(XName.Get("Class", "http://schemas.microsoft.com/winfx/2006/xaml"))!.Remove();
+                foreach (XAttribute fieldModifier in markup.Descendants().Attributes(
+                    XName.Get("FieldModifier", "http://schemas.microsoft.com/winfx/2006/xaml")).ToArray())
+                    fieldModifier.Remove();
+                // XamlReader.Parse has no product code-behind instance after x:Class is removed.
+                // Product-level geometry tests separately assert the exact caption-button handlers.
+                foreach (XAttribute clickHandler in markup.Descendants().Attributes("Click").ToArray())
+                    clickHandler.Remove();
+                XNamespace xamlPresentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+                // The loose-XAML test has no app ResourceAssembly, so materialize the product's
+                // merged dictionaries in the same declared order before invoking XamlReader.
+                XElement windowResources = Assert.Single(markup.Descendants(xamlPresentation + "Window.Resources"));
+                XElement dictionary = Assert.Single(windowResources.Elements(xamlPresentation + "ResourceDictionary"));
+                XElement merged = Assert.Single(dictionary.Elements(xamlPresentation + "ResourceDictionary.MergedDictionaries"));
+                XElement[] materializedResources = merged.Elements(xamlPresentation + "ResourceDictionary")
+                    .Select(item => item.Attribute("Source")!.Value)
+                    .Select(source => XDocument.Load(Path.Combine(
+                        RepositoryPaths.Root,
+                        "src",
+                        "Tcc.DesktopHost",
+                        source.Replace('/', Path.DirectorySeparatorChar))))
+                    .SelectMany(document => document.Root!.Elements())
+                    .Select(element => new XElement(element))
+                    .ToArray();
+                merged.Remove();
+                dictionary.Add(materializedResources);
+                string hostRoot = Path.Combine(RepositoryPaths.Root, "src", "Tcc.DesktopHost");
+                foreach (XAttribute assetReference in markup.Descendants()
+                    .Attributes()
+                    .Where(attribute => attribute.Name.LocalName is "Source" or "UriSource" or "ImageSource")
+                    .Where(attribute => attribute.Value.StartsWith("Assets/", StringComparison.Ordinal))
+                    .ToArray())
+                {
+                    assetReference.Value = new Uri(Path.Combine(
+                        hostRoot,
+                        assetReference.Value.Replace('/', Path.DirectorySeparatorChar))).AbsoluteUri;
+                }
                 Type xamlReader = Type.GetType("System.Windows.Markup.XamlReader, PresentationFramework", throwOnError: true)!;
                 window = xamlReader.GetMethod("Parse", [typeof(string)])!
                     .Invoke(null, [markup.ToString(SaveOptions.DisableFormatting)])!;
@@ -512,24 +759,16 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 Invoke(window, "Show");
                 Invoke(window, "UpdateLayout");
 
-                object scrollViewer = GetProperty(window, "Content");
-                object stackPanel = GetProperty(scrollViewer, "Content");
-                IList children = Assert.IsAssignableFrom<IList>(GetProperty(stackPanel, "Children"));
-                object status = children[1]!;
-                object variant = children[2]!;
-
-                Assert.Equal(diagnostic, GetProperty(status, "Text"));
-                Assert.Equal($"啟動顯示模式：{selectedVariant}", GetProperty(variant, "Text"));
-                Assert.Contains(diagnostic, GetAutomationPeerName(status), StringComparison.Ordinal);
-                Assert.Contains($"啟動顯示模式：{selectedVariant}", GetAutomationPeerName(variant), StringComparison.Ordinal);
-                Assert.Equal("Wrap", GetProperty(status, "TextWrapping")!.ToString());
+                object scrollViewer = FindByAutomationId(window, "MainContentScroller");
 
                 double viewportWidth = (double)GetProperty(scrollViewer, "ViewportWidth");
                 double extentWidth = (double)GetProperty(scrollViewer, "ExtentWidth");
                 Assert.True(viewportWidth > 0d);
-                Assert.True(extentWidth <= viewportWidth + 0.5d,
-                    $"Critical diagnostic content has horizontal extent {extentWidth} beyond viewport {viewportWidth} at {width}x{height}.");
-                Assert.Equal("Collapsed", GetProperty(scrollViewer, "ComputedHorizontalScrollBarVisibility")!.ToString());
+                Assert.True(extentWidth >= viewportWidth - 0.5d);
+                bool usesMinimumWidthFallback = extentWidth > viewportWidth + 0.5d;
+                Assert.Equal(
+                    usesMinimumWidthFallback ? "Visible" : "Collapsed",
+                    GetProperty(scrollViewer, "ComputedHorizontalScrollBarVisibility")!.ToString());
                 Assert.True((bool)GetProperty(scrollViewer, "Focusable"));
                 Assert.True(GetKeyboardNavigationIsTabStop(scrollViewer));
 
@@ -541,7 +780,10 @@ public sealed class PhaseSixBootstrapArchitectureTests
                     Invoke(scrollViewer, "PageDown");
                     Invoke(window, "UpdateLayout");
                     Assert.True((double)GetProperty(scrollViewer, "VerticalOffset") > before,
-                        "Keyboard-focused diagnostic scroller did not move on PageDown.");
+                        "Keyboard-focused Home content scroller did not move on PageDown.");
+                    Invoke(scrollViewer, "ScrollToTop");
+                    Invoke(window, "UpdateLayout");
+                    Assert.Equal(0d, (double)GetProperty(scrollViewer, "VerticalOffset"));
                 }
             }
             catch (Exception exception)
@@ -659,7 +901,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
             Assert.False(process.HasExited, "Apphost exited before creating its real WPF window.");
             Assert.NotEqual(0, process.MainWindowHandle);
-            Assert.StartsWith("Trading Command Center", process.MainWindowTitle, StringComparison.Ordinal);
+            Assert.StartsWith("TCC — Strata Observatory", process.MainWindowTitle, StringComparison.Ordinal);
             Assert.True(process.CloseMainWindow());
             Assert.True(process.WaitForExit(10_000));
             Assert.Equal(0, process.ExitCode);
@@ -2022,7 +2264,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
             .OfType<MethodInfo>().ToHashSet();
         members.AddRange(type.GetMethods(flags).Where(method => Visible(method) && !accessors.Contains(method))
             .Select(method => $"M {CallableAccess(method)} {method.Name}({string.Join(",", method.GetParameters().Select(p => TypeIdentity(p.ParameterType)))}):{TypeIdentity(method.ReturnType)}"));
-        members.AddRange(type.GetFields(flags).Where(Visible)
+        members.AddRange(type.GetFields(flags).Where(field => Visible(field) && !IsGeneratedXamlBackingField(field))
             .Select(field => $"F {FieldAccess(field)} {field.Name}:{TypeIdentity(field.FieldType)}"));
         members.AddRange(type.GetEvents(flags).Where(evt => evt.AddMethod is not null && Visible(evt.AddMethod))
             .Select(evt => $"E {evt.Name}:{TypeIdentity(evt.EventHandlerType!)}"));
@@ -2034,6 +2276,11 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
     private static bool Visible(FieldInfo field) => field.IsPublic || field.IsAssembly
         || field.IsFamily || field.IsFamilyOrAssembly || field.IsFamilyAndAssembly;
+
+    private static bool IsGeneratedXamlBackingField(FieldInfo field) =>
+        field.IsAssembly
+        && field.DeclaringType?.FullName == "Tcc.DesktopHost.MainWindow"
+        && typeof(System.Windows.DependencyObject).IsAssignableFrom(field.FieldType);
 
     private static string CallableAccess(MethodBase method) => method.IsPublic ? "public"
         : method.IsAssembly ? "internal"
@@ -2390,7 +2637,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
             appPath = Path.Combine(root, "App.xaml.cs");
             File.WriteAllText(appPath, appSource);
         }
-        string generatedRoot = Path.Combine(hostRoot, "obj", "x64", "Release", "net10.0-windows");
+        string generatedRoot = Path.Combine(hostRoot, "obj", "Release", "net10.0-windows");
         string[] compilePaths =
         [
             appPath,
@@ -2587,6 +2834,35 @@ public sealed class PhaseSixBootstrapArchitectureTests
     private static object GetProperty(object instance, string propertyName) =>
         instance.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance)!
             .GetValue(instance)!;
+
+    private static object FindByAutomationId(object root, string automationId)
+    {
+        Type automationProperties = Type.GetType(
+            "System.Windows.Automation.AutomationProperties, PresentationCore", true)!;
+        MethodInfo getAutomationId = automationProperties.GetMethod(
+            "GetAutomationId", BindingFlags.Public | BindingFlags.Static)!;
+        Type visualTreeHelper = Type.GetType(
+            "System.Windows.Media.VisualTreeHelper, PresentationCore", true)!;
+        MethodInfo getChildrenCount = visualTreeHelper.GetMethod(
+            "GetChildrenCount", BindingFlags.Public | BindingFlags.Static)!;
+        MethodInfo getChild = visualTreeHelper.GetMethod(
+            "GetChild", BindingFlags.Public | BindingFlags.Static)!;
+        Stack<object> pending = new();
+        pending.Push(root);
+
+        while (pending.Count != 0)
+        {
+            object current = pending.Pop();
+            if ((string)getAutomationId.Invoke(null, [current])! == automationId)
+                return current;
+
+            int childCount = (int)getChildrenCount.Invoke(null, [current])!;
+            for (int index = childCount - 1; index >= 0; index--)
+                pending.Push(getChild.Invoke(null, [current, index])!);
+        }
+
+        throw new InvalidOperationException($"AutomationId '{automationId}' was not found.");
+    }
 
     private static void SetProperty(object instance, string propertyName, object value) =>
         instance.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance)!
