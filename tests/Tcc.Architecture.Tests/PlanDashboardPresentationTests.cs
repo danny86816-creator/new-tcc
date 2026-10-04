@@ -30,10 +30,13 @@ public sealed class PlanDashboardPresentationTests
             root.GetProperty("safety_constraints").EnumerateArray().Select(value => value.GetString()));
 
         string phase = File.ReadAllText(Path.Combine(Root, "docs", "design", "TCC_PLAN_DASHBOARD_WPF_FIRST_VISIBLE_SLICE_R1.md"));
-        Assert.Contains("IMPLEMENTED / VALIDATED / HUMAN VISUAL ACCEPTANCE PENDING", phase, StringComparison.Ordinal);
+        Assert.Contains("IMPLEMENTED / VALIDATED / HUMAN VISUAL ACCEPTED / LOCAL COMMIT EXISTS", phase, StringComparison.Ordinal);
         Assert.Contains("UX-PLAN-001", phase, StringComparison.Ordinal);
         Assert.Contains("MOD-PLAN-WORKBENCH", phase, StringComparison.Ordinal);
         Assert.Contains("Real navigation or enabling the existing left-rail Plan button", phase, StringComparison.Ordinal);
+
+        string visualAlignment = File.ReadAllText(Path.Combine(Root, "docs", "design", "TCC_PLAN_DASHBOARD_WPF_VISUAL_ALIGNMENT_R2.md"));
+        Assert.Contains("IMPLEMENTED / VALIDATED / HUMAN VISUAL ACCEPTED / LOCAL COMMIT EXISTS", visualAlignment, StringComparison.Ordinal);
     }
 
     [Fact]

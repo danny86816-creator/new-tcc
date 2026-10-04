@@ -4130,3 +4130,19 @@ TCC-P6-83B later authorizes only this Decision020 clarification, the correspondi
 - Evidence：精確index共16檔、clean export共438個files；locked restore PASS；solution Release x64與DesktopHost exact Release x64 builds均0 warnings／0 errors；focused Plan9/9及full1846/1846 PASS，failed0／skipped0。首次clean-index pass因三份新增規格共7處trailing whitespace與一個仍期待既有visual-acceptance status的治理契約而停止，沒有commit；只移除whitespace並保留原acceptance語意後final gates通過，沒有刪除／skip／弱化test。Plan asset SHA-256為`19BC4132...3F05`；Frozen protected paths staged0且既有11/11 hashes preserved；secret0、forbidden-artifact0、`git diff --cached --check`與16/16 scope assertion均PASS。
 - Status：`LOCAL SCOPED COMMIT CREATED`；commit為current HEAD，branch相對upstream ahead 1。commit hash不寫入自身內容以避免self-reference；由Git HEAD提供唯一identity。
 - Delivery boundary：只建立一個local scoped commit後停止；不得推送remote，也不得建立tag、merge、release、deploy或刪除branch。
+
+## TCC-DEC-2026-10-05-234 - Human Formally Accepts the Plan Visual Result
+
+- 日期：2026-10-05；來源：Decision233 local commit完成後，Codex建議下一步由Human確認正式visual acceptance，再另行決定是否授權push；Human以standalone `1`接受該下一步。本決策只記錄Human visual acceptance，不授權另一個commit、tag、push、merge、release、deploy或branch deletion。
+- Acceptance：Human正式接受Decisions225–233交付的Plan first visible slice、HOME-tone R2 visual alignment、Traditional-Chinese copy、Plan decorative background、viewport-safe focus、Home ↔ Plan navigation與child-label state closure。接受依據包含已呈現的normal／1280×720、Text Scale152%、actual High Contrast與restore、mouse／keyboard／UIA evidence及Decision233 clean-index gates。
+- Boundary：visual acceptance不擴張presentation-only product semantics；Plan仍為Offline／read-only preview，不新增UX-PLAN-002–005、CRUD、formalization、autosave、persistence、approval、recovery、conflict resolution、Domain／Application／Persistence、connector write、broker／exchange／prop-firm／order／execution API、dependency、public API或APPROVED／FROZEN byte修改。
+- Contract synchronization：first-slice與R2規格狀態同步為`IMPLEMENTED / VALIDATED / HUMAN VISUAL ACCEPTED / LOCAL COMMIT EXISTS`；focused Plan contract鎖定兩份規格的新狀態。Decision233 commit `44d525ffccb95393898db77c9154b6e4d3fc2a2f`保持current HEAD，本決策與同步檔案目前不提交。
+- Next authority：若要提交Decision234 acceptance record，或push既有／後續commit，Human必須再提供明確授權；commit與push是兩個獨立權限。
+
+## TCC-DEC-2026-10-05-235 - Human Authorizes the Acceptance-Record Commit and Next-WPF Handoff
+
+- 日期：2026-10-05；來源：Codex建議依序完成Decision234五檔acceptance-record local commit、開立新對話、再依正式authority確認並施工下一個WPF；Human明確回覆`123都做吧 開始`，授權三項依序執行。
+- Commit authority：只允許提交Decision234已審查的五檔：Decision ledger、Project Status、Plan first-slice spec、Plan R2 spec及focused Plan presentation contract。禁止`git add -A`，其餘user-owned／excluded untracked files、outputs、cache、skill observations、rollback artifacts與其他工作全部排除。
+- Gate：commit前必須通過exact scope、locked restore、Release x64 builds、focused／full tests、Frozen custody、secret／forbidden-artifact scan及Git hygiene；任何failure均停止commit與後續handoff。
+- Next-WPF authority：完成本local commit後，建立獨立新對話`第三個 WPF—規格確認與施工`，先從Repository、Approved／Frozen sources、Status、Decision ledger與Git state重建上下文，再確認唯一正式screen／module authority、included／excluded scope、acceptance gates與rollback；確認後可在該新對話施工，不得把「下一個WPF」自行解讀為未核准Phase7或擴張business semantics。
+- Delivery boundary：本授權不包含push、tag、merge、release、deploy、branch deletion或remote overwrite。Decision235 acceptance-record commit的唯一identity由建立後的Git HEAD提供，不在commit內容中self-reference。
