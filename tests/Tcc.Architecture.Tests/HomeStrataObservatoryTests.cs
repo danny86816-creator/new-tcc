@@ -531,7 +531,20 @@ public sealed class HomeStrataObservatoryTests
             label.Attribute("Style")?.Value == "{StaticResource Strata.NavLabel}" &&
             label.Attribute("Foreground")?.Value == "{Binding Foreground, ElementName=NavPlanning}");
 
-        string[] unavailableNavIds = ["NavMarkets", "NavRisk", "NavPositions", "NavReview", "NavSettings"];
+        XElement risk = document.Descendants(presentation + "Button")
+            .Single(button => button.Attribute(x + "Name")?.Value == "NavRisk");
+        Assert.NotEqual("False", risk.Attribute("IsEnabled")?.Value);
+        Assert.NotEqual("False", risk.Attribute("IsTabStop")?.Value);
+        Assert.Equal("Available", risk.Attribute("AutomationProperties.ItemStatus")?.Value);
+        Assert.Equal("Open Risk", risk.Attribute("ToolTip")?.Value);
+        Assert.Equal("OnRiskNavigationClick", risk.Attribute("Click")?.Value);
+        Assert.DoesNotContain("Command=", risk.ToString(SaveOptions.DisableFormatting), StringComparison.Ordinal);
+        Assert.Contains(risk.Descendants(presentation + "TextBlock"), label =>
+            label.Attribute("Text")?.Value == "RISK" &&
+            label.Attribute("Style")?.Value == "{StaticResource Strata.NavLabel}" &&
+            label.Attribute("Foreground")?.Value == "{Binding Foreground, ElementName=NavRisk}");
+
+        string[] unavailableNavIds = ["NavMarkets", "NavPositions", "NavReview", "NavSettings"];
         foreach (string navId in unavailableNavIds)
         {
             XElement nav = document.Descendants(presentation + "Button")

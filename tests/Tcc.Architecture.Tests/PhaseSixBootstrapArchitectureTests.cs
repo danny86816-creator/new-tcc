@@ -78,6 +78,8 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 Tcc.DesktopHost.MainWindowViewModel
                 Tcc.DesktopHost.PlanDashboardPreviewState
                 Tcc.DesktopHost.PlanDashboardView
+                Tcc.DesktopHost.RiskPermissionPreviewState
+                Tcc.DesktopHost.RiskPermissionView
                 Tcc.DesktopHost.ThemeBootstrap.ThemeBootstrap
                 """),
         };
@@ -218,6 +220,19 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 M internal ShowPreviewState(Tcc.DesktopHost.PlanDashboardPreviewState):System.Void
                 M public InitializeComponent():System.Void
                 """),
+            ["Tcc.DesktopHost.RiskPermissionPreviewState"] = Lines("""
+                F public Blocked:Tcc.DesktopHost.RiskPermissionPreviewState
+                F public Empty:Tcc.DesktopHost.RiskPermissionPreviewState
+                F public Error:Tcc.DesktopHost.RiskPermissionPreviewState
+                F public Loading:Tcc.DesktopHost.RiskPermissionPreviewState
+                F public Offline:Tcc.DesktopHost.RiskPermissionPreviewState
+                F public value__:System.Int32
+                """),
+            ["Tcc.DesktopHost.RiskPermissionView"] = Lines("""
+                C public()
+                M internal ShowPreviewState(Tcc.DesktopHost.RiskPermissionPreviewState):System.Void
+                M public InitializeComponent():System.Void
+                """),
         };
 
     // ADR-0005 §3 locks parameter names for the listed callable boundary. Keeping this
@@ -275,6 +290,11 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 M InitializeComponent()
                 M ShowPreviewState(Tcc.DesktopHost.PlanDashboardPreviewState state)
                 """),
+            ["Tcc.DesktopHost.RiskPermissionView"] = Lines("""
+                C()
+                M InitializeComponent()
+                M ShowPreviewState(Tcc.DesktopHost.RiskPermissionPreviewState state)
+                """),
         };
 
     private static readonly Dictionary<string, string[]> ApprovedHostInterfaces =
@@ -307,6 +327,17 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 System.Windows.Media.Animation.IAnimatable
                 System.Windows.Media.Composition.DUCE+IResource
                 """),
+            ["Tcc.DesktopHost.RiskPermissionView"] = Lines("""
+                System.ComponentModel.ISupportInitialize
+                System.Windows.IFrameworkInputElement
+                System.Windows.IInputElement
+                System.Windows.Markup.IAddChild
+                System.Windows.Markup.IComponentConnector
+                System.Windows.Markup.IHaveResources
+                System.Windows.Markup.IQueryAmbient
+                System.Windows.Media.Animation.IAnimatable
+                System.Windows.Media.Composition.DUCE+IResource
+                """),
         };
 
     private static readonly HashSet<string> ApprovedPhaseSixPublicTypes =
@@ -322,6 +353,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
         "Tcc.DesktopHost.MainWindow",
         "Tcc.DesktopHost.MainWindowViewModel",
         "Tcc.DesktopHost.PlanDashboardView",
+        "Tcc.DesktopHost.RiskPermissionView",
     ];
 
     // ADR-0005 §3.3 fixes all native authority independently of the inspected assembly.
@@ -357,6 +389,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
                  {
                      ("MainWindow.xaml", "Tcc.DesktopHost.MainWindow"),
                      ("PlanDashboardView.xaml", "Tcc.DesktopHost.PlanDashboardView"),
+                     ("RiskPermissionView.xaml", "Tcc.DesktopHost.RiskPermissionView"),
                  })
         {
             string[] declaredNames = XDocument.Load(Path.Combine(
@@ -574,7 +607,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
         string[] disabledControls =
         [
-            "NavMarkets", "NavRisk", "NavPositions", "NavReview", "NavSettings",
+            "NavMarkets", "NavPositions", "NavReview", "NavSettings",
             "TabBtcUsdt", "TabEthUsdt", "TabSolUsdt", "TabBnbUsdt", "TabXrpUsdt", "TabAddSymbol",
             "Timeframe1H", "Timeframe4H", "Timeframe1D", "Timeframe1W",
         ];
@@ -586,7 +619,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
             Assert.Equal("False", control.Attribute("IsEnabled")?.Value);
         }
 
-        foreach (string automationId in new[] { "NavHome", "NavPlanning" })
+        foreach (string automationId in new[] { "NavHome", "NavPlanning", "NavRisk" })
         {
             XElement navigation = Assert.Single(markup.Descendants(), element => element.Attributes().Any(attribute =>
                 attribute.Name.LocalName == "AutomationProperties.AutomationId" &&
@@ -779,10 +812,12 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 XNamespace xamlPresentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
                 XNamespace local = "clr-namespace:Tcc.DesktopHost";
                 // This gate exercises HOME wrapping and bound diagnostics from loose XAML.
-                // The Plan UserControl is compiled and validated by its own presentation and
-                // runtime gates, and cannot be constructed by a classless loose-XAML parser.
+                // Compiled page UserControls are validated by their presentation and runtime
+                // gates, and cannot be constructed by a classless loose-XAML parser.
                 foreach (XElement planSurface in markup.Descendants(local + "PlanDashboardView").ToArray())
                     planSurface.Remove();
+                foreach (XElement riskSurface in markup.Descendants(local + "RiskPermissionView").ToArray())
+                    riskSurface.Remove();
                 // The loose-XAML test has no app ResourceAssembly, so materialize the product's
                 // merged dictionaries in the same declared order before invoking XamlReader.
                 XElement windowResources = Assert.Single(markup.Descendants(xamlPresentation + "Window.Resources"));
@@ -2029,6 +2064,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
                     or "Tcc.DesktopHost.MainWindow"
                     or "Tcc.DesktopHost.MainWindowViewModel"
                     or "Tcc.DesktopHost.PlanDashboardView"
+                    or "Tcc.DesktopHost.RiskPermissionView"
                     or "Tcc.DesktopHost.ThemeBootstrap.ThemeBootstrap"
                     or "Tcc.DesktopHost.EmbeddedSafeTheme.SafeThemeResourceAdapter")
                 .ToArray();
@@ -2341,7 +2377,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
     private static bool IsGeneratedXamlBackingField(FieldInfo field) =>
         field.IsAssembly
-        && field.DeclaringType?.FullName is "Tcc.DesktopHost.MainWindow" or "Tcc.DesktopHost.PlanDashboardView"
+        && field.DeclaringType?.FullName is "Tcc.DesktopHost.MainWindow" or "Tcc.DesktopHost.PlanDashboardView" or "Tcc.DesktopHost.RiskPermissionView"
         && typeof(System.Windows.DependencyObject).IsAssignableFrom(field.FieldType);
 
     private static string CallableAccess(MethodBase method) => method.IsPublic ? "public"
@@ -2706,11 +2742,13 @@ public sealed class PhaseSixBootstrapArchitectureTests
             mainWindowPath,
             viewModelPath,
             Path.Combine(hostRoot, "PlanDashboardView.xaml.cs"),
+            Path.Combine(hostRoot, "RiskPermissionView.xaml.cs"),
             .. Directory.GetFiles(Path.Combine(hostRoot, "ThemeBootstrap"), "*.cs", SearchOption.AllDirectories),
             .. Directory.GetFiles(Path.Combine(hostRoot, "EmbeddedSafeTheme"), "*.cs", SearchOption.AllDirectories),
             Path.Combine(generatedRoot, "App.g.cs"),
             Path.Combine(generatedRoot, "MainWindow.g.cs"),
             Path.Combine(generatedRoot, "PlanDashboardView.g.cs"),
+            Path.Combine(generatedRoot, "RiskPermissionView.g.cs"),
             Path.Combine(generatedRoot, "Tcc.DesktopHost.GlobalUsings.g.cs"),
         ];
         Assert.All(compilePaths, path => Assert.True(File.Exists(path), $"Host production-copy input missing: {path}"));

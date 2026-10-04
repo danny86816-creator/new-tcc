@@ -117,6 +117,7 @@ internal static class CurrentHomeAuthorityContract
             "Assets/Brand/Tcc.NocturneMeridian.AppIcon.Window.png",
             "Assets/MasterFidelity/StrataObservatory.MasterR1.Scene.R26.png",
             "Assets/Plan/Tcc.PlanDashboard.HomeStyle.Background.R1.png",
+            "Assets/Risk/Tcc.RiskPermission.GuardedPass.Background.R1.png",
             "Assets/StrataObservatory/StrataObservatory.MentalStateSuite.R1.png",
         ], resources);
     }
@@ -164,7 +165,7 @@ internal static class CurrentHomeAuthorityContract
             Assert.False(string.IsNullOrWhiteSpace(button.Attribute("Click")?.Value));
             Assert.NotEqual("False", button.Attribute("IsEnabled")?.Value);
         }
-        foreach (string id in new[] { "NavHome", "NavPlanning" })
+        foreach (string id in new[] { "NavHome", "NavPlanning", "NavRisk" })
         {
             XElement navigation = ByAutomationId(document, id);
             Assert.NotEqual("False", navigation.Attribute("IsEnabled")?.Value);

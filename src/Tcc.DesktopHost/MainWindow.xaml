@@ -164,8 +164,8 @@
                                 <Button x:Name="NavPlanning" Grid.Row="2" AutomationProperties.AutomationId="NavPlanning" AutomationProperties.Name="Open Plan" AutomationProperties.ItemStatus="Available" AutomationProperties.HelpText="Navigates to the read-only Plan page." ToolTip="Open Plan" Style="{StaticResource Strata.NavButton}" Click="OnPlanNavigationClick">
                                     <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Plan}" /><TextBlock Margin="0,8,0,0" Text="PLAN" Style="{StaticResource Strata.NavLabel}" Foreground="{Binding Foreground, ElementName=NavPlanning}" /><TextBlock x:Name="NavPlanningCurrentState" Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" Visibility="Collapsed" /></StackPanel>
                                 </Button>
-                                <Button x:Name="NavRisk" Grid.Row="3" AutomationProperties.AutomationId="NavRisk" AutomationProperties.Name="Risk unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
-                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Risk}" /><TextBlock Margin="0,8,0,0" Text="RISK" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                <Button x:Name="NavRisk" Grid.Row="3" AutomationProperties.AutomationId="NavRisk" AutomationProperties.Name="Open Risk" AutomationProperties.ItemStatus="Available" AutomationProperties.HelpText="Navigates to the read-only Trading Permission Overview." ToolTip="Open Risk" Style="{StaticResource Strata.NavButton}" Click="OnRiskNavigationClick">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Risk}" /><TextBlock Margin="0,8,0,0" Text="RISK" Style="{StaticResource Strata.NavLabel}" Foreground="{Binding Foreground, ElementName=NavRisk}" /><TextBlock x:Name="NavRiskCurrentState" Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" Visibility="Collapsed" /></StackPanel>
                                 </Button>
                                 <Button x:Name="NavPositions" Grid.Row="4" AutomationProperties.AutomationId="NavPositions" AutomationProperties.Name="Positions unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
                                     <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Positions}" /><TextBlock Margin="0,8,0,0" Text="POSITIONS" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
@@ -609,6 +609,11 @@
                                                  Width="1568" Height="889"
                                                  Visibility="Collapsed"
                                                  Panel.ZIndex="50" />
+                        <local:RiskPermissionView x:Name="RiskPermissionSurface"
+                                                  Canvas.Left="104" Canvas.Top="52"
+                                                  Width="1568" Height="889"
+                                                  Visibility="Collapsed"
+                                                  Panel.ZIndex="50" />
                     </Canvas>
         </ScrollViewer>
         <Border Margin="2"

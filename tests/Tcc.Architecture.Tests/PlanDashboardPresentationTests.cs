@@ -232,7 +232,7 @@ public sealed class PlanDashboardPresentationTests
     }
 
     [Fact]
-    public void HostActivatesOnlyHomeAndPlanNavigationWithSynchronizedPageState()
+    public void HostActivatesHomePlanAndRiskNavigationWithSynchronizedPageState()
     {
         XDocument window = XDocument.Load(WindowPath);
         string code = File.ReadAllText(WindowCodePath);
@@ -273,24 +273,27 @@ public sealed class PlanDashboardPresentationTests
         Assert.Contains("private const string PlanVisualFixture = \"PLAN_R1\"", code, StringComparison.Ordinal);
         Assert.Contains("private void OnHomeNavigationClick(object sender, RoutedEventArgs e)", code, StringComparison.Ordinal);
         Assert.Contains("private void OnPlanNavigationClick(object sender, RoutedEventArgs e)", code, StringComparison.Ordinal);
-        Assert.Contains("private void ApplyShellPage(bool showPlan, bool announce)", code, StringComparison.Ordinal);
-        Assert.Contains("HomePageLayer.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible", code, StringComparison.Ordinal);
+        Assert.Contains("private void ApplyShellPage(bool showPlan, bool showRisk, bool announce)", code, StringComparison.Ordinal);
+        Assert.Contains("bool showHome = !showPlan && !showRisk", code, StringComparison.Ordinal);
+        Assert.Contains("HomePageLayer.Visibility = showHome ? Visibility.Visible : Visibility.Collapsed", code, StringComparison.Ordinal);
         Assert.Contains("PlanDashboardSurface.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed", code, StringComparison.Ordinal);
-        Assert.Contains("NavHome.Style = (Style)FindResource(showPlan ? \"Strata.NavButton\" : \"Strata.NavButton.Selected\")", code, StringComparison.Ordinal);
-        Assert.Contains("NavHomeCurrentState.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible", code, StringComparison.Ordinal);
-        Assert.Contains("AutomationProperties.SetName(NavHome, showPlan ? \"Open Home\" : \"Home selected, current page\")", code, StringComparison.Ordinal);
-        Assert.Contains("AutomationProperties.SetItemStatus(NavHome, showPlan ? \"Available\" : \"Current page\")", code, StringComparison.Ordinal);
-        Assert.Contains("AutomationProperties.SetHelpText(NavHome, showPlan ? \"Navigates to the Home page.\" : \"Current page.\")", code, StringComparison.Ordinal);
-        Assert.Contains("NavHome.ToolTip = showPlan ? \"Open Home\" : \"Current page\"", code, StringComparison.Ordinal);
+        Assert.Contains("RiskPermissionSurface.Visibility = showRisk ? Visibility.Visible : Visibility.Collapsed", code, StringComparison.Ordinal);
+        Assert.Contains("NavHome.Style = (Style)FindResource(showHome ? \"Strata.NavButton.Selected\" : \"Strata.NavButton\")", code, StringComparison.Ordinal);
+        Assert.Contains("NavHomeCurrentState.Visibility = showHome ? Visibility.Visible : Visibility.Collapsed", code, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.SetName(NavHome, showHome ? \"Home selected, current page\" : \"Open Home\")", code, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.SetItemStatus(NavHome, showHome ? \"Current page\" : \"Available\")", code, StringComparison.Ordinal);
+        Assert.Contains("AutomationProperties.SetHelpText(NavHome, showHome ? \"Current page.\" : \"Navigates to the Home page.\")", code, StringComparison.Ordinal);
+        Assert.Contains("NavHome.ToolTip = showHome ? \"Current page\" : \"Open Home\"", code, StringComparison.Ordinal);
         Assert.Contains("NavPlanning.Style = (Style)FindResource(showPlan ? \"Strata.NavButton.Selected\" : \"Strata.NavButton\")", code, StringComparison.Ordinal);
         Assert.Contains("NavPlanningCurrentState.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed", code, StringComparison.Ordinal);
         Assert.Contains("AutomationProperties.SetName(NavPlanning, showPlan ? \"Plan selected, current page\" : \"Open Plan\")", code, StringComparison.Ordinal);
         Assert.Contains("AutomationProperties.SetItemStatus(NavPlanning, showPlan ? \"Current page\" : \"Available\")", code, StringComparison.Ordinal);
         Assert.Contains("AutomationProperties.SetHelpText(NavPlanning, showPlan ? \"Current page.\" : \"Navigates to the read-only Plan page.\")", code, StringComparison.Ordinal);
         Assert.Contains("NavPlanning.ToolTip = showPlan ? \"Current page\" : \"Open Plan\"", code, StringComparison.Ordinal);
-        Assert.Contains("AutomationProperties.SetName(MainContentScroller, showPlan ? \"交易計畫儀表板\" : \"Strata Observatory HOME\")", code, StringComparison.Ordinal);
-        Assert.Contains("_baseTitle = showPlan ? \"TCC — 交易計畫儀表板\" : \"TCC — Strata Observatory\"", code, StringComparison.Ordinal);
+        Assert.Contains("showPlan ? \"交易計畫儀表板\" : showRisk ? \"交易權限總覽\" : \"Strata Observatory HOME\"", code, StringComparison.Ordinal);
+        Assert.Contains("showRisk ? \"TCC — 交易權限總覽\"", code, StringComparison.Ordinal);
         Assert.Contains("PlanDashboardSurface.ShowPreviewState(PlanDashboardPreviewState.Offline)", code, StringComparison.Ordinal);
+        Assert.Contains("RiskPermissionSurface.ShowPreviewState(RiskPermissionPreviewState.Offline)", code, StringComparison.Ordinal);
         Assert.Contains("AutomationEvents.LiveRegionChanged", code, StringComparison.Ordinal);
         Assert.Contains("交易計畫儀表板，視覺測試", code, StringComparison.Ordinal);
         Assert.Contains("TCC — 交易計畫儀表板", code, StringComparison.Ordinal);

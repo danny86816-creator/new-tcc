@@ -18,6 +18,7 @@ public partial class MainWindow : Window
     private const string VisualFixtureEnvironmentVariable = "TCC_VISUAL_FIXTURE";
     private const string MasterVisualFixture = "MASTER_R1";
     private const string PlanVisualFixture = "PLAN_R1";
+    private const string RiskVisualFixture = "RISK_R1";
     private const string MonitorUnavailableSuffix = " — 顯示器／DPI 資訊暫不可用";
     private static readonly string[] StrataBrushOverrideKeys =
     [
@@ -341,6 +342,11 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (TryApplyRiskFixture(fixture))
+        {
+            return;
+        }
+
         if (!string.Equals(fixture, MasterVisualFixture, StringComparison.Ordinal))
         {
             return;
@@ -414,11 +420,35 @@ public partial class MainWindow : Window
             return false;
         }
 
-        ApplyShellPage(showPlan: true, announce: false);
+        ApplyShellPage(showPlan: true, showRisk: false, announce: false);
         PlanDashboardSurface.ShowPreviewState(state.Value);
 
         AutomationProperties.SetName(MainContentScroller, "交易計畫儀表板，視覺測試 " + fixture);
         AutomationProperties.SetHelpText(MainContentScroller, "唯讀計畫展示。可使用左側 HOME 與 PLAN 導覽；文字放大時請使用計畫內容捲動區。");
+        return true;
+    }
+
+    private bool TryApplyRiskFixture(string? fixture)
+    {
+        RiskPermissionPreviewState? state = fixture switch
+        {
+            RiskVisualFixture => RiskPermissionPreviewState.Offline,
+            "RISK_R1_EMPTY" => RiskPermissionPreviewState.Empty,
+            "RISK_R1_LOADING" => RiskPermissionPreviewState.Loading,
+            "RISK_R1_ERROR" => RiskPermissionPreviewState.Error,
+            "RISK_R1_BLOCKED" => RiskPermissionPreviewState.Blocked,
+            _ => null,
+        };
+        if (state is null)
+        {
+            return false;
+        }
+
+        ApplyShellPage(showPlan: false, showRisk: true, announce: false);
+        RiskPermissionSurface.ShowPreviewState(state.Value);
+
+        AutomationProperties.SetName(MainContentScroller, "交易權限總覽，視覺測試 " + fixture);
+        AutomationProperties.SetHelpText(MainContentScroller, "唯讀交易權限展示。可使用左側 HOME、PLAN 與 RISK 導覽；文字放大時請使用風險內容捲動區。");
         return true;
     }
 
@@ -429,7 +459,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        ApplyShellPage(showPlan: false, announce: true);
+        ApplyShellPage(showPlan: false, showRisk: false, announce: true);
     }
 
     private void OnPlanNavigationClick(object sender, RoutedEventArgs e)
@@ -439,21 +469,34 @@ public partial class MainWindow : Window
             return;
         }
 
-        ApplyShellPage(showPlan: true, announce: true);
+        ApplyShellPage(showPlan: true, showRisk: false, announce: true);
         PlanDashboardSurface.ShowPreviewState(PlanDashboardPreviewState.Offline);
     }
 
-    private void ApplyShellPage(bool showPlan, bool announce)
+    private void OnRiskNavigationClick(object sender, RoutedEventArgs e)
     {
-        HomePageLayer.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible;
-        PlanDashboardSurface.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed;
+        if (RiskPermissionSurface.Visibility == Visibility.Visible)
+        {
+            return;
+        }
 
-        NavHome.Style = (Style)FindResource(showPlan ? "Strata.NavButton" : "Strata.NavButton.Selected");
-        NavHomeCurrentState.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible;
-        AutomationProperties.SetName(NavHome, showPlan ? "Open Home" : "Home selected, current page");
-        AutomationProperties.SetItemStatus(NavHome, showPlan ? "Available" : "Current page");
-        AutomationProperties.SetHelpText(NavHome, showPlan ? "Navigates to the Home page." : "Current page.");
-        NavHome.ToolTip = showPlan ? "Open Home" : "Current page";
+        ApplyShellPage(showPlan: false, showRisk: true, announce: true);
+        RiskPermissionSurface.ShowPreviewState(RiskPermissionPreviewState.Offline);
+    }
+
+    private void ApplyShellPage(bool showPlan, bool showRisk, bool announce)
+    {
+        bool showHome = !showPlan && !showRisk;
+        HomePageLayer.Visibility = showHome ? Visibility.Visible : Visibility.Collapsed;
+        PlanDashboardSurface.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed;
+        RiskPermissionSurface.Visibility = showRisk ? Visibility.Visible : Visibility.Collapsed;
+
+        NavHome.Style = (Style)FindResource(showHome ? "Strata.NavButton.Selected" : "Strata.NavButton");
+        NavHomeCurrentState.Visibility = showHome ? Visibility.Visible : Visibility.Collapsed;
+        AutomationProperties.SetName(NavHome, showHome ? "Home selected, current page" : "Open Home");
+        AutomationProperties.SetItemStatus(NavHome, showHome ? "Current page" : "Available");
+        AutomationProperties.SetHelpText(NavHome, showHome ? "Current page." : "Navigates to the Home page.");
+        NavHome.ToolTip = showHome ? "Current page" : "Open Home";
 
         NavPlanning.Style = (Style)FindResource(showPlan ? "Strata.NavButton.Selected" : "Strata.NavButton");
         NavPlanningCurrentState.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed;
@@ -462,13 +505,25 @@ public partial class MainWindow : Window
         AutomationProperties.SetHelpText(NavPlanning, showPlan ? "Current page." : "Navigates to the read-only Plan page.");
         NavPlanning.ToolTip = showPlan ? "Current page" : "Open Plan";
 
-        AutomationProperties.SetName(MainContentScroller, showPlan ? "交易計畫儀表板" : "Strata Observatory HOME");
+        NavRisk.Style = (Style)FindResource(showRisk ? "Strata.NavButton.Selected" : "Strata.NavButton");
+        NavRiskCurrentState.Visibility = showRisk ? Visibility.Visible : Visibility.Collapsed;
+        AutomationProperties.SetName(NavRisk, showRisk ? "Risk selected, current page" : "Open Risk");
+        AutomationProperties.SetItemStatus(NavRisk, showRisk ? "Current page" : "Available");
+        AutomationProperties.SetHelpText(NavRisk, showRisk ? "Current page." : "Navigates to the read-only Trading Permission Overview.");
+        NavRisk.ToolTip = showRisk ? "Current page" : "Open Risk";
+
+        AutomationProperties.SetName(MainContentScroller,
+            showPlan ? "交易計畫儀表板" : showRisk ? "交易權限總覽" : "Strata Observatory HOME");
         AutomationProperties.SetHelpText(
             MainContentScroller,
             showPlan
                 ? "唯讀交易計畫儀表板。文字放大或視窗受限時，請使用計畫內容或外層頁面捲動區。"
+                : showRisk
+                    ? "唯讀交易權限總覽。文字放大或視窗受限時，請使用風險內容或外層頁面捲動區。"
                 : "At constrained window sizes or enlarged text, use the scroll bars or arrow keys to explore the full HOME composition.");
-        _baseTitle = showPlan ? "TCC — 交易計畫儀表板" : "TCC — Strata Observatory";
+        _baseTitle = showPlan ? "TCC — 交易計畫儀表板"
+            : showRisk ? "TCC — 交易權限總覽"
+            : "TCC — Strata Observatory";
         Title = _baseTitle;
 
         if (announce)
