@@ -76,6 +76,8 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 Tcc.DesktopHost.EmbeddedSafeTheme.SafeThemeResourceAdapter
                 Tcc.DesktopHost.MainWindow
                 Tcc.DesktopHost.MainWindowViewModel
+                Tcc.DesktopHost.PlanDashboardPreviewState
+                Tcc.DesktopHost.PlanDashboardView
                 Tcc.DesktopHost.ThemeBootstrap.ThemeBootstrap
                 """),
         };
@@ -195,12 +197,26 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 """),
             ["Tcc.DesktopHost.MainWindow"] = Lines("""
                 C public(Tcc.DesktopHost.MainWindowViewModel,Tcc.Windows.Monitors.WindowMonitorAdapter)
+                M internal _CreateDelegate(System.Type,System.String):System.Delegate
                 M public InitializeComponent():System.Void
                 """),
             ["Tcc.DesktopHost.MainWindowViewModel"] = Lines("""
                 C public(Tcc.Themes.Fallback.BuiltInThemePresentationSnapshot,System.String)
                 P public Presentation:Tcc.Themes.Fallback.BuiltInThemePresentationSnapshot
                 P public Status:System.String
+                """),
+            ["Tcc.DesktopHost.PlanDashboardPreviewState"] = Lines("""
+                F public Blocked:Tcc.DesktopHost.PlanDashboardPreviewState
+                F public Empty:Tcc.DesktopHost.PlanDashboardPreviewState
+                F public Error:Tcc.DesktopHost.PlanDashboardPreviewState
+                F public Loading:Tcc.DesktopHost.PlanDashboardPreviewState
+                F public Offline:Tcc.DesktopHost.PlanDashboardPreviewState
+                F public value__:System.Int32
+                """),
+            ["Tcc.DesktopHost.PlanDashboardView"] = Lines("""
+                C public()
+                M internal ShowPreviewState(Tcc.DesktopHost.PlanDashboardPreviewState):System.Void
+                M public InitializeComponent():System.Void
                 """),
         };
 
@@ -249,9 +265,15 @@ public sealed class PhaseSixBootstrapArchitectureTests
             ["Tcc.DesktopHost.MainWindow"] = Lines("""
                 C(Tcc.DesktopHost.MainWindowViewModel viewModel,Tcc.Windows.Monitors.WindowMonitorAdapter monitorAdapter)
                 M InitializeComponent()
+                M _CreateDelegate(System.Type delegateType,System.String handler)
                 """),
             ["Tcc.DesktopHost.MainWindowViewModel"] = Lines("""
                 C(Tcc.Themes.Fallback.BuiltInThemePresentationSnapshot presentation,System.String startupNotice)
+                """),
+            ["Tcc.DesktopHost.PlanDashboardView"] = Lines("""
+                C()
+                M InitializeComponent()
+                M ShowPreviewState(Tcc.DesktopHost.PlanDashboardPreviewState state)
                 """),
         };
 
@@ -274,6 +296,17 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 System.Windows.Media.Animation.IAnimatable
                 System.Windows.Media.Composition.DUCE+IResource
                 """),
+            ["Tcc.DesktopHost.PlanDashboardView"] = Lines("""
+                System.ComponentModel.ISupportInitialize
+                System.Windows.IFrameworkInputElement
+                System.Windows.IInputElement
+                System.Windows.Markup.IAddChild
+                System.Windows.Markup.IComponentConnector
+                System.Windows.Markup.IHaveResources
+                System.Windows.Markup.IQueryAmbient
+                System.Windows.Media.Animation.IAnimatable
+                System.Windows.Media.Composition.DUCE+IResource
+                """),
         };
 
     private static readonly HashSet<string> ApprovedPhaseSixPublicTypes =
@@ -288,6 +321,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
         "Tcc.DesktopHost.App",
         "Tcc.DesktopHost.MainWindow",
         "Tcc.DesktopHost.MainWindowViewModel",
+        "Tcc.DesktopHost.PlanDashboardView",
     ];
 
     // ADR-0005 §3.3 fixes all native authority independently of the inspected assembly.
@@ -308,32 +342,42 @@ public sealed class PhaseSixBootstrapArchitectureTests
         foreach (Assembly assembly in new[] { typeof(BuiltInThemePresentationSource).Assembly,
                      typeof(WindowsStartupPathResolver).Assembly, LoadHostAssembly() })
         {
-            Assert.Empty(GetCompiledBoundaryViolations(assembly, null));
+            string[] violations = GetCompiledBoundaryViolations(assembly, null);
+            Assert.True(violations.Length == 0,
+                $"{assembly.GetName().Name}: {string.Join(", ", violations)}");
         }
     }
 
     [Fact]
-    public void CompiledMainWindowXamlFieldsExactlyMatchDeclaredNames()
+    public void CompiledXamlFieldsExactlyMatchDeclaredNames()
     {
         XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-        string[] declaredNames = XDocument.Load(Path.Combine(
-                RepositoryPaths.Root, "src", "Tcc.DesktopHost", "MainWindow.xaml"))
-            .Descendants()
-            .Select(element => element.Attribute(xaml + "Name")?.Value)
-            .Where(name => name is not null)
-            .Cast<string>()
-            .Order(StringComparer.Ordinal)
-            .ToArray();
+        Assembly host = LoadHostAssembly();
+        foreach ((string file, string typeName) in new[]
+                 {
+                     ("MainWindow.xaml", "Tcc.DesktopHost.MainWindow"),
+                     ("PlanDashboardView.xaml", "Tcc.DesktopHost.PlanDashboardView"),
+                 })
+        {
+            string[] declaredNames = XDocument.Load(Path.Combine(
+                    RepositoryPaths.Root, "src", "Tcc.DesktopHost", file))
+                .Descendants()
+                .Select(element => element.Attribute(xaml + "Name")?.Value)
+                .Where(name => name is not null)
+                .Cast<string>()
+                .Order(StringComparer.Ordinal)
+                .ToArray();
 
-        Type mainWindow = LoadHostAssembly().GetType("Tcc.DesktopHost.MainWindow", throwOnError: true)!;
-        string[] compiledNames = mainWindow.GetFields(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-            .Where(IsGeneratedXamlBackingField)
-            .Select(field => field.Name)
-            .Order(StringComparer.Ordinal)
-            .ToArray();
+            Type owner = host.GetType(typeName, throwOnError: true)!;
+            string[] compiledNames = owner.GetFields(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(IsGeneratedXamlBackingField)
+                .Select(field => field.Name)
+                .Order(StringComparer.Ordinal)
+                .ToArray();
 
-        Assert.Equal(declaredNames, compiledNames);
+            Assert.Equal(declaredNames, compiledNames);
+        }
     }
 
     [Fact]
@@ -450,7 +494,8 @@ public sealed class PhaseSixBootstrapArchitectureTests
             mainWindow.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             method => (method.IsPublic || method.IsAssembly)
                 && !method.IsSpecialName
-                && method.Name is not ("InitializeComponent" or "System.Windows.Markup.IComponentConnector.Connect"));
+                && method.Name is not ("InitializeComponent" or "_CreateDelegate"
+                    or "System.Windows.Markup.IComponentConnector.Connect"));
         Assert.NotNull(mainWindow.GetMethod(
             "InitializeComponent",
             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly));
@@ -529,7 +574,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
         string[] disabledControls =
         [
-            "NavHome", "NavMarkets", "NavPlanning", "NavRisk", "NavPositions", "NavReview", "NavSettings",
+            "NavMarkets", "NavRisk", "NavPositions", "NavReview", "NavSettings",
             "TabBtcUsdt", "TabEthUsdt", "TabSolUsdt", "TabBnbUsdt", "TabXrpUsdt", "TabAddSymbol",
             "Timeframe1H", "Timeframe4H", "Timeframe1D", "Timeframe1W",
         ];
@@ -539,6 +584,16 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 attribute.Name.LocalName == "AutomationProperties.AutomationId" &&
                 attribute.Value == automationId));
             Assert.Equal("False", control.Attribute("IsEnabled")?.Value);
+        }
+
+        foreach (string automationId in new[] { "NavHome", "NavPlanning" })
+        {
+            XElement navigation = Assert.Single(markup.Descendants(), element => element.Attributes().Any(attribute =>
+                attribute.Name.LocalName == "AutomationProperties.AutomationId" &&
+                attribute.Value == automationId));
+            Assert.NotEqual("False", navigation.Attribute("IsEnabled")?.Value);
+            Assert.NotEqual("False", navigation.Attribute("IsTabStop")?.Value);
+            Assert.False(string.IsNullOrWhiteSpace(navigation.Attribute("Click")?.Value));
         }
 
         XElement resources = Assert.Single(markup.Descendants(presentation + "Window.Resources"));
@@ -722,6 +777,12 @@ public sealed class PhaseSixBootstrapArchitectureTests
                 foreach (XAttribute clickHandler in markup.Descendants().Attributes("Click").ToArray())
                     clickHandler.Remove();
                 XNamespace xamlPresentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+                XNamespace local = "clr-namespace:Tcc.DesktopHost";
+                // This gate exercises HOME wrapping and bound diagnostics from loose XAML.
+                // The Plan UserControl is compiled and validated by its own presentation and
+                // runtime gates, and cannot be constructed by a classless loose-XAML parser.
+                foreach (XElement planSurface in markup.Descendants(local + "PlanDashboardView").ToArray())
+                    planSurface.Remove();
                 // The loose-XAML test has no app ResourceAssembly, so materialize the product's
                 // merged dictionaries in the same declared order before invoking XamlReader.
                 XElement windowResources = Assert.Single(markup.Descendants(xamlPresentation + "Window.Resources"));
@@ -1967,6 +2028,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
                     "Tcc.DesktopHost.App"
                     or "Tcc.DesktopHost.MainWindow"
                     or "Tcc.DesktopHost.MainWindowViewModel"
+                    or "Tcc.DesktopHost.PlanDashboardView"
                     or "Tcc.DesktopHost.ThemeBootstrap.ThemeBootstrap"
                     or "Tcc.DesktopHost.EmbeddedSafeTheme.SafeThemeResourceAdapter")
                 .ToArray();
@@ -2279,7 +2341,7 @@ public sealed class PhaseSixBootstrapArchitectureTests
 
     private static bool IsGeneratedXamlBackingField(FieldInfo field) =>
         field.IsAssembly
-        && field.DeclaringType?.FullName == "Tcc.DesktopHost.MainWindow"
+        && field.DeclaringType?.FullName is "Tcc.DesktopHost.MainWindow" or "Tcc.DesktopHost.PlanDashboardView"
         && typeof(System.Windows.DependencyObject).IsAssignableFrom(field.FieldType);
 
     private static string CallableAccess(MethodBase method) => method.IsPublic ? "public"
@@ -2643,10 +2705,12 @@ public sealed class PhaseSixBootstrapArchitectureTests
             appPath,
             mainWindowPath,
             viewModelPath,
+            Path.Combine(hostRoot, "PlanDashboardView.xaml.cs"),
             .. Directory.GetFiles(Path.Combine(hostRoot, "ThemeBootstrap"), "*.cs", SearchOption.AllDirectories),
             .. Directory.GetFiles(Path.Combine(hostRoot, "EmbeddedSafeTheme"), "*.cs", SearchOption.AllDirectories),
             Path.Combine(generatedRoot, "App.g.cs"),
             Path.Combine(generatedRoot, "MainWindow.g.cs"),
+            Path.Combine(generatedRoot, "PlanDashboardView.g.cs"),
             Path.Combine(generatedRoot, "Tcc.DesktopHost.GlobalUsings.g.cs"),
         ];
         Assert.All(compilePaths, path => Assert.True(File.Exists(path), $"Host production-copy input missing: {path}"));

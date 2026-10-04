@@ -2,6 +2,7 @@ using System.ComponentModel;
 using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Automation;
+using System.Windows.Automation.Peers;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +17,7 @@ public partial class MainWindow : Window
     private const int SettingChangeMessage = 0x001A;
     private const string VisualFixtureEnvironmentVariable = "TCC_VISUAL_FIXTURE";
     private const string MasterVisualFixture = "MASTER_R1";
+    private const string PlanVisualFixture = "PLAN_R1";
     private const string MonitorUnavailableSuffix = " — 顯示器／DPI 資訊暫不可用";
     private static readonly string[] StrataBrushOverrideKeys =
     [
@@ -333,10 +335,13 @@ public partial class MainWindow : Window
 
     private void ApplyVisualFixtureIfRequested()
     {
-        if (!string.Equals(
-                Environment.GetEnvironmentVariable(VisualFixtureEnvironmentVariable),
-                MasterVisualFixture,
-                StringComparison.Ordinal))
+        string? fixture = Environment.GetEnvironmentVariable(VisualFixtureEnvironmentVariable);
+        if (TryApplyPlanFixture(fixture))
+        {
+            return;
+        }
+
+        if (!string.Equals(fixture, MasterVisualFixture, StringComparison.Ordinal))
         {
             return;
         }
@@ -391,6 +396,85 @@ public partial class MainWindow : Window
         ApplyRecentFixtureRow(RecentTime4, RecentText4, "08:16", "Reviewed plan");
         RecentRow5.Visibility = Visibility.Visible;
         ApplyRecentFixtureRow(RecentTime5, RecentText5, "08:03", "Checked risk parameters");
+    }
+
+    private bool TryApplyPlanFixture(string? fixture)
+    {
+        PlanDashboardPreviewState? state = fixture switch
+        {
+            PlanVisualFixture => PlanDashboardPreviewState.Offline,
+            "PLAN_R1_EMPTY" => PlanDashboardPreviewState.Empty,
+            "PLAN_R1_LOADING" => PlanDashboardPreviewState.Loading,
+            "PLAN_R1_ERROR" => PlanDashboardPreviewState.Error,
+            "PLAN_R1_BLOCKED" => PlanDashboardPreviewState.Blocked,
+            _ => null,
+        };
+        if (state is null)
+        {
+            return false;
+        }
+
+        ApplyShellPage(showPlan: true, announce: false);
+        PlanDashboardSurface.ShowPreviewState(state.Value);
+
+        AutomationProperties.SetName(MainContentScroller, "交易計畫儀表板，視覺測試 " + fixture);
+        AutomationProperties.SetHelpText(MainContentScroller, "唯讀計畫展示。可使用左側 HOME 與 PLAN 導覽；文字放大時請使用計畫內容捲動區。");
+        return true;
+    }
+
+    private void OnHomeNavigationClick(object sender, RoutedEventArgs e)
+    {
+        if (HomePageLayer.Visibility == Visibility.Visible)
+        {
+            return;
+        }
+
+        ApplyShellPage(showPlan: false, announce: true);
+    }
+
+    private void OnPlanNavigationClick(object sender, RoutedEventArgs e)
+    {
+        if (PlanDashboardSurface.Visibility == Visibility.Visible)
+        {
+            return;
+        }
+
+        ApplyShellPage(showPlan: true, announce: true);
+        PlanDashboardSurface.ShowPreviewState(PlanDashboardPreviewState.Offline);
+    }
+
+    private void ApplyShellPage(bool showPlan, bool announce)
+    {
+        HomePageLayer.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible;
+        PlanDashboardSurface.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed;
+
+        NavHome.Style = (Style)FindResource(showPlan ? "Strata.NavButton" : "Strata.NavButton.Selected");
+        NavHomeCurrentState.Visibility = showPlan ? Visibility.Collapsed : Visibility.Visible;
+        AutomationProperties.SetName(NavHome, showPlan ? "Open Home" : "Home selected, current page");
+        AutomationProperties.SetItemStatus(NavHome, showPlan ? "Available" : "Current page");
+        AutomationProperties.SetHelpText(NavHome, showPlan ? "Navigates to the Home page." : "Current page.");
+        NavHome.ToolTip = showPlan ? "Open Home" : "Current page";
+
+        NavPlanning.Style = (Style)FindResource(showPlan ? "Strata.NavButton.Selected" : "Strata.NavButton");
+        NavPlanningCurrentState.Visibility = showPlan ? Visibility.Visible : Visibility.Collapsed;
+        AutomationProperties.SetName(NavPlanning, showPlan ? "Plan selected, current page" : "Open Plan");
+        AutomationProperties.SetItemStatus(NavPlanning, showPlan ? "Current page" : "Available");
+        AutomationProperties.SetHelpText(NavPlanning, showPlan ? "Current page." : "Navigates to the read-only Plan page.");
+        NavPlanning.ToolTip = showPlan ? "Current page" : "Open Plan";
+
+        AutomationProperties.SetName(MainContentScroller, showPlan ? "交易計畫儀表板" : "Strata Observatory HOME");
+        AutomationProperties.SetHelpText(
+            MainContentScroller,
+            showPlan
+                ? "唯讀交易計畫儀表板。文字放大或視窗受限時，請使用計畫內容或外層頁面捲動區。"
+                : "At constrained window sizes or enlarged text, use the scroll bars or arrow keys to explore the full HOME composition.");
+        _baseTitle = showPlan ? "TCC — 交易計畫儀表板" : "TCC — Strata Observatory";
+        Title = _baseTitle;
+
+        if (announce)
+        {
+            UIElementAutomationPeer.FromElement(MainContentScroller)?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+        }
     }
 
 

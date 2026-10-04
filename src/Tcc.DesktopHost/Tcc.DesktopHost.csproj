@@ -24,6 +24,7 @@
     <Resource Include="Assets/Brand/Tcc.NocturneMeridian.AppIcon.ico" />
     <Resource Include="Assets/Brand/Tcc.NocturneMeridian.AppIcon.Window.png" />
     <Resource Include="Assets/MasterFidelity/StrataObservatory.MasterR1.Scene.R26.png" />
+    <Resource Include="Assets/Plan/Tcc.PlanDashboard.HomeStyle.Background.R1.png" />
     <Resource Include="Assets/StrataObservatory/StrataObservatory.MentalStateSuite.R1.png" />
   </ItemGroup>
 </Project>

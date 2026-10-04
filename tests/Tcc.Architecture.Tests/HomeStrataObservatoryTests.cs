@@ -274,7 +274,8 @@ public sealed class HomeStrataObservatoryTests
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XElement home = document.Descendants(presentation + "Button")
             .Single(button => button.Attribute(x + "Name")?.Value == "NavHome");
-        Assert.Equal("False", home.Attribute("IsEnabled")?.Value);
+        Assert.NotEqual("False", home.Attribute("IsEnabled")?.Value);
+        Assert.Equal("OnHomeNavigationClick", home.Attribute("Click")?.Value);
         Assert.Equal("Home selected, current page", home.Attribute("AutomationProperties.Name")?.Value);
     }
 
@@ -503,8 +504,8 @@ public sealed class HomeStrataObservatoryTests
 
         XElement home = document.Descendants(presentation + "Button")
             .Single(button => button.Attribute(x + "Name")?.Value == "NavHome");
-        Assert.Equal("False", home.Attribute("IsEnabled")?.Value);
-        Assert.Equal("False", home.Attribute("IsTabStop")?.Value);
+        Assert.NotEqual("False", home.Attribute("IsEnabled")?.Value);
+        Assert.NotEqual("False", home.Attribute("IsTabStop")?.Value);
         Assert.Equal("Current page", home.Attribute("AutomationProperties.ItemStatus")?.Value);
         Assert.Equal("Current page", home.Attribute("ToolTip")?.Value);
         Assert.Contains(home.Descendants(presentation + "TextBlock"), label =>
@@ -512,11 +513,25 @@ public sealed class HomeStrataObservatoryTests
             label.Attribute("Style")?.Value == "{StaticResource Strata.NavState.Current}");
         Assert.Contains(home.Descendants(presentation + "TextBlock"), label =>
             label.Attribute("Text")?.Value == "HOME" &&
-            label.Attribute("Style")?.Value == "{StaticResource Strata.NavLabel.Selected}");
+            label.Attribute("Style")?.Value == "{StaticResource Strata.NavLabel.Selected}" &&
+            label.Attribute("Foreground")?.Value == "{Binding Foreground, ElementName=NavHome}");
         Assert.DoesNotContain("Command=", home.ToString(SaveOptions.DisableFormatting), StringComparison.Ordinal);
-        Assert.DoesNotContain("Click=", home.ToString(SaveOptions.DisableFormatting), StringComparison.Ordinal);
+        Assert.Equal("OnHomeNavigationClick", home.Attribute("Click")?.Value);
 
-        string[] unavailableNavIds = ["NavMarkets", "NavPlanning", "NavRisk", "NavPositions", "NavReview", "NavSettings"];
+        XElement plan = document.Descendants(presentation + "Button")
+            .Single(button => button.Attribute(x + "Name")?.Value == "NavPlanning");
+        Assert.NotEqual("False", plan.Attribute("IsEnabled")?.Value);
+        Assert.NotEqual("False", plan.Attribute("IsTabStop")?.Value);
+        Assert.Equal("Available", plan.Attribute("AutomationProperties.ItemStatus")?.Value);
+        Assert.Equal("Open Plan", plan.Attribute("ToolTip")?.Value);
+        Assert.Equal("OnPlanNavigationClick", plan.Attribute("Click")?.Value);
+        Assert.DoesNotContain("Command=", plan.ToString(SaveOptions.DisableFormatting), StringComparison.Ordinal);
+        Assert.Contains(plan.Descendants(presentation + "TextBlock"), label =>
+            label.Attribute("Text")?.Value == "PLAN" &&
+            label.Attribute("Style")?.Value == "{StaticResource Strata.NavLabel}" &&
+            label.Attribute("Foreground")?.Value == "{Binding Foreground, ElementName=NavPlanning}");
+
+        string[] unavailableNavIds = ["NavMarkets", "NavRisk", "NavPositions", "NavReview", "NavSettings"];
         foreach (string navId in unavailableNavIds)
         {
             XElement nav = document.Descendants(presentation + "Button")

@@ -1,6 +1,7 @@
 <Window x:Class="Tcc.DesktopHost.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Tcc.DesktopHost"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="TCC — Strata Observatory"
         Width="1672" Height="941"
@@ -41,9 +42,10 @@
 
     <Grid Background="{DynamicResource Tcc.Strata.Brush.Background}">
         <ScrollViewer x:Name="MainContentScroller"
-                      AutomationProperties.AutomationId="MainContentScroller"
-                      AutomationProperties.Name="Strata Observatory HOME"
-                      AutomationProperties.HelpText="At constrained window sizes or enlarged text, use the scroll bars or arrow keys to explore the full HOME composition."
+                       AutomationProperties.AutomationId="MainContentScroller"
+                       AutomationProperties.Name="Strata Observatory HOME"
+                       AutomationProperties.HelpText="At constrained window sizes or enlarged text, use the scroll bars or arrow keys to explore the full HOME composition."
+                       AutomationProperties.LiveSetting="Polite"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalContentAlignment="Left"
@@ -51,7 +53,8 @@
                       CanContentScroll="False"
                       PanningMode="Both"
                       Focusable="True"
-                      IsTabStop="True">
+                      IsTabStop="True"
+                      FocusVisualStyle="{x:Null}">
                     <Canvas x:Name="ReferenceCompositionCanvas"
                             Width="1672" Height="941"
                             ClipToBounds="True"
@@ -148,18 +151,18 @@
                                     <RowDefinition Height="*" /><RowDefinition Height="88" /><RowDefinition Height="62" />
                                 </Grid.RowDefinitions>
 
-                                <Button x:Name="NavHome" Grid.Row="0" Height="116" AutomationProperties.AutomationId="NavHome" AutomationProperties.Name="Home selected, current page" AutomationProperties.ItemStatus="Current page" AutomationProperties.HelpText="Current page; no navigation action is available." ToolTip="Current page" Style="{StaticResource Strata.NavButton.Selected}" IsEnabled="False" IsTabStop="False">
+                                <Button x:Name="NavHome" Grid.Row="0" Height="116" AutomationProperties.AutomationId="NavHome" AutomationProperties.Name="Home selected, current page" AutomationProperties.ItemStatus="Current page" AutomationProperties.HelpText="Current page." ToolTip="Current page" Style="{StaticResource Strata.NavButton.Selected}" Click="OnHomeNavigationClick">
                                     <StackPanel>
                                         <Control Width="23" Height="23" Style="{StaticResource Strata.NavGlyph.Home}" />
-                                        <TextBlock Margin="0,7,0,0" Text="HOME" Style="{StaticResource Strata.NavLabel.Selected}" />
-                                        <TextBlock Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" />
+                                        <TextBlock Margin="0,7,0,0" Text="HOME" Style="{StaticResource Strata.NavLabel.Selected}" Foreground="{Binding Foreground, ElementName=NavHome}" />
+                                        <TextBlock x:Name="NavHomeCurrentState" Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="NavMarkets" Grid.Row="1" AutomationProperties.AutomationId="NavMarkets" AutomationProperties.Name="Market unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
                                     <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Market}" /><TextBlock Margin="0,8,0,0" Text="MARKET" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
                                 </Button>
-                                <Button x:Name="NavPlanning" Grid.Row="2" AutomationProperties.AutomationId="NavPlanning" AutomationProperties.Name="Planning unavailable" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Not available in this presentation." ToolTip="Not available in this presentation" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
-                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Plan}" /><TextBlock Margin="0,8,0,0" Text="PLAN" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
+                                <Button x:Name="NavPlanning" Grid.Row="2" AutomationProperties.AutomationId="NavPlanning" AutomationProperties.Name="Open Plan" AutomationProperties.ItemStatus="Available" AutomationProperties.HelpText="Navigates to the read-only Plan page." ToolTip="Open Plan" Style="{StaticResource Strata.NavButton}" Click="OnPlanNavigationClick">
+                                    <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Plan}" /><TextBlock Margin="0,8,0,0" Text="PLAN" Style="{StaticResource Strata.NavLabel}" Foreground="{Binding Foreground, ElementName=NavPlanning}" /><TextBlock x:Name="NavPlanningCurrentState" Margin="0,3,0,0" Text="CURRENT" Style="{StaticResource Strata.NavState.Current}" Visibility="Collapsed" /></StackPanel>
                                 </Button>
                                 <Button x:Name="NavRisk" Grid.Row="3" AutomationProperties.AutomationId="NavRisk" AutomationProperties.Name="Risk unavailable while offline" AutomationProperties.ItemStatus="Unavailable" AutomationProperties.HelpText="Unavailable while offline." ToolTip="Unavailable while offline" Style="{StaticResource Strata.NavButton}" IsEnabled="False">
                                     <StackPanel><Control Width="22" Height="22" Style="{StaticResource Strata.NavGlyph.Risk}" /><TextBlock Margin="0,8,0,0" Text="RISK" Style="{StaticResource Strata.NavLabel}" /></StackPanel>
@@ -181,6 +184,7 @@
                             </Grid>
                         </Border>
 
+                        <Canvas x:Name="HomePageLayer" Width="1672" Height="941">
                         <!-- Header field -->
                         <Border Canvas.Left="104" Canvas.Top="52" Width="1154" Height="186" Background="{DynamicResource Tcc.Strata.Brush.HeaderField}" BorderBrush="{DynamicResource Tcc.Strata.Brush.BorderQuiet}" BorderThickness="0,0,0,1">
                             <Grid>
@@ -598,7 +602,32 @@
 
                         <TextBlock Visibility="Collapsed" Text="{Binding StartupVariant}" />
                         <TextBlock Visibility="Collapsed" Text="{Binding StartupStatus}" />
+                        </Canvas>
+
+                        <local:PlanDashboardView x:Name="PlanDashboardSurface"
+                                                 Canvas.Left="104" Canvas.Top="52"
+                                                 Width="1568" Height="889"
+                                                 Visibility="Collapsed"
+                                                 Panel.ZIndex="50" />
                     </Canvas>
         </ScrollViewer>
+        <Border Margin="2"
+                BorderBrush="{DynamicResource Tcc.Strata.Brush.Ice}"
+                BorderThickness="2"
+                Focusable="False"
+                IsHitTestVisible="False"
+                Panel.ZIndex="100"
+                SnapsToDevicePixels="True">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Children[0].IsKeyboardFocused, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
     </Grid>
 </Window>

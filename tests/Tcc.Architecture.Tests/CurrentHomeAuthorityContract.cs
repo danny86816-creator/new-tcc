@@ -116,6 +116,7 @@ internal static class CurrentHomeAuthorityContract
             "Assets/Brand/Tcc.NocturneMeridian.AppIcon.ico",
             "Assets/Brand/Tcc.NocturneMeridian.AppIcon.Window.png",
             "Assets/MasterFidelity/StrataObservatory.MasterR1.Scene.R26.png",
+            "Assets/Plan/Tcc.PlanDashboard.HomeStyle.Background.R1.png",
             "Assets/StrataObservatory/StrataObservatory.MentalStateSuite.R1.png",
         ], resources);
     }
@@ -163,8 +164,13 @@ internal static class CurrentHomeAuthorityContract
             Assert.False(string.IsNullOrWhiteSpace(button.Attribute("Click")?.Value));
             Assert.NotEqual("False", button.Attribute("IsEnabled")?.Value);
         }
-        Assert.Equal("False", ByAutomationId(document, "NavHome").Attribute("IsEnabled")?.Value);
-        Assert.Equal("False", ByAutomationId(document, "NavHome").Attribute("IsTabStop")?.Value);
+        foreach (string id in new[] { "NavHome", "NavPlanning" })
+        {
+            XElement navigation = ByAutomationId(document, id);
+            Assert.NotEqual("False", navigation.Attribute("IsEnabled")?.Value);
+            Assert.NotEqual("False", navigation.Attribute("IsTabStop")?.Value);
+            Assert.False(string.IsNullOrWhiteSpace(navigation.Attribute("Click")?.Value));
+        }
     }
 
     private static void AssertCurrentProductTruth()
